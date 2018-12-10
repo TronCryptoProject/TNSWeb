@@ -1,0 +1,13 @@
+{ 
+    "errors": {
+        "TRONWEB_NOT_CONNECTED": {
+            "error": "Unable to connect to any nodes at this time"
+        },
+        "INVALID_PARAM":{
+            "error": "Given parameter(s) are not valid"
+        },
+        "NO_ADDRESS_FOUND":{
+            "error": "No addresses found"
+        }
+    }
+}

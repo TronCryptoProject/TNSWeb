@@ -1,13 +1,13 @@
-var express = require("express");
-var approot = require("app-root-path");
-var router = express.Router();
+var Express = require("express");
+var AppRoot = require("app-root-path");
+var Router = Express.Router();
 
-router.get("/", function (req, res){
-	res.sendFile(approot + "/index.html");
+Router.get("/", function (req, res){
+	res.sendFile(AppRoot + "/index.html");
 });
 
-router.get(/.*/, function(req, res){
-	res.status(400).sendFile(approot + "/client/views/default404.html");
+Router.get(/.*/, function(req, res){
+	res.status(400).sendFile(AppRoot + "/client/views/default404.html");
 });
 
-module.exports = router;
+module.exports = Router;

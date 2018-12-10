@@ -1,21 +1,39 @@
-var approot = require("app-root-path");
-var express = require("express");
-var bodyparser = require("body-parser");
-var approuter = require(approot + "/server/js/routes/approuter.js");
-var apirouter = require(approot + "/server/js/routes/apirouter.js");
+argv = require('minimist')(process.argv.slice(2));
+require("env2")("./.env");
 
-var app = express();
+var AppRoot = require("app-root-path");
+var Express = require("express");
+var BodyParser = require("body-parser");
+var GlobalConfig = require(AppRoot + "/GlobalConfig.js");
+global.GlobalConfig = GlobalConfig;
 
-app.use(bodyparser.json());
-app.use(bodyparser.urlencoded({extended:true}));
+var AppRouter = require(AppRoot + "/server/js/routes/AppRouter.js");
+var ApiRouter = require(AppRoot + "/server/js/routes/ApiRouter.js");
+
+
+if (!("network" in argv)){
+	console.log("Please specify network");
+	process.exit(1);
+}
+
+
+var app = Express();
+
+app.use("/style", Express.static(AppRoot + "/client/style"));
+app.use("/js", Express.static(AppRoot + "/client/js"));
+app.use("/bundle", Express.static(AppRoot + "/bundle"));
+app.use("/images", Express.static(AppRoot + "/client/images"));
+
+app.use(BodyParser.json());
+app.use(BodyParser.urlencoded({extended:true}));
 
 
 //register the express router
-app.use("/api", apirouter);
+app.use("/api", ApiRouter);
 /*app.use("/favicon.ico", function(req,res){
 	res.sendFile(approot + "/favicon.ico");
 });*/
-app.use("/", approuter);
+app.use("/", AppRouter);
 
 var port = 3000;
 app.listen(port, function(){

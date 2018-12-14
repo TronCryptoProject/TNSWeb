@@ -14,7 +14,6 @@ const tronWeb = new TronWeb(
 const TNSContractAddress = Injecter["TNS"]["address"];
 var genAddressListIdxDict = {};
 
-
 async function isTronWebConnected(){
     return await tronWeb.isConnected();
 }

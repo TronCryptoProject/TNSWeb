@@ -36,7 +36,6 @@ app.use("/api", ApiRouter);
 });*/
 app.use("/", AppRouter);
 
-
 var port = 3000;
 app.listen(port, function(){
 	console.log("Node server running @ http://localhost:" + port)

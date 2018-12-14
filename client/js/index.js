@@ -105,6 +105,7 @@ class Index extends React.Component{
 		return (
 			<div className="fullscreen">{main_comp}</div>
 		);
+
 	}
 
 }

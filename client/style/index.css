@@ -1,0 +1,17 @@
+@import "./TronLogoAnim.css";
+@import "./Spacing.css";
+@import "./TronLinkDownload.css";
+@import "./TronLinkChecker.css";
+
+.fullscreen{
+	height: 100vh;
+	width: 100vw;
+}
+
+.vertical_center{
+	position: relative;
+	transform: translate(-50%, -50%);
+    float: left;
+    top: 50%;
+    left: 50%;
+}

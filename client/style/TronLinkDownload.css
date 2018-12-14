@@ -1,0 +1,15 @@
+.tronlink_background{
+	background-color: #557fe8;
+	color: white;
+	height: inherit;
+	width: inherit;
+}
+
+.tronlink_title{
+	font-family: "Nunito SemiBold";
+	font-size: 6em;
+}
+
+.tronlink_subtitle{
+	font-family: "Sana";
+}

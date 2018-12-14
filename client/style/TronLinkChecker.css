@@ -1,0 +1,11 @@
+.tronlinkchecker_title{
+	font-size: 2em;
+	font-family: "Nunito"
+}
+
+.tronlinkchecker_background{
+	background: rgba(85, 127, 232, 0.75);
+	color: white;
+	height: inherit;
+	width: inherit;
+}

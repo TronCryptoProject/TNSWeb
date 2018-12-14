@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg" xmlns:bx="https://boxy-svg.com">
+  <defs>
+    <bx:grid x="0" y="0" width="38.879" height="43.973"/>
+    <pattern id="pattern-0" x="0" y="0" width="25" height="25" patternUnits="userSpaceOnUse" viewBox="0 0 100 100">
+      <rect x="0" y="0" width="50" height="100" style="fill: black;"/>
+    </pattern>
+    <radialGradient id="gradient-13" gradientUnits="userSpaceOnUse" cx="136.077" cy="263.838" r="58.319" gradientTransform="matrix(1, 0, 0, 1, -0.000004, -0.000002)">
+      <stop offset="0" style="stop-color: rgba(68, 139, 239, 1)"/>
+      <stop offset="1" style="stop-color: rgba(16, 88, 189, 1)"/>
+    </radialGradient>
+    <radialGradient id="gradient-17" gradientUnits="userSpaceOnUse" cx="359.081" cy="158.489" r="29.709" spreadMethod="reflect" gradientTransform="matrix(1, 0, 0, 1, 2, 0)">
+      <stop offset="0" style="stop-color: rgba(68, 139, 239, 1)"/>
+      <stop offset="1" style="stop-color: rgba(16, 88, 189, 1)"/>
+    </radialGradient>
+    <radialGradient id="gradient-18" gradientUnits="userSpaceOnUse" cx="291.593" cy="312.395" r="97.198" gradientTransform="matrix(1, 0, 0, 1, 0, 0)">
+      <stop offset="0" style="stop-color: rgba(68, 139, 239, 1)"/>
+      <stop offset="1" style="stop-color: rgba(16, 88, 189, 1)"/>
+    </radialGradient>
+    <radialGradient id="gradient-28" gradientUnits="userSpaceOnUse" cx="271.222" cy="185.654" r="58.149" gradientTransform="matrix(-0.062099, -0.435079, 1.168058, -0.166718, 71.210281, 334.608734)">
+      <stop offset="0" style="stop-color: rgba(68, 139, 239, 1)"/>
+      <stop offset="1" style="stop-color: rgba(16, 88, 189, 1)"/>
+    </radialGradient>
+    <radialGradient id="gradient-29" gradientUnits="userSpaceOnUse" cx="145.416" cy="163.667" r="67.658" gradientTransform="matrix(1, 0, 0, 1, 0, 0)">
+      <stop offset="0" style="stop-color: rgba(68, 139, 239, 1)"/>
+      <stop offset="1" style="stop-color: rgba(16, 88, 189, 1)"/>
+    </radialGradient>
+    <radialGradient id="gradient-34" gradientUnits="userSpaceOnUse" cx="300.932" cy="212.224" r="87.859" gradientTransform="matrix(1, 0, 0, 1, 1, 0)">
+      <stop offset="0" style="stop-color: rgba(68, 139, 239, 1)"/>
+      <stop offset="1" style="stop-color: rgba(16, 88, 189, 1)"/>
+    </radialGradient>
+  </defs>
+  <line style="stroke: rgb(0, 0, 0); stroke-miterlimit: 21;" x1="63.66723404083071" y1="101.0186780114514" x2="63.66723404083071" y2="101.0186780114514"/>
+  <g>
+    <line style="stroke-width: 9px; stroke-linejoin: round; stroke-linecap: round; stroke: url(#gradient-29); fill: rgba(0, 0, 0, 0.7); fill-rule: evenodd; stroke-opacity: 0.69;" x1="77.758" y1="87.946" x2="213.073" y2="239.389"/>
+    <line x1="79.456" y1="90.493" x2="194.395" y2="439.73" style="stroke-linecap: round; stroke-linejoin: round; stroke-width: 15px; stroke: url(#gradient-13); stroke-opacity: 0.75; fill: rgba(0, 0, 0, 0.7); fill-rule: evenodd;"/>
+    <line style="stroke-linejoin: round; stroke-linecap: round; stroke-width: 12px; fill: rgba(0, 0, 0, 0.7); fill-rule: evenodd; stroke: rgb(68, 139, 239);" x1="77.758" y1="87.946" x2="329.372" y2="130.221"/>
+    <line style="stroke-linecap: round; stroke-miterlimit: 37; stroke-linejoin: round; stroke: url(#gradient-17); stroke-opacity: 0.82; stroke-width: 12px; fill: rgba(0, 0, 0, 0.7); fill-rule: evenodd;" x1="331.372" y1="131.919" x2="390.79" y2="185.059"/>
+    <line style="stroke-linejoin: round; stroke-linecap: round; stroke-width: 10px; fill: rgba(0, 0, 0, 0.7); fill-rule: evenodd; stroke: rgb(68, 139, 239); stroke-opacity: 0.77;" x1="213.073" y1="241.935" x2="194.395" y2="439.73"/>
+    <line x1="388.79" y1="185.059" x2="194.395" y2="439.73" style="stroke-linecap: round; stroke-linejoin: round; stroke: url(#gradient-18); stroke-opacity: 0.82; fill: rgba(0, 0, 0, 0.7); fill-rule: evenodd; mix-blend-mode: darken; stroke-width: 15px;"/>
+    <line style="stroke-width: 12px; stroke-linejoin: round; stroke-linecap: round; stroke: url(#gradient-34); fill: rgba(0, 0, 0, 0.7); fill-rule: evenodd; stroke-opacity: 0.6;" x1="212.375" y1="238.54" x2="382.15" y2="185.059"/>
+    <line style="stroke-width: 9px; stroke-linejoin: round; stroke-linecap: round; stroke: url(#gradient-28); fill: rgba(0, 0, 0, 0.7); fill-rule: evenodd; stroke-opacity: 0.67;" x1="213.073" y1="239.389" x2="329.372" y2="131.919"/>
+  </g>
+</svg>

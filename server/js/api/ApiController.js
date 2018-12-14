@@ -14,6 +14,7 @@ const tronWeb = new TronWeb(
 const TNSContractAddress = Injecter["TNS"]["address"];
 var genAddressListIdxDict = {};
 
+
 async function isTronWebConnected(){
     return await tronWeb.isConnected();
 }
@@ -249,12 +250,16 @@ exports.getNextGenAddress = function(req,res){
         return getNextGenAddressForTag[key];
     }
     
-    contractCall("getGenAddressList",args).then(genList=>{
-        if (genListLen.length < 1){
+    contractCall("getGenAddressListLen",args).then(genNumElems=>{
+        if (genNumElems < 1){
             throw ApiConfig.errors.NO_ADDRESS_FOUND;
         }
-        var next_idx = getListNextIdx(genListLen.length);
-        res.json(createResJSON(genList[next_idx]));
+        var next_idx = getListNextIdx(genNumElems);
+        contractCall("getGenAddressForTag",[...args,next_idx]).then(genAddress=>{
+            res.json(createResJSON(genAddress));
+        }).catch(e=>{
+            throw e;
+        });
     }).catch(e=>{
         res.status(400).json(createErrorJSON(e));
     });

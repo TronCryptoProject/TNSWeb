@@ -1,0 +1,48 @@
+.tron_logo_svg{
+	width:50%;
+	height:50%;
+}
+.svg_line2, .svg_line3, .svg_line4, .svg_line6, .svg_line7, .svg_line8{
+    stroke-dasharray: 560;
+    stroke-dashoffset: 560;
+    animation: svg_line_outer_anim 4s normal forwards ease-in;
+    opacity: 1;
+}
+
+.svg_line5, .svg_line7, .svg_line8{
+    stroke-dasharray: 300;
+    stroke-dashoffset: 300;
+    animation: svg_line_inner_anim 4s normal forwards ease-in;
+}
+
+.svg_line1{
+	stroke-dasharray: 300;
+    stroke-dashoffset: 300;
+    animation: svg_line_inner_f_anim 5s normal forwards ease-in;
+}
+
+
+@keyframes svg_line_inner_f_anim {
+	from{
+		opacity: 0;
+	}
+	to {
+	  	stroke-dashoffset: 0;
+	  	opacity: 1;
+	}
+}
+
+@keyframes svg_line_outer_anim {
+	to {
+	  	stroke-dashoffset: 1120;
+	}
+}
+@keyframes svg_line_inner_anim {
+	from{
+		opacity: 0;
+	}
+	to {
+	  	stroke-dashoffset: 600;
+	  	opacity: 1;
+	}
+}

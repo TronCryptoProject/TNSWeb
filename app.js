@@ -23,6 +23,7 @@ app.use("/style", Express.static(AppRoot + "/client/style"));
 app.use("/js", Express.static(AppRoot + "/client/js"));
 app.use("/bundle", Express.static(AppRoot + "/bundle"));
 app.use("/images", Express.static(AppRoot + "/client/images"));
+app.use("/fonts", Express.static(AppRoot + "/client/fonts"));
 
 app.use(BodyParser.json());
 app.use(BodyParser.urlencoded({extended:true}));
@@ -34,6 +35,7 @@ app.use("/api", ApiRouter);
 	res.sendFile(approot + "/favicon.ico");
 });*/
 app.use("/", AppRouter);
+
 
 var port = 3000;
 app.listen(port, function(){

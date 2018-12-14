@@ -1,45 +1,112 @@
+$.fn.extend({
+  animateCss: function(animationName, callback) {
+    var animationEnd = (function(el) {
+      var animations = {
+        animation: 'animationend',
+        OAnimation: 'oAnimationEnd',
+        MozAnimation: 'mozAnimationEnd',
+        WebkitAnimation: 'webkitAnimationEnd',
+      };
+
+      for (var t in animations) {
+        if (el.style[t] !== undefined) {
+          return animations[t];
+        }
+      }
+    })(document.createElement('div'));
+
+    this.addClass('animated ' + animationName).one(animationEnd, function() {
+      $(this).removeClass('animated ' + animationName);
+
+      if (typeof callback === 'function') callback();
+    });
+
+    return this;
+  },
+});
+
 import React from "react";
 import ReactDOM from "react-dom";
-import TronWeb from "tronweb";
+import TronLinkDownload from "./TronLinkDownload.js";
+import TronLinkChecker from "./TronLinkChecker.js";
+import HomePage from "./HomePage.js"
 
-class IndexPage extends React.Component{
+class Index extends React.Component{
 	constructor(props){
 		super(props);
+		this.state = {
+			tronWebState: {
+				installed: false,
+				loggedIn: false
+			}
+		};
+		this.tronLinkInterval = null;
+		this.tronLinkCheckerRunning = true;
 	}
+
 	componentDidMount(){
-		const tronWeb = new TronWeb(
-		   	"http://127.0.0.1:8090",
-		    "http://127.0.0.1:8091",
-		    "http://127.0.0.1:8092",
-		    "1992f2bc8b15a508e09d6e5f87fb63543b64f105f86001bfcc7a6cb72764bb8f"
-		);
-		tronWeb.isConnected().then(res=>{
-			console.log("RES:", res);
-			var key = "testKey";
-		    var keccak_key = tronWeb.sha3(key);
-		    tronWeb.contract().at("41776fd337d5358d04efe2e8f1625f098af239d207")
-		    .then(contract =>{
-		        console.log(contract);
-		        //console.log(contract.isKeyAvailable(keccak_key).call());
-		        contract.isKeyAvailable(keccak_key).call().then(res=>{
-		            console.log("RES:",res);
-		        }).catch(error=>{
-		            console.log("E: ", error);
-		        });
-		    })
-		    .catch(error=>{
-		        console.log("contract error: ", error);
-		    })
+		let maxtime = 10000;
+		let currtime = 0;
+		let timeinterval = 500;
+		this.tronLinkInterval = setInterval(()=>{
+			currtime += timeinterval;
+			let is_installed = !!window.tronWeb;
 
-		}).catch(error=>{
-			console.log("E:",error);
-		});
+			if (currtime >= maxtime || is_installed){
+				const tronWebState = {
+					installed: is_installed,
+					loggedIn: window.tronWeb && window.tronWeb.ready
+				};
 
+				if ((tronWebState.installed && tronWebState.loggedIn) ||
+					currtime >= maxtime){
+					clearInterval(this.tronLinkInterval);
+					this.tronLinkCheckerRunning = false;
+				}
+
+				let setState = ()=>{
+					this.setState({tronWebState: tronWebState}, ()=>{
+						console.log("tr", this.state.tronWebState.installed);
+					});
+				}
+				if (tronWebState.loggedIn){
+					setTimeout(()=>{
+						setState();
+					},2000);
+				}else{
+					setState();
+				}
+				
+			}
+		}, timeinterval);
 	}
+
 	render(){
-		return <div></div>;
+		let main_comp;
+		
+		if (this.tronLinkCheckerRunning){
+			let checker_title = "";
+			if (!this.state.tronWebState.installed){
+				checker_title = "Checking if TronLink is installed";
+			}else if (!this.state.tronWebState.loggedIn){
+				checker_title = "Checking if you're logged into TronLink";
+			}
+			main_comp = <TronLinkChecker title={checker_title}/>
+
+		}else{
+			if (!this.state.tronWebState.installed){
+				main_comp = <TronLinkDownload/>;	
+			}else{
+				main_comp = <HomePage/>;
+			}
+		}
+		
+
+		return (
+			<div className="fullscreen">{main_comp}</div>
+		);
 	}
 
 }
 
-ReactDOM.render(<IndexPage/>, $("#root_renderer")[0]);
+ReactDOM.render(<Index/>, $("#htmlroot")[0]);

@@ -1,0 +1,36 @@
+<svg version="1.1" id="el_ozN96LU1Q" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 58 58" style="enable-background:new 0 0 58 58;" xml:space="preserve"><style>@-webkit-keyframes el_116Q2_UKIX_J95IRzePi_Animation{0%{-webkit-transform: translate(38px, 22.865999221801758px) translate(-38px, -22.865999221801758px) translate(0px, 20px);transform: translate(38px, 22.865999221801758px) translate(-38px, -22.865999221801758px) translate(0px, 20px);}10%{-webkit-transform: translate(38px, 22.865999221801758px) translate(-38px, -22.865999221801758px) translate(0px, 0px);transform: translate(38px, 22.865999221801758px) translate(-38px, -22.865999221801758px) translate(0px, 0px);}100%{-webkit-transform: translate(38px, 22.865999221801758px) translate(-38px, -22.865999221801758px) translate(0px, 0px);transform: translate(38px, 22.865999221801758px) translate(-38px, -22.865999221801758px) translate(0px, 0px);}}@keyframes el_116Q2_UKIX_J95IRzePi_Animation{0%{-webkit-transform: translate(38px, 22.865999221801758px) translate(-38px, -22.865999221801758px) translate(0px, 20px);transform: translate(38px, 22.865999221801758px) translate(-38px, -22.865999221801758px) translate(0px, 20px);}10%{-webkit-transform: translate(38px, 22.865999221801758px) translate(-38px, -22.865999221801758px) translate(0px, 0px);transform: translate(38px, 22.865999221801758px) translate(-38px, -22.865999221801758px) translate(0px, 0px);}100%{-webkit-transform: translate(38px, 22.865999221801758px) translate(-38px, -22.865999221801758px) translate(0px, 0px);transform: translate(38px, 22.865999221801758px) translate(-38px, -22.865999221801758px) translate(0px, 0px);}}@-webkit-keyframes el_116Q2_UKIX_KQ28ndSXd_Animation{0%{-webkit-transform: translate(38px, 22.865999221801758px) rotate(0deg) translate(-38px, -22.865999221801758px);transform: translate(38px, 22.865999221801758px) rotate(0deg) translate(-38px, -22.865999221801758px);}10%{-webkit-transform: translate(38px, 22.865999221801758px) rotate(20deg) translate(-38px, -22.865999221801758px);transform: translate(38px, 22.865999221801758px) rotate(20deg) translate(-38px, -22.865999221801758px);}20%{-webkit-transform: translate(38px, 22.865999221801758px) rotate(0deg) translate(-38px, -22.865999221801758px);transform: translate(38px, 22.865999221801758px) rotate(0deg) translate(-38px, -22.865999221801758px);}100%{-webkit-transform: translate(38px, 22.865999221801758px) rotate(0deg) translate(-38px, -22.865999221801758px);transform: translate(38px, 22.865999221801758px) rotate(0deg) translate(-38px, -22.865999221801758px);}}@keyframes el_116Q2_UKIX_KQ28ndSXd_Animation{0%{-webkit-transform: translate(38px, 22.865999221801758px) rotate(0deg) translate(-38px, -22.865999221801758px);transform: translate(38px, 22.865999221801758px) rotate(0deg) translate(-38px, -22.865999221801758px);}10%{-webkit-transform: translate(38px, 22.865999221801758px) rotate(20deg) translate(-38px, -22.865999221801758px);transform: translate(38px, 22.865999221801758px) rotate(20deg) translate(-38px, -22.865999221801758px);}20%{-webkit-transform: translate(38px, 22.865999221801758px) rotate(0deg) translate(-38px, -22.865999221801758px);transform: translate(38px, 22.865999221801758px) rotate(0deg) translate(-38px, -22.865999221801758px);}100%{-webkit-transform: translate(38px, 22.865999221801758px) rotate(0deg) translate(-38px, -22.865999221801758px);transform: translate(38px, 22.865999221801758px) rotate(0deg) translate(-38px, -22.865999221801758px);}}#el_ozN96LU1Q *{-webkit-animation-duration: 5s;animation-duration: 5s;-webkit-animation-iteration-count: infinite;animation-iteration-count: infinite;-webkit-animation-timing-function: cubic-bezier(0, 0, 1, 1);animation-timing-function: cubic-bezier(0, 0, 1, 1);}#el_116Q2_UKIX{fill: none;stroke: #D8A852;stroke-width: 4;stroke-linecap: round;stroke-linejoin: round;stroke-miterlimit: 10;}#el_-KgVLBFU5M{fill: #E7ECED;}#el__HpXvPk54Q{fill: #C7CAC7;}#el_VcLM8VRVo6{fill: #424A60;}#el_116Q2_UKIX_KQ28ndSXd{-webkit-animation-name: el_116Q2_UKIX_KQ28ndSXd_Animation;animation-name: el_116Q2_UKIX_KQ28ndSXd_Animation;}#el_116Q2_UKIX_J95IRzePi{-webkit-animation-name: el_116Q2_UKIX_J95IRzePi_Animation;animation-name: el_116Q2_UKIX_J95IRzePi_Animation;}</style>
+<g id="el_116Q2_UKIX_J95IRzePi" data-animator-group="true" data-animator-type="0"><g id="el_116Q2_UKIX_KQ28ndSXd" data-animator-group="true" data-animator-type="1"><path d="&#10;&#9;M38,22.866V11.219C38,6.149,33.5,2,28,2s-10,4.149-10,9.219" id="el_116Q2_UKIX"/></g></g>
+<circle cx="29" cy="39" r="19" id="el_-KgVLBFU5M"/>
+<path d="M48,39c0-10.493-8.507-19-19-19v38C39.493,58,48,49.493,48,39z" id="el__HpXvPk54Q"/>
+<path d="M29,44L29,44c-1.65,0-3-1.35-3-3v-6c0-1.65,1.35-3,3-3h0c1.65,0,3,1.35,3,3v6&#10;&#9;C32,42.65,30.65,44,29,44z" id="el_VcLM8VRVo6"/>
+<g id="el_T7fKljRWyu">
+</g>
+<g id="el_TzR2xWiKYL">
+</g>
+<g id="el_6uq6G8YDfW">
+</g>
+<g id="el_9GVIDTUggd">
+</g>
+<g id="el_uM_fxtWDE8">
+</g>
+<g id="el_7aUQgjCo8f">
+</g>
+<g id="el_zuWBVBueEX">
+</g>
+<g id="el_M5mekas4B8">
+</g>
+<g id="el_F0IOm0J1gW">
+</g>
+<g id="el__lpWmafRql">
+</g>
+<g id="el_Jr7K7Z0A6n">
+</g>
+<g id="el_Exrqky9m3Kv">
+</g>
+<g id="el_RrWLqon_rXw">
+</g>
+<g id="el_rpnKBSexaGH">
+</g>
+<g id="el_O22GS865dZe">
+</g>
+</svg>

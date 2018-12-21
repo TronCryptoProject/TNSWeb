@@ -15,7 +15,7 @@ const config = {
   output: {
 	  filename: 'index.bundle.js',
 	  path: __dirname + '/bundle',
-	  publicPath: `bundle/`
+	  publicPath: '/bundle/'
   },
   module: {
 		rules: [
@@ -39,7 +39,7 @@ const config = {
             	test: /\.(png|jpg|gif|svg)$/,
             	loader: 'file-loader',
             	query: {
-                	name: '[name].[ext]?[hash]'
+                	name: '[name].[ext]'
             	}
         	}
 	  	]

@@ -1,0 +1,114 @@
+#home_features_grid>.row{
+    padding-top: 4rem !important;
+    padding-bottom: 4rem !important;
+}
+#home_features_grid>.row .column .ui.header{
+    color: white !important;
+}
+
+#home_page_feature_cards .column .cards>.card>.image img{
+    margin: 0 auto;
+    width: 60%;
+}
+
+#home_page_feature_cards .column .cards>.card>.content .header,
+#home_page_feature_cards .column .cards>.card>.content .description{
+    font-family: "Nunito";
+}
+
+#home_features_section{
+    background: linear-gradient(#6599f5,#4c64bb, #545aa5);
+    color: white !important;
+    padding-bottom: 10em !important;
+}
+
+#home_protection_section{
+    /*background: linear-gradient(#6599f5,#3075bb);*/
+    position: relative;
+}
+#home_protection_section:before{
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 110%;
+    top: -5em;
+    transform: skewY(-4deg);
+    background: linear-gradient(#6599f5,#3075bb);
+}
+
+#home_features_alias_seg>.ui.grid .row .ui.statistic>.value{
+    text-transform: lowercase !important;
+    padding-bottom: 0.3em;
+}
+
+#home_features_alias_seg{
+    background: #00000033;
+    border-radius: 1em;
+}
+
+#home_page_protection_seg .segment>.grid>.column:first-child>:first-child{
+    width: 10vw;
+} 
+#home_page_protection_seg .segment>.grid>*{
+    font-family: "Nunito";
+    font-size: 1.1em;
+} 
+
+#home_page_protection_seg .segment>.grid{
+    width: 70vw;
+}
+
+#home_page_protection_seg .segment>.grid>.column .extra.content{
+    color: rgba(0,0,0,.5);
+    padding: .75em 0em; 
+    border-top: 1px solid rgba(0,0,0,.05)!important;
+}
+
+#home_page_protection_seg .segment>.grid>.column .content{
+    padding-top: 0.5em;
+    padding-bottom: 0.5em;
+}
+
+#home_protection_section>div{
+    z-index: 10;
+}
+
+#home_application_section .column .cards>.card>.content .header,
+#home_application_section .column .cards>.card>.content .description{
+    font-family: "Nunito";
+}
+
+#home_application_section .column .cards>.card>.content .description{
+    font-size: 1.1em;
+}
+#home_application_section .column .cards>.card{
+    border-radius: 1em !important;
+    padding: 2em 1em;
+}
+
+@media screen and (min-width: 780px){
+    #home_application_section .column .cards>.card{
+        max-width: 27vw !important;
+    }
+}
+@media screen and (max-width: 780px){
+    #home_application_section .column .cards>.card{
+       margin-bottom: 2em !important;
+    }
+}
+
+#home_applications_desc{
+    font-size: 1.5em;
+    padding-top: 1em;
+    padding-bottom: 4em;
+}
+
+#home_application_section .column .cards>.card.raised{
+    box-shadow: 0 0 0 1px #d4d4d5, 3px 4px 4px 0 rgba(34,36,38,.12),
+    8px 5px 10px 1px rgba(34,36,38,.15) !important;
+}
+
+#home_application_section{
+    margin-top: 4em;
+}
+

@@ -1,0 +1,119 @@
+.hp_background{
+    background: linear-gradient(#4958a7,#8aa3d0, #6599f5);/*linear-gradient(rgba(10, 34, 97, 0.75),rgba(85,127,232,.75),rgba(85, 127, 232, 0.33));
+    /*linear-gradient(10deg,rgba(154, 194, 222, 0.58),#e1e1e2 40%,rgba(47, 102, 206, 0.68));*/
+}
+
+#hp_logo_container>object{
+    position: absolute;
+    height: 75%;
+    z-index: 0;
+}
+
+#hp_logo_container{
+    height: 75%;
+}
+
+.hp_title{
+    color: #ffffff;
+    font-family: Amaranth;
+    font-size: 6em;
+    transition: all 2s;
+    animation: image_blur_out 3s;
+    user-select: none;
+}
+.hp_subtitle{
+    color: #cbddf9;
+    font-size: 1.5em;
+    transition: all 2s;
+    animation: image_blur_out 3s;
+    user-select: none;
+}
+
+.ui.secondary.pointing.borderless.menu a,
+.ui.secondary.pointing.borderless.menu a.active{
+    display: block;
+    padding: 15px;
+    text-decoration: none;
+    color: whitesmoke;
+    font-weight: 800;
+    text-transform: uppercase;
+    margin: 0 10px;
+    font-family: "Nunito Black";
+    font-size:1.1em;
+    position: relative;
+}
+.ui.secondary.pointing.borderless.menu{
+    border-bottom: 0 !important;
+}
+.ui.secondary.pointing.borderless.menu a,
+.ui.secondary.pointing.borderless.menu a:after,
+.ui.secondary.pointing.borderless.menu a:before {
+    transition: all .5s;
+}
+.ui.secondary.pointing.borderless.menu a:hover {
+    color: #c0ccf3 !important;
+}
+.ui.secondary.pointing.borderless.menu a.item:active,
+.ui.secondary.pointing.borderless.menu .active.item{
+    border-color: #c0ccf3 !important;
+}
+
+.ui.secondary.pointing.borderless.menu .item:after{
+    display: inherit !important;
+}
+
+.ui.secondary.pointing.borderless.menu a:after,
+.ui.pointing.menu .item:after{
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
+    width: 0% !important;
+    content: '.';
+    color: transparent;
+    background: #c0ccf3;
+    height: 2px;
+}
+.ui.secondary.pointing.borderless.menu a:hover:after{
+    width: 100% !important;
+}
+.ui.secondary.pointing.borderless.menu .item:after{
+    visibility: visible !important;
+    transform: inherit !important;
+    border-bottom: 0 !important;
+    border-right: 0 !important;
+}
+
+.ui.secondary.pointing.borderless.menu .active.item:hover:after{
+    background-color: inherit !important;
+}
+  
+
+@media screen and (min-width: 1100px)
+{
+    .hp_title{
+        font-size: 6.5em;
+    }
+    .hp_subtitle{
+        font-size: 2em;
+    }
+}
+@media screen and (min-width:690px) and (max-width : 1100px)
+{
+    .hp_title{
+        font-size: 5em;
+    }
+    .hp_subtitle{
+        font-size: 1.5em;
+    }
+}
+@media screen and (max-width: 690px)
+{
+    .hp_title{
+        font-size: 3em;
+    }
+    .hp_subtitle{
+        font-size: 1em;
+    }
+}

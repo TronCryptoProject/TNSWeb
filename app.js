@@ -31,9 +31,9 @@ app.use(BodyParser.urlencoded({extended:true}));
 
 //register the express router
 app.use("/api", ApiRouter);
-/*app.use("/favicon.ico", function(req,res){
-	res.sendFile(approot + "/favicon.ico");
-});*/
+app.use("/favicon.ico", function(req,res){
+	res.sendFile(AppRoot + "/favicon.ico");
+});
 app.use("/", AppRouter);
 
 var port = 3000;

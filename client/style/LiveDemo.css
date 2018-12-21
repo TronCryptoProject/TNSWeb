@@ -1,0 +1,43 @@
+@import "./CheckboxAnim.css";
+
+.CheckboxAnim_main_div{
+    margin: 3rem 1rem 3rem 1rem;
+}
+#amt_input_signed, #amt_input_unsigned{
+    color: #b5cc18 !important
+}
+#to_input_signed, #to_input_unsigned{
+    color: cornflowerblue !important;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+}
+
+.ui.statistic.fullwidth{
+    width: 100%;
+}
+
+.ui.statistic.fullwidth .value .input{
+    width: 100%;
+}
+
+.row_spaced_div .row{
+    margin-bottom: 2rem;
+    margin-top: 2rem;
+}
+
+#live_demo_conf_table tbody tr td:first-child{
+    font-weight: bolder;
+    text-transform: uppercase;
+    color: #74d0ff;
+}
+#live_demo_conf_table tbody tr td{
+    font-size: 1.1em;
+}
+
+#signed_tx_card .raised.card{
+    box-shadow: 0 0 0 1px #d4d4d5, 3px 4px 4px 0 rgba(34,36,38,.12),
+        8px 5px 10px 1px rgba(34,36,38,.15) !important;
+}

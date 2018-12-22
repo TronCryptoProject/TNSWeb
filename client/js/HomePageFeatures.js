@@ -6,7 +6,13 @@ export default class HomePageFeatures extends React.Component{
         this.getFeaturesDiv = this.getFeaturesDiv.bind(this);
 		this.getProtectionDiv = this.getProtectionDiv.bind(this);
 		this.getApplicationsDiv = this.getApplicationsDiv.bind(this);
-		this.getFooterDiv = this.getFooterDiv.bind(this);
+        this.getFooterDiv = this.getFooterDiv.bind(this);
+        
+        this.eventGithubClick = this.eventGithubClick.bind(this);
+    }
+
+    eventGithubClick(){
+        window.open("https://gitlab.com/gregorydev/tnsweb", "_blank");
     }
 
     getFeaturesDiv(){
@@ -16,7 +22,7 @@ export default class HomePageFeatures extends React.Component{
 					<div className="left floated center aligned column">
 					
 					</div>
-					<div className="right floated center aligned column">
+					<div className="right floated column">
 						<div className="ui huge center aligned margined_y header">
 							Chat-like Usernames for Tron Addresses
 						</div>
@@ -30,7 +36,7 @@ export default class HomePageFeatures extends React.Component{
 					</div>
 				</div>
 				<div className="center middle aligned two column row">
-					<div className="left floated center aligned column">
+					<div className="left floated column">
 						<div className="ui huge center aligned margined_y header">
 							Create Multiple Tags under Same Alias
 						</div>
@@ -76,6 +82,26 @@ export default class HomePageFeatures extends React.Component{
                                 </div>
                             </div>
 						</div>
+					</div>
+				</div>
+                <div className="left middle aligned two column row">
+					<div className="left floated center aligned column">
+                        <object type="image/svg+xml" data="../images/rotating_address_anim.svg"></object>
+					</div>
+					<div className="right floated column">
+						<div className="ui huge center aligned margined_y header">
+							Have Transactions Sent to New Addresses
+						</div>
+						<p>
+                            You can have your incoming transactions be sent to new addresses
+                            every time your alias is resolved by TNS! This lets you mask your identity for every transaction
+                            by creating multiple addresses under 1 mnemonic HD key,
+                            so that every transaction is sent to a different address.
+                            You should keep your wealth private without having to manage several private keys.
+						</p>
+                        <p className="extra content">
+                            Addresses will be reused in round-robin fashion if they grow to be too large.
+                        </p>
 					</div>
 				</div>
 				<div className="one column middle aligned centered row" id="home_page_feature_cards">
@@ -224,7 +250,7 @@ export default class HomePageFeatures extends React.Component{
 	getApplicationsDiv(){
 		return(
 			<div>
-                <div className="ui huge center aligned padding_y header">Applications of TNS</div>
+                <div className="ui huge center aligned padding_y blue header">Applications of TNS</div>
                 <div className="text_center" id="home_applications_desc">
                     Tron Name Service can extend beyond your wallet, so users, developers,
                     merchants and exchanges can benefit from easy of use, transparency and
@@ -235,7 +261,7 @@ export default class HomePageFeatures extends React.Component{
                         <div className="ui three stackable dead_center cards">
                             <div className="ui raised centered card">
                                 <div className="content">
-                                    <div className="ui large center aligned header">
+                                    <div className="ui large center aligned green header">
                                         Wallets
                                     </div>
                                     <div className="center aligned description">
@@ -248,11 +274,11 @@ export default class HomePageFeatures extends React.Component{
 
                             <div className="ui raised centered card">
                                 <div className="content">
-                                    <div className="ui large center aligned header">
+                                    <div className="ui large center aligned green header">
                                         Contract Addresses
                                     </div>
                                     <div className="center aligned description">
-                                        DApp developers don’t have to modify existing contract addresses
+                                        DApp developers don’t have to change existing contract addresses
                                         in their code everytime they modify & deploy new contracts.
                                         Contract alias will always point to the most current & correct
                                         contract address!
@@ -262,7 +288,7 @@ export default class HomePageFeatures extends React.Component{
                             
                             <div className="ui raised centered card">
                                 <div className="content">
-                                    <div className="ui large center aligned header">
+                                    <div className="ui large center aligned green header">
                                         Exchanges
                                     </div>
                                     <div className="center aligned description">
@@ -282,9 +308,10 @@ export default class HomePageFeatures extends React.Component{
 
 	getFooterDiv(){
 		return(
-			<div className="ui clearing segment">
-				<div className="ui right floated button">
-				
+			<div className="ui basic center aligned segment">
+				<div className="ui labeled icon red button" onClick={this.eventGithubClick}>
+                    <i className="github icon"></i>
+                    Github Code
 				</div>
 			</div>
 		)
@@ -301,6 +328,9 @@ export default class HomePageFeatures extends React.Component{
                 </section>
                 <section className="alot padding" id="home_application_section">
                     {this.getApplicationsDiv()}
+                </section>
+                <section className="alot padding" id="home_footer_section">
+                    {this.getFooterDiv()}
                 </section>
             </div>
         );

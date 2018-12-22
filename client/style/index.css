@@ -4,9 +4,15 @@
 @import "./HomePage.css";
 @import "./LiveDemo.css";
 @import "./HomePageFeatures.css";
+@import "./LoginPage.css";
 
 body{
 	line-height: inherit !important;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
 }
 
 .fullscreen{

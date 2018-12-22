@@ -1,28 +1,97 @@
 $.fn.extend({
-  animateCss: function(animationName, callback) {
-    var animationEnd = (function(el) {
-      var animations = {
-        animation: 'animationend',
-        OAnimation: 'oAnimationEnd',
-        MozAnimation: 'mozAnimationEnd',
-        WebkitAnimation: 'webkitAnimationEnd',
-      };
+	animateCss: function(animationName, callback) {
+		var animationEnd = (function(el) {
+		var animations = {
+			animation: 'animationend',
+			OAnimation: 'oAnimationEnd',
+			MozAnimation: 'mozAnimationEnd',
+			WebkitAnimation: 'webkitAnimationEnd',
+		};
 
-      for (var t in animations) {
-        if (el.style[t] !== undefined) {
-          return animations[t];
-        }
-      }
-    })(document.createElement('div'));
+		for (var t in animations) {
+			if (el.style[t] !== undefined) {
+				return animations[t];
+			}
+		}
+		})(document.createElement('div'));
 
-    this.addClass('animated ' + animationName).one(animationEnd, function() {
-      $(this).removeClass('animated ' + animationName);
+		this.addClass('animated ' + animationName).one(animationEnd, function() {
+			$(this).removeClass('animated ' + animationName);
+			if (typeof callback === 'function') callback();
+		});
 
-      if (typeof callback === 'function') callback();
-    });
+		return this;
+	},
+	showButtonConf: function(args, callback){
+		/*
+			{
+				type: "error",
+				duration: 1000,
+				error: {
+					text: ""
+				},
+				success:{
+					text: ""
+				}
+				normal: {
+					text: "",
+					icon: ""
+				}
+				
+			}
+		*/
+		if (this.is("button")){
+			var duration = "duration" in args ? args.duration: 1000;
+			var label_removed = false;
+			if ((args.type == "error" || args.type == "success")){
+				this.css("transition", "all 0.5s");
+				if (this.hasClass("right") && this.hasClass("labeled")){
+					label_removed = true;
+					this.removeClass("right labeled");
+				}
+			}
 
-    return this;
-  },
+			if (args.type == "error"){
+				this.addClass("red");
+				this.text(args.error.text);
+				setTimeout(()=>{
+					this.removeClass("red");
+					this.text(args.normal.text);
+					
+					if (label_removed) this.addClass("right labeled");
+					
+					if (this.hasClass("icon")){
+						var icon = args.normal.icon + " icon";
+						this.prepend(`<i class="${icon}"/>`);
+					}
+					if (typeof callback === 'function') callback();
+				}, duration);
+				
+			}else if(args.type == "success"){
+				let green_color_added = false;
+				if (!this.hasClass("green")){
+					green_color_added = true;
+					this.addClass("green");
+				}
+				
+				this.text(args.success.text);
+				setTimeout(()=>{
+					if (green_color_added) this.removeClass("green");
+					
+					this.text(args.normal.text);
+					
+					if (label_removed) this.addClass("right labeled");
+
+					if (this.hasClass("icon")){
+						var icon = args.normal.icon + " icon";
+						this.prepend(`<i class="${icon}"/>`);
+					}
+					if (typeof callback === 'function') callback();
+				}, duration);
+			}
+		}
+		
+	}
 });
 
 import React from "react";
@@ -32,6 +101,7 @@ import TronLinkChecker from "./TronLinkChecker.js";
 import HomePage from "./HomePage.js";
 import LiveDemo from "./LiveDemo.js";
 import HomePageFeatures from "./HomePageFeatures.js";
+import LoginPage from "./LoginPage.js";
 
 class Index extends React.Component{
 	constructor(props){
@@ -123,6 +193,7 @@ class Index extends React.Component{
 					case "api_item":
 						break;
 					case "login_item":
+						main_comp = <LoginPage/>;
 						break;
 					default:
 						break;
@@ -173,6 +244,8 @@ class Index extends React.Component{
 			case "LiveDemo":
 				background = "hp_background";
 				break;
+			case "LoginPage":
+				background = "hp_background";
 			default:
 				break;
 		}

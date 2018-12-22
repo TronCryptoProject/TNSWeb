@@ -122,10 +122,10 @@ class Index extends React.Component{
 	}
 
 	componentDidMount(){
-		let maxtime = 50000000;
+		let maxtime = 5000;
 		let currtime = 0;
 		let timeinterval = 200;
-		let extratime = 10000000;
+		let extratime = 1000;
 		this.tronLinkInterval = setInterval(()=>{
 			currtime += timeinterval;
 			let is_installed = !!window.tronWeb;

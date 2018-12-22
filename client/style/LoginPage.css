@@ -1,0 +1,17 @@
+#login_page_main_div .card{
+    padding: 2rem;
+	border-radius: 1rem;
+}
+
+#login_page_main_div .raised.card{
+    box-shadow: 0 0 0 1px #d4d4d5, 3px 4px 4px 0 rgba(34,36,38,.12),
+    8px 5px 10px 1px rgba(34,36,38,.15) !important;
+}
+
+#login_page_main_div{
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+}

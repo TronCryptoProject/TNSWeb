@@ -128,14 +128,18 @@ export default class LiveDemo extends React.Component{
                     setConfState();
                 });
             }
-        }else{
-            $(e.target).addClass("red");
-            $(e.target).text("Input is empty");
-            setTimeout(()=>{
-                $(e.target).removeClass("red");
-                $(e.target).text(txState == "signed"? "Send Transaction" : "Build Transaction");
-                $(e.target).prepend(<i className="bullhorn icon"/>);
-            }, 1000);
+        }else{  
+            let button_conf_dict = {
+                type: "error",
+                error: {
+                    text: "Input is empty"
+                },
+                normal: {
+                    text: (txState == "signed"? "Send Transaction" : "Build Transaction"),
+                    icon: "bullhorn"
+                }
+            };
+            $(e.target).showButtonConf(button_conf_dict);
         }
     }
 

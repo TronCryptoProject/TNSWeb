@@ -1,11 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<svg width="500" height="500" viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg">
+<svg width="500" height="500" xmlns="http://www.w3.org/2000/svg" xmlns:bx="https://boxy-svg.com">
   <defs>
     <linearGradient x1="0.08041999816894531" y1="0" x2="0.6568199920654297" y2="0.23864999771118164" id="a">
       <stop stop-color="rgb(92, 151, 233)" stop-opacity="0" offset="0"/>
       <stop stop-color="rgb(92, 151, 233)" stop-opacity=".631" offset="0.6315"/>
       <stop stop-color="rgb(92, 151, 233)" offset="1"/>
     </linearGradient>
+    <bx:grid x="0" y="0" width="100" height="100"/>
+    <filter xmlns="http://www.w3.org/2000/svg" id="f2" x="0" y="0" width="200%" height="200%" filterUnits="userSpaceOnUse">
+      <feOffset result="offOut" in="SourceGraphic" dx="16" dy="20"/>
+      <feGaussianBlur result="blurOut" in="offOut" stdDeviation="12"/>
+      <feBlend in="SourceGraphic" in2="blurOut" mode="normal"/>
+    </filter>
     <linearGradient id="gradient-33" gradientUnits="userSpaceOnUse" x1="271.223" y1="131.919" x2="271.223" y2="239.389">
       <stop offset="0" style="stop-color: rgba(149, 192, 253, 1)"/>
       <stop offset="1" style="stop-color: rgba(49, 133, 251, 1)"/>
@@ -34,11 +40,10 @@
       <stop offset="0" style="stop-color: rgba(128, 176, 254, 1)"/>
       <stop offset="1" style="stop-color: rgba(27, 114, 253, 1)"/>
     </linearGradient>
-
   </defs>
   <g fill="none" fill-rule="evenodd" transform="matrix(10.376241, 0, 0, 9.988429, 40.591354, 46.220436)">
     <g transform="translate(1 1)">
-       <path d="M36 18c0-9.94-8.06-18-18-18" id="Oval-2" stroke="url(#a)" stroke-width="1">
+     <path d="M36 18c0-9.94-8.06-18-18-18" id="Oval-2" stroke="url(#a)" stroke-width="1">
         <animateTransform
                     attributeName="transform"
                     type="rotate"
@@ -58,14 +63,15 @@
       </circle>
     </g>
   </g>
-  <g transform="matrix(0.621007, 0, 0, 0.626443, 104.514206, 85.14621)">
-    <line style="stroke-width: 9px; stroke-linejoin: round; stroke-linecap: round; fill: rgba(0, 0, 0, 0.7); fill-rule: evenodd; stroke-opacity: 0.67; stroke: url(#gradient-33);" x1="213.073" y1="239.389" x2="329.372" y2="131.919"/>
-    <line style="stroke-linecap: round; stroke-miterlimit: 37; stroke-linejoin: round; stroke-opacity: 0.82; stroke-width: 12px; fill: rgba(0, 0, 0, 0.7); fill-rule: evenodd; stroke: url(#gradient-20);" x1="331.372" y1="131.919" x2="390.79" y2="185.059"/>
-    <line style="stroke-width: 12px; stroke-linejoin: round; stroke-linecap: round; fill-rule: evenodd; stroke-opacity: 0.6; fill: rgba(0, 0, 0, 0.7); stroke: url(#gradient-4);" x1="212.375" y1="238.54" x2="388.79" y2="185.059"/>
-    <line style="stroke-linejoin: round; stroke-linecap: round; stroke-width: 10px; fill: rgba(0, 0, 0, 0.7); fill-rule: evenodd; stroke-opacity: 0.77; stroke: url(#gradient-3);" x1="213.073" y1="241.935" x2="194.395" y2="439.73"/>
-    <line style="stroke-width: 9px; stroke-linejoin: round; stroke-linecap: round; fill-rule: evenodd; stroke-opacity: 0.69; fill: url(#gradient-8); stroke: url(#gradient-35);" x1="77.758" y1="87.946" x2="213.073" y2="239.389"/>
-    <line x1="79.456" y1="90.493" x2="194.395" y2="439.73" style="stroke-linecap: round; stroke-linejoin: round; stroke-width: 15px; stroke-opacity: 0.75; fill: rgba(0, 0, 0, 0.7); fill-rule: evenodd; stroke: url(#gradient-25);"/>
-    <line style="stroke-linejoin: round; stroke-linecap: round; stroke-width: 12px; fill: rgba(0, 0, 0, 0.7); fill-rule: evenodd; stroke: rgb(83, 136, 208);" x1="77.758" y1="87.946" x2="329.372" y2="130.221"/>
-    <line x1="388.79" y1="185.059" x2="194.395" y2="439.73" style="stroke-linecap: round; stroke-linejoin: round; stroke-opacity: 0.82; fill: rgba(0, 0, 0, 0.7); fill-rule: evenodd; stroke-width: 15px; stroke: rgb(88, 138, 239);"/>
+  <g filter="url(#f2)" transform="matrix(0.621007, 0, 0, 0.626443, 104.514259, 85.146248)">
+    <line style="stroke-width: 9px; stroke-linejoin: round; stroke-linecap: round; fill: rgba(0, 0, 0, 0.7); fill-rule: evenodd; stroke-opacity: 0.67; stroke: url(#gradient-33);" x1="213.073" y1="239.389" x2="329.372" y2="131.919" class="svg_line8"/>
+    <line style="stroke-linecap: round; stroke-miterlimit: 37; stroke-linejoin: round; stroke-opacity: 0.82; stroke-width: 12px; fill: rgba(0, 0, 0, 0.7); fill-rule: evenodd; stroke: url(#gradient-20);" x1="331.372" y1="131.919" x2="390.79" y2="185.059" class="svg_line4"/>
+    <line style="stroke-width: 12px; stroke-linejoin: round; stroke-linecap: round; fill-rule: evenodd; stroke-opacity: 0.6; fill: rgba(0, 0, 0, 0.7); stroke: url(#gradient-4);" x1="212.375" y1="238.54" x2="388.79" y2="185.059" class="svg_line7"/>
+    <line style="stroke-linejoin: round; stroke-linecap: round; stroke-width: 10px; fill: rgba(0, 0, 0, 0.7); fill-rule: evenodd; stroke-opacity: 0.77; stroke: url(#gradient-3);" x1="213.073" y1="241.935" x2="194.395" y2="439.73" class="svg_line5"/>
+    <polygon points="196.095 439.728 390.492 180.815 328.523 129.032 83.192 86.587" style="fill-opacity: 0.36; opacity: 0.4; fill: rgb(13, 125, 244);"/>
+    <line style="stroke-width: 9px; stroke-linejoin: round; stroke-linecap: round; fill-rule: evenodd; stroke-opacity: 0.69; fill: url(#gradient-8); stroke: url(#gradient-35);" x1="77.758" y1="87.946" x2="213.073" y2="239.389" class="svg_line1"/>
+    <line x1="79.456" y1="90.493" x2="194.395" y2="439.73" style="stroke-linecap: round; stroke-linejoin: round; stroke-width: 15px; stroke-opacity: 0.75; fill: rgba(0, 0, 0, 0.7); fill-rule: evenodd; stroke: url(#gradient-25);" class="svg_line2"/>
+    <line style="stroke-linejoin: round; stroke-linecap: round; stroke-width: 12px; fill: rgba(0, 0, 0, 0.7); fill-rule: evenodd; stroke: rgb(83, 136, 208);" x1="77.758" y1="87.946" x2="329.372" y2="130.221" class="svg_line3"/>
+    <line x1="388.79" y1="185.059" x2="194.395" y2="439.73" style="stroke-linecap: round; stroke-linejoin: round; stroke-opacity: 0.82; fill: rgba(0, 0, 0, 0.7); fill-rule: evenodd; mix-blend-mode: darken; stroke-width: 15px; stroke: rgb(88, 138, 239);" class="svg_line6"/>
   </g>
 </svg>

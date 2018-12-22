@@ -1,7 +1,6 @@
 
 
 import React from "react";
-import TronLinkImg from "../images/tron_link.png";
 
 export default class TronLinkDownload extends React.Component{
 	constructor(props){
@@ -22,7 +21,7 @@ export default class TronLinkDownload extends React.Component{
 					<div className="ui red ribbon tiny label">
 						Download Here
 					</div>
-					<img src={TronLinkImg}/>
+					<img src="../images/tron_link.png"/>
 				</a>
 			</div>
 		);

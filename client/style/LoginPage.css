@@ -14,4 +14,10 @@
     right: 0;
     bottom: 0;
     left: 0;
+    font-family: "Nunito" !important;
+}
+
+#login_pass_input, #login_confirm_pass_input{
+    color:cornflowerblue;
+    font-family: "Nunito Bold";
 }

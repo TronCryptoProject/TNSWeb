@@ -4,7 +4,7 @@
     margin: 3rem 1rem 3rem 1rem;
 }
 #amt_input_signed, #amt_input_unsigned{
-    color: #b5cc18 !important
+    color: #82b314 !important;
 }
 #to_input_signed, #to_input_unsigned{
     color: cornflowerblue !important;
@@ -35,4 +35,8 @@
 #signed_tx_card .raised.card{
     box-shadow: 0 0 0 1px #d4d4d5, 3px 4px 4px 0 rgba(34,36,38,.12),
         8px 5px 10px 1px rgba(34,36,38,.15) !important;
+}
+
+#live_demo_shape *{
+    font-family: "Nunito" !important;
 }

@@ -69,7 +69,7 @@ export default class LoginPage extends React.Component{
                                 <div className="ui tiny statistic fullwidth">
                                     <div className="value">
                                         <div className="ui transparent small input">
-                                            <input type="text" placeholder="Password" id="login_pass_input"
+                                            <input type="password" placeholder="Password" id="login_pass_input"
                                                 className="text_center" autoComplete="off"/>
                                         </div>
                                     </div>
@@ -79,7 +79,7 @@ export default class LoginPage extends React.Component{
                                 <div className="ui tiny statistic fullwidth">
                                     <div className="value">
                                         <div className="ui transparent small input">
-                                            <input type="text" placeholder="Confirm Password" id="login_confirm_pass_input"
+                                            <input type="password" placeholder="Confirm Password" id="login_confirm_pass_input"
                                                 className="text_center" autoComplete="off"/>
                                         </div>
                                     </div>

@@ -180,7 +180,7 @@ export default class LiveDemo extends React.Component{
                                 <div className="ui transparent small input">
                                     <input type="text" placeholder="Recipient alias or address"
                                         onChange={e=>{this.eventToInputChanged(e)}} id={to_input_id}
-                                        className="text_center" autoComplete="off"/>
+                                        className="text_center" autoComplete="off" spellCheck="false"/>
                                 </div>
                             </div>
                             <div className="label">
@@ -194,7 +194,8 @@ export default class LiveDemo extends React.Component{
                             <div className="value">
                                 <div className="ui transparent input">
                                     <input type="number" placeholder="0" min="0" onChange={(e)=>{this.eventAmtChanged(e)}}
-                                        id={amount_id} className="text_center" autoComplete="off"/>
+                                        id={amount_id} className="text_center" autoComplete="off"
+                                        spellCheck="false"/>
                                 </div>
                             </div>
                             <div className="label">

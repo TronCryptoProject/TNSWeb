@@ -15,7 +15,7 @@
 
 .hp_title{
     color: #ffffff;
-    font-family: Amaranth;
+    font-family: Amaranth !important;
     font-size: 6em;
     transition: all 2s;
     animation: image_blur_out 3s;
@@ -30,7 +30,8 @@
 }
 
 .ui.secondary.pointing.borderless.menu a,
-.ui.secondary.pointing.borderless.menu a.active{
+.ui.secondary.pointing.borderless.menu a.active,
+#nav_dropdown:not(.menu){
     display: block;
     padding: 15px;
     text-decoration: none;
@@ -38,10 +39,15 @@
     font-weight: 800;
     text-transform: uppercase;
     margin: 0 10px;
-    font-family: "Nunito Black";
+    font-family: "Nunito Black" !important;
     font-size:1.1em;
     position: relative;
 }
+
+#nav_dropdown{
+    transition: all .5s;
+}
+
 .ui.secondary.pointing.borderless.menu{
     border-bottom: 0 !important;
 }
@@ -54,7 +60,7 @@
     color: #c0ccf3 !important;
 }
 .ui.secondary.pointing.borderless.menu a.item:active,
-.ui.secondary.pointing.borderless.menu .active.item{
+.ui.secondary.pointing.borderless.menu .active.item:not(#nav_dropdown){
     border-color: #c0ccf3 !important;
 }
 
@@ -75,6 +81,11 @@
     background: #c0ccf3;
     height: 2px;
 }
+
+.ui.secondary.pointing.menu #nav_dropdown:active{
+    border-color: transparent;
+}
+
 .ui.secondary.pointing.borderless.menu a:hover:after{
     width: 100% !important;
 }
@@ -116,4 +127,9 @@
     .hp_subtitle{
         font-size: 1em;
     }
+}
+
+#navbar{
+    margin-right: 1em;
+    transition: all .5s;
 }

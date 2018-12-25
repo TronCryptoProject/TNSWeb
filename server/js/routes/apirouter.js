@@ -7,6 +7,7 @@ Router.get("/tagAvailable/:alias/:tag", ApiController.isTagAvailable);
 Router.get("/aliases/:owner", ApiController.getAliasesForOwner);
 Router.get("/tags/:alias", ApiController.getAllTagsForAlias);
 Router.get("/tagInfo/:alias/:tag", ApiController.getTagDataForTag);
+Router.get("/allAliasInfo/:owner", ApiController.getAllAliasInfo);
 
 Router.get("/genAddressList/:alias/:tag", ApiController.getGenAddressList);
 Router.get("/genAddressListLen/:alias/:tag", ApiController.getGenAddressListLen);

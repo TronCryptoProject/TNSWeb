@@ -1,0 +1,22 @@
+#generate_wallet_segment{
+    border: 1px solid rgba(34,36,38,.1) !important;
+    box-shadow: none !important;
+    border-radius: 0.7em !important;
+}
+
+#new_wallet_segment{
+    background: rgba(189, 180, 180, 0.1);
+    border-radius: 1em;
+}
+
+.mnemonic_detail{
+    padding: .4em .833em;
+    background: rgba(0,0,0,.1);
+    border-top-left-radius: .28571429rem;
+    border-bottom-left-radius: .28571429rem;
+}
+.ui.label.mnemonic{
+    border-top-left-radius: 0 !important;
+    border-bottom-left-radius: 0 !important;
+    margin-left: 0 !important;
+}

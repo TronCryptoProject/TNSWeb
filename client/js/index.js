@@ -50,7 +50,7 @@ $.fn.extend({
 					this.removeClass("right labeled");
 				}
 			}
-
+			
 			if (args.type == "error"){
 				this.addClass("red");
 				this.text(args.error.text);
@@ -102,6 +102,7 @@ import HomePage from "./HomePage.js";
 import LiveDemo from "./LiveDemo.js";
 import HomePageFeatures from "./HomePageFeatures.js";
 import LoginPage from "./LoginPage.js";
+import UserHome from "./UserHome.js";
 
 class Index extends React.Component{
 	constructor(props){
@@ -119,6 +120,9 @@ class Index extends React.Component{
 		this.handleMenuClick = this.handleMenuClick.bind(this);
 		this.getNavBar = this.getNavBar.bind(this);
 		this.getBackground = this.getBackground.bind(this);
+		this.eventNavDropUserHomeClick = this.eventNavDropUserHomeClick.bind(this);
+		this.eventNavDropLogoutClick = this.eventNavDropLogoutClick.bind(this);
+		this.switchToUserHome = this.switchToUserHome.bind(this);
 	}
 
 	componentDidMount(){
@@ -159,6 +163,10 @@ class Index extends React.Component{
 		}, timeinterval);
 	}
 
+	componentDidUpdate(){
+		$(".ui.dropdown").dropdown();
+	}
+
 	handleMenuClick(e){
 		let id = e.target.id;
 		$("#" + id).addClass("active");
@@ -166,6 +174,10 @@ class Index extends React.Component{
 			$("#" + this.state.currPage).removeClass("active");
 		}
 		this.setState({currPage: id});
+	}
+
+	switchToUserHome(){
+		this.setState({currPage: "userhome_item"});
 	}
 
 	getMainComp(){
@@ -193,7 +205,13 @@ class Index extends React.Component{
 					case "api_item":
 						break;
 					case "login_item":
-						main_comp = <LoginPage/>;
+						main_comp = <LoginPage onSuccessCallback={this.switchToUserHome}/>;
+						break;
+					case "userhome_item":
+						main_comp = <UserHome/>;
+						break;
+					case "logout_item":
+						main_comp = <HomePage/>;
 						break;
 					default:
 						break;
@@ -203,10 +221,50 @@ class Index extends React.Component{
 		return main_comp;
 	}
 
+	eventNavDropUserHomeClick(e){
+		this.setState({currPage: "userhome_item"});
+	}
+
+	eventNavDropLogoutClick(e){
+		localStorage.removeItem("tnsx");
+		if (this.state.currPage == "userhome_item"){
+			this.setState({currPage: "home"});
+		}
+		this.forceUpdate();
+	}
+
 	getNavBar(compName){
 		if (compName != "TronLinkChecker" && compName != "TronLinkDownload"){
+			let getUserStateDiv = ()=>{
+				let tnsx = localStorage.getItem("tnsx");
+				if (tnsx != undefined && tnsx != ""){
+					return(
+						<div className="ui pointing dropdown item" id="nav_dropdown">
+							User Portal
+							<i className="dropdown icon"></i>
+							<div className="menu">
+								<div className="dead_center item" onClick={e=>{this.eventNavDropUserHomeClick(e)}}
+									id="userhome_item">
+									Aliases
+								</div>
+								<div className="dead_center item" onClick={e=>{this.eventNavDropLogoutClick(e)}}
+									id="logout_item">
+									Logout
+								</div>
+							</div>
+						</div>
+					);
+				}else{
+					return(
+						<a className="ui item" onClick={(e)=>{this.handleMenuClick(e)}} id="login_item">
+							Login
+						</a>
+					);
+				}
+			}
+
 			return (
-				<div className="ui secondary pointing borderless menu">
+				<div className="ui secondary pointing borderless menu" id="navbar">
 					<a className="ui item no_padding" onClick={(e)=>{this.handleMenuClick(e)}}
 						id="home">
 						<img src="../images/tron_logo_shadow_white.svg"/>
@@ -220,9 +278,7 @@ class Index extends React.Component{
 						<a className="ui item" onClick={(e)=>{this.handleMenuClick(e)}} id="api_item">
 							API
 						</a>
-						<a className="ui item" onClick={(e)=>{this.handleMenuClick(e)}} id="login_item">
-							Login
-						</a>
+						{getUserStateDiv()}
 					</div>
 				</div>
 			);
@@ -246,6 +302,10 @@ class Index extends React.Component{
 				break;
 			case "LoginPage":
 				background = "hp_background";
+				break;
+			case "UserHome":
+				background = "hp_background";
+				break;
 			default:
 				break;
 		}

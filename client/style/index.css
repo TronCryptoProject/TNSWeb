@@ -5,14 +5,35 @@
 @import "./LiveDemo.css";
 @import "./HomePageFeatures.css";
 @import "./LoginPage.css";
+@import "./UserHome.css";
+@import "./CreateAlias.css";
+@import "./GenerateAddressSegment.css";
 
 body{
 	line-height: inherit !important;
+	font-family: "Nunito" !important;
+}
+
+.ui.header, .ui.sub.header{
+	font-family: "Nunito Bold" !important;
 }
 
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
     -webkit-appearance: none;
+}
+.hidden_scroll_y{
+    overflow: scroll;
+    overflow-y: hidden;
+}
+.hidden_scroll_x{
+    overflow: scroll;
+    overflow-x: hidden;
+}
+
+::-webkit-scrollbar {
+    width: 0px;
+    background: transparent;
 }
 
 .fullscreen{
@@ -69,6 +90,9 @@ input::-webkit-inner-spin-button {
 .no_padding{
 	padding: 0 !important;
 }
+.no_padding_t{
+	padding-top: 0 !important;
+}
 .no_margin{
 	margin: 0 !important;
 }
@@ -79,7 +103,12 @@ input::-webkit-inner-spin-button {
 .margined{
 	margin: 2rem !important;
 }
-
+.margined_b{
+	margin-bottom: 2rem !important;
+}
+.margined_t{
+	margin-top: 2rem !important;
+}
 .padding_x{
 	padding-left: 2rem !important;
 	padding-right: 2rem !important;
@@ -103,6 +132,12 @@ input::-webkit-inner-spin-button {
 .alot.margined{
 	margin: 4rem !important;
 }
+.alot.margined_b{
+	margin-bottom: 4rem !important;
+}
+.alot.margined_t{
+	margin-top: 4rem !important;
+}
 .alot.padding_x{
 	padding-left: 4rem !important;
 	padding-right: 4rem !important;
@@ -118,4 +153,36 @@ input::-webkit-inner-spin-button {
 .alot.margined_y{
 	margin-top: 4rem !important;
 	margin-bottom: 4rem !important;
+}
+
+.ui.statistic .label.initialcase{
+    text-transform: initial;
+}
+.ui.statistic .label.lowercase{
+    text-transform: lowercase;
+}
+.ui.statistic .label.initialcase.extra.content,
+.ui.statistic .label.lowercase.extra.content{
+    color: rgba(0,0,0,.5);
+}
+
+.lineheight{
+	line-height: 1.3em;
+}
+.alot-lineheight{
+	line-height: 2em;
+}
+
+.block_display{
+	display: block !important;
+}
+.flex_display{
+	display: flex !important;
+}
+.flowroot_display{
+	display: flow-root !important;
+}
+
+.overflow_hidden{
+	overflow: hidden;
 }

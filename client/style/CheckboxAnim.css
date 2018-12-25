@@ -85,8 +85,9 @@
     overflow: hidden;
     perspective: 750px;
     line-height: 0.5;
-    color: #c2d2ec; 
+    color: #c2d2ec;
 }
+
 *, *::before, *::after {
     box-sizing: border-box;
 }

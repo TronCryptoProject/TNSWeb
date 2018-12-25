@@ -2,7 +2,7 @@ var AppRoot = require("app-root-path");
 var ApiConfig = require(AppRoot + "/server/config/api.json");
 var Injecter = require(AppRoot + "/injecter.json");
 var TronWeb = require("tronweb");
-
+var to = require('await-to-js').default;
 
 const network_type = argv.network.trim();
 const tronWeb = new TronWeb(
@@ -13,6 +13,7 @@ const tronWeb = new TronWeb(
 );
 const TNSContractAddress = Injecter["TNS"]["address"];
 var genAddressListIdxDict = {};
+
 
 async function isTronWebConnected(){
     return await tronWeb.isConnected();
@@ -174,6 +175,51 @@ exports.getTagDataForTag = function(req,res){
     }).catch(e=>{
         res.status(400).json(createErrorJSON(e));
     });
+}
+
+exports.getAllAliasInfo = async function(req,res){
+    var owner_address = req.params.owner;
+    var res_dict = {};
+
+    preCheck([owner_address]);
+    if (tronWeb.isAddress(owner_address)){
+        try{
+            var [err, aliasList] = await to(contractCall("getAliasesForOwner", [owner_address]));
+            if (err) throw err;
+            console.log(aliasList);
+            for (var alias of aliasList){
+                var [err, encAlias] = await to(contractCall("getEncryptedAliasForKeccak",[alias]));
+                if (err) throw err;
+
+                var [err, tagList] = await to(contractCall("getAllTagsForAlias",[alias]));
+                if (err) throw err;
+               
+                for (var tag of tagList){
+                    var [err, encTag] = await to(contractCall("getEncryptedTagForKeccak",[alias,tag]));
+                    if (err) throw err;
+                    
+                    var [err, tagDataList] = await to(contractCall("getTagDataForTag",[alias,tag]));
+                    if (err) throw err;
+                    var res_json = {
+                        "generatorFlag": tagDataList[0],
+                        "genAddressList": tagDataList[1],
+                        "tagPubAddress": tagDataList[2]
+                    };
+
+                    if (!(encAlias in res_dict)){
+                        res_dict[encAlias] = {};
+                    }
+                    res_dict[encAlias][encTag] = res_json;
+                }
+            }
+            res.json(createResJSON(res_dict));
+        }catch(e){
+            res.status(400).json(createErrorJSON(e));
+        }
+           
+    }else{
+        res.status(400).json(ApiConfig.errors.INVALID_PARAM);
+    }
 }
 
 exports.getGenAddressList = function(req,res){

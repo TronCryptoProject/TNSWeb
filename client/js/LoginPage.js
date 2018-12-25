@@ -7,6 +7,11 @@ export default class LoginPage extends React.Component{
         this.eventLoginClick = this.eventLoginClick.bind(this);
     }
 
+    componentDidMount(){
+        let navheight = $("#navbar").outerHeight(true);
+        $("#login_page_main_div").css("height", `calc(100% - ${navheight}px)`);
+    }
+
     eventLoginClick(e){
         let confirm_val = $("#login_confirm_pass_input").val().trim();
         let initial_val = $("#login_pass_input").val().trim();
@@ -27,8 +32,9 @@ export default class LoginPage extends React.Component{
                         text: "Success"
                     }
                 };
-                func_callback = function(){
-
+                func_callback = ()=>{
+                    localStorage.setItem("tnsx", confirm_val);
+                    this.props.onSuccessCallback();
                 }
             }else{
                 button_conf_dict = {
@@ -70,7 +76,8 @@ export default class LoginPage extends React.Component{
                                     <div className="value">
                                         <div className="ui transparent small input">
                                             <input type="password" placeholder="Password" id="login_pass_input"
-                                                className="text_center" autoComplete="off"/>
+                                                className="text_center" autoComplete="off"
+                                                spellCheck="false"/>
                                         </div>
                                     </div>
                                 </div>
@@ -80,7 +87,8 @@ export default class LoginPage extends React.Component{
                                     <div className="value">
                                         <div className="ui transparent small input">
                                             <input type="password" placeholder="Confirm Password" id="login_confirm_pass_input"
-                                                className="text_center" autoComplete="off"/>
+                                                className="text_center" autoComplete="off"
+                                                spellCheck="false"/>
                                         </div>
                                     </div>
                                 </div>
@@ -100,4 +108,8 @@ export default class LoginPage extends React.Component{
             </div>
         );
     }
+}
+
+LoginPage.defaultProps = {
+    onSuccessCallback: (function(){})
 }

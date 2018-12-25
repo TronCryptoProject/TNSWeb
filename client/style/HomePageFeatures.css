@@ -19,11 +19,6 @@
     width: 60%;
 }
 
-#home_page_feature_cards .column .cards>.card>.content .header,
-#home_page_feature_cards .column .cards>.card>.content .description{
-    font-family: "Nunito";
-}
-
 #home_features_section{
     background: linear-gradient(#6599f5,#4c64bb, #545aa5);
     color: white !important;
@@ -73,7 +68,6 @@
     width: 10vw;
 } 
 #home_page_protection_seg .segment>.grid>*{
-    font-family: "Nunito";
     font-size: 1.1em;
 } 
 

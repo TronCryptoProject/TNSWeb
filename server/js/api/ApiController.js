@@ -147,6 +147,18 @@ exports.getAliasesForOwner = function(req,res){
     }
 }
 
+exports.getAliasOwner = function(req,res){
+    var alias = req.params.alias;
+
+    preCheck([alias]);
+    var args = getConditionedArgs(req.query.raw, [alias]);
+    contractCall("getAliasOwner", args).then(result=>{
+        res.json(createResJSON(result));
+    }).catch(e=>{
+        res.status(400).json(createErrorJSON(e));
+    });
+}
+
 exports.getAllTagsForAlias = function(req,res){
     var alias = req.params.alias;
 

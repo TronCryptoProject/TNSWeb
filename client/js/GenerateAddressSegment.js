@@ -46,10 +46,15 @@ export default class GenerateAddressSegment extends React.Component{
     eventImportMNInputBlur(e){
         let val = $(e.target).val().trim();
         let split_val = val.split(" ");
+        let res_val = [];
+
         for (let idx = 0; idx < split_val.length; idx++){
-            split_val[idx] = split_val[idx].trim();
+            let tmp_val = split_val[idx].trim();
+            if (tmp_val != ""){
+                res_val.push(tmp_val);
+            }
         }
-        this.setState({importMNState: "uneditable", genMN: split_val});
+        this.setState({importMNState: "uneditable", genMN: res_val});
     }
 
     eventCloseGenWalletSegment(){
@@ -59,6 +64,8 @@ export default class GenerateAddressSegment extends React.Component{
             genMN:[],
             genAddrs:[],
             importMNState: "editable"
+        }, ()=>{
+            this.props.updateGenAddrs(this.state.genAddrs);
         });
     }
 
@@ -73,7 +80,7 @@ export default class GenerateAddressSegment extends React.Component{
     getAddrs(){
         let res_list = [];
         for (let key of this.state.genAddrs){
-            res_list.push(TronWeb.address.fromPrivateKey(key));
+            res_list.push(TronWeb.address.toHex(TronWeb.address.fromPrivateKey(key)));
         }
         return res_list;
     }
@@ -84,7 +91,8 @@ export default class GenerateAddressSegment extends React.Component{
         for(let idx = 0; idx < this.state.genAddrs.length; idx++){
             let pkey = this.state.genAddrs[idx];
             file_list.push(`ACCOUNT INDEX: ${idx}\n`);
-            file_list.push(`Public Address: ${pub_addrs[idx]}\n`);
+            file_list.push(`Public Address: ${TronWeb.address.fromHex(pub_addrs[idx])}\n`);
+            file_list.push(`Public Address (HEX): ${pub_addrs[idx]}\n`);
             file_list.push(`Private Key: ${pkey}\n`);
             file_list.push("\n\n");
         }
@@ -95,7 +103,7 @@ export default class GenerateAddressSegment extends React.Component{
 
     eventGenAddressClick(e){
         e.persist();
-        if (this.state.genMN.length != 0){
+        if (this.state.genMN.length == 12){
             let count = $("#gen_address_cnt").dropdown("get value");
 
             if (count == undefined || count == ""){
@@ -124,19 +132,20 @@ export default class GenerateAddressSegment extends React.Component{
                     this.setState({
                         genAddrs: addr_list,
                         isGenerated: true
+                    }, ()=>{
+                        this.props.updateGenAddrs(this.getAddrs());
                     });
                 },1000);
             }
         }else{
             let button_conf_dict = {
                 type: "error",
-                error: {
-                    text: "Mnemonic cannot be empty"
-                },
-                normal: {
-                    text: "Generate Addresses"
-                }
+                error: {text: "Mnemonic cannot be empty"},
+                normal: {text: "Generate Addresses"}
             };
+            if (this.state.genMN.length != 0){
+                button_conf_dict.error.text = "Mnemonic is not valid";
+            }
             $(e.target).showButtonConf(button_conf_dict);
         }
     }
@@ -155,12 +164,15 @@ export default class GenerateAddressSegment extends React.Component{
                 let start_idx = (row * col_len);
                 let res_row_list = [];
                 for (let idx = start_idx; idx < (start_idx + col_len); idx++){
-                    let word = this.state.genMN[idx];
+                    let word = " ";
+                    if (idx < this.state.genMN.length){
+                        word = this.state.genMN[idx];
+                    }
                     res_row_list.push(
                         <div className="column overflow_hidden" key={"mnemonic_col_" + idx}>
-                            <div className="flex_display">
+                            <div className="flex_display dead_center">
                                 <div className="mnemonic_detail">{idx+1}</div>
-                                <div className="ui label mnemonic">
+                                <div className="ui label center aligned mnemonic">
                                     {word}
                                 </div>
                             </div>
@@ -187,7 +199,7 @@ export default class GenerateAddressSegment extends React.Component{
         let getGenButtons = ()=>{
             if (this.state.isGenerated){
                 return(
-                    <button className="ui margined_y right labelled button" onClick={e=>{this.eventGenAddressDownloadClick(e)}}>
+                    <button className="ui margined_y right green labelled button" onClick={e=>{this.eventGenAddressDownloadClick(e)}}>
                        <i className="download icon"/>
                        Download Addresses
                     </button>
@@ -283,20 +295,20 @@ export default class GenerateAddressSegment extends React.Component{
                 <div className="ui vertical divider">Or</div>
                 <div className="middle aligned row">
                     <div className="column">
-                        <div className="ui icon header block_display">
+                        <div className="ui mud_green_color icon header block_display">
                             <i className="download icon"/>
                             Import HD Wallet
                         </div>
-                        <div className="ui primary button" onClick={e=>{this.eventImportWalletClick(e)}}>
+                        <button className="ui button" onClick={e=>{this.eventImportWalletClick(e)}}>
                             Import
-                        </div>
+                        </button>
                     </div>
                     <div className="column">
-                        <div className="ui icon header block_display">
+                        <div className="ui mud_green_color icon header block_display">
                             <i className="address card icon"/>
                             Create New HD Wallet
                         </div>
-                        <button className="ui primary button" onClick={e=>{this.eventCreateWalletClick(e)}}>
+                        <button className="ui button" onClick={e=>{this.eventCreateWalletClick(e)}}>
                             Create
                         </button>
                     </div>
@@ -349,5 +361,5 @@ export default class GenerateAddressSegment extends React.Component{
 }
 
 GenerateAddressSegment.defaultProps = {
-    
+    updateGenAddrs: (function(){})
 }

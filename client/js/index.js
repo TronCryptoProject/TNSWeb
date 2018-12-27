@@ -104,6 +104,7 @@ import HomePageFeatures from "./HomePageFeatures.js";
 import LoginPage from "./LoginPage.js";
 import UserHome from "./UserHome.js";
 
+
 class Index extends React.Component{
 	constructor(props){
 		super(props);
@@ -304,7 +305,7 @@ class Index extends React.Component{
 				background = "hp_background";
 				break;
 			case "UserHome":
-				background = "hp_background";
+				background = "userhome_background";
 				break;
 			default:
 				break;
@@ -330,7 +331,7 @@ class Index extends React.Component{
 
 		return (
 			<div>
-				<div className={`fullscreen ${curr_background}`}>
+				<div className={`fullscreen ${curr_background}`} id="main_background_div">
 					{this.getNavBar(component.type.name)}
 					{component}
 				</div>

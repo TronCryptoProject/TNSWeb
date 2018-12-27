@@ -5,6 +5,7 @@ var ApiController = require("./../api/ApiController.js");
 Router.get("/aliasAvailable/:alias", ApiController.isAliasAvailable);
 Router.get("/tagAvailable/:alias/:tag", ApiController.isTagAvailable);
 Router.get("/aliases/:owner", ApiController.getAliasesForOwner);
+Router.get("/aliasOwner/:alias", ApiController.getAliasOwner);
 Router.get("/tags/:alias", ApiController.getAllTagsForAlias);
 Router.get("/tagInfo/:alias/:tag", ApiController.getTagDataForTag);
 Router.get("/allAliasInfo/:owner", ApiController.getAllAliasInfo);

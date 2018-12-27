@@ -161,6 +161,12 @@ input::-webkit-inner-spin-button {
 .ui.statistic .label.lowercase{
     text-transform: lowercase;
 }
+.ui.statistic .value.initialcase{
+    text-transform: initial;
+}
+.ui.statistic .value.lowercase{
+    text-transform: lowercase;
+}
 .ui.statistic .label.initialcase.extra.content,
 .ui.statistic .label.lowercase.extra.content{
     color: rgba(0,0,0,.5);
@@ -182,7 +188,26 @@ input::-webkit-inner-spin-button {
 .flowroot_display{
 	display: flow-root !important;
 }
-
+.none_display{
+	display: none !important;
+}
 .overflow_hidden{
 	overflow: hidden;
+}
+
+.no_user_select{
+	user-select: none;
+}
+
+.mud_green_color{
+	color: #5d8849 !important;
+}
+
+.no_border{
+	border: none !important;
+}
+.ui.popup{
+    background: #4c4747 !important;
+    color: white !important;
+	border-radius: 0.6em !important;
 }

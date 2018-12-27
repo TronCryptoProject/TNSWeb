@@ -1,0 +1,29 @@
+.userhome_background{
+    background: linear-gradient(185deg,#558cde 60%,rgba(136,163,212,.75),#bdd4f9 10%)
+}
+
+#default_address{
+    font-family: "Nunito Bold" !important;
+    user-select: none;
+}
+#default_address .value{
+    color: #b2daff !important;
+}
+
+.purple_button{
+    background-color: #3645b5 !important;
+    color: white !important;
+}
+.purple_button.red{
+    background-color: #db2828 !important;
+    color: white !important;
+}
+
+.disabled_text{
+    color: rgba(0,0,0,.5);
+}
+
+.alias_segment{
+    border-radius: 1em !important;
+    margin: 4em 2em !important;
+}

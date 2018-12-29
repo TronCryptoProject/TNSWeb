@@ -9,7 +9,7 @@ global.GlobalConfig = GlobalConfig;
 
 var AppRouter = require(AppRoot + "/server/js/routes/AppRouter.js");
 var ApiRouter = require(AppRoot + "/server/js/routes/ApiRouter.js");
-
+var ActivityRouter = require(AppRoot + "/server/js/routes/ActivityRouter.js");
 
 if (!("network" in argv)){
 	console.log("Please specify network");
@@ -31,6 +31,7 @@ app.use(BodyParser.urlencoded({extended:true}));
 
 //register the express router
 app.use("/api", ApiRouter);
+app.use("/activityApi", ActivityRouter);
 app.use("/favicon.ico", function(req,res){
 	res.sendFile(AppRoot + "/favicon.ico");
 });

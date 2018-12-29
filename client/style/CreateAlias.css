@@ -14,11 +14,11 @@
     box-shadow: none !important;
     outline: none !important;
     border: none !important;
-    background: transparent !important;
+    border-radius: 1em !important;
 }
 
 .create_alias_background{
-	background: rgba(123, 157, 224, 0.75)!important;
+	background: rgba(85, 140, 222, 0.77)!important;
 }
 
 #create_alias_div .value .bracket{
@@ -30,9 +30,6 @@
 #create_alias_div .value *input{
     font-family: "Nunito Bold" !important;
     color: #505aad !important;
-}
-#create_alias_div .value *input::placeholder{
-    color: white !important;
 }
 
 @media screen and (max-width: 700px)
@@ -78,11 +75,13 @@
 }
 #create_alias_address_div>.content .ui.menu .item.active{
     font-weight: 600 !important;
+    background: #79757512 !important;
 }
 #create_alias_address_div>.content>.segment{
     border: none !important;
     border-bottom-left-radius: 0.8em !important;
     border-bottom-right-radius: 0.8em !important;
+    background: #79757512 !important;
 }
 #static_address_segment{
     border-top-right-radius: 0.8em !important;

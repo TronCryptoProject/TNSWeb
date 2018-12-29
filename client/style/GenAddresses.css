@@ -1,0 +1,8 @@
+.tns_modal{
+    border-radius: 1em !important;
+    background: rgba(255, 255, 255, 0.63)!important;
+}
+
+.tns_modal>.modal_layout_segment *{
+    transition: all .5s !important;
+}

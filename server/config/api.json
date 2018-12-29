@@ -9,5 +9,50 @@
         "NO_ADDRESS_FOUND":{
             "error": "No addresses found"
         }
+    },
+    "contractFuncAction":{
+        "setAliasStatic": "Create {aliasName} {{{tagName}}} alias (static address)",
+        "setAliasGenerated": "Create {aliasName} {{{tagName}}} alias (auto-gen address)",
+        "updateAlias": "Update {oldEncryptedAlias} alias to {newAliasName}",
+        "updateTag": "Update {oldEncryptedTag} tag to {newTagName} for {aliasName} alias",
+        "deleteAliasTag": "Delete {tagName} tag for {aliasName} alias",
+        "updatePubAddressForTag": "Update public address for {aliasName} {{{tagName}}}",
+        "updateGenAddressFlag": "Update auto-gen setting for {aliasName} {{{tagName}}}",
+        "updateGenAddressListReplace": "Replace auto-gen address list for {aliasName} {{{tagName}}}",
+        "updateGenAddressListAppend": "Add auto-gen address for {aliasName} {{{tagName}}}",
+        "updateGenAddressListDelete": "Delete auto-gen address for {aliasName} {{{tagName}}}"
+    },
+    "funcActionRemoveWords":{
+        "setAliasStatic":{
+            "tagName": ["lc3", "rc3"]
+        },
+        "setAliasGenerated":{ 
+            "tagName": ["lc3", "rc3"]
+        },
+        "updateAlias": {
+            "newAliasName": ["l1"]
+        },
+        "updateTag": {
+            "newTagName": ["l1"],
+            "aliasName": ["l1", "r1"]
+        },
+        "deleteAliasTag": {
+            "aliasName": ["l1", "r1"]
+        },
+        "updatePubAddressForTag": {
+            "tagName": ["lc3", "rc3"]
+        },
+        "updateGenAddressFlag": {
+            "tagName": ["lc3", "rc3"]
+        },
+        "updateGenAddressListReplace": {
+            "tagName": ["lc3", "rc3"]
+        },
+        "updateGenAddressListAppend": {
+            "tagName": ["lc3", "rc3"]
+        },
+        "updateGenAddressListDelete": {
+            "tagName": ["lc3", "rc3"]
+        }
     }
 }

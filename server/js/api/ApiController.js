@@ -1,16 +1,9 @@
 var AppRoot = require("app-root-path");
 var ApiConfig = require(AppRoot + "/server/config/api.json");
 var Injecter = require(AppRoot + "/injecter.json");
-var TronWeb = require("tronweb");
+var tronWeb = require("./TronWebInst.js");
 var to = require('await-to-js').default;
 
-const network_type = argv.network.trim();
-const tronWeb = new TronWeb(
-    GlobalConfig.network[network_type].fullNode,
-    GlobalConfig.network[network_type].solidityNode,
-    GlobalConfig.network[network_type].eventServer,
-    GlobalConfig.privateKey[network_type]
-);
 const TNSContractAddress = Injecter["TNS"]["address"];
 var genAddressListIdxDict = {};
 
@@ -32,7 +25,7 @@ function preCheck(itemArray){
     }
 }
 
-function createErrorJSON(val = ""){
+global.createErrorJSON = function(val = ""){
     var errorMsg = val;
     if (val.constructor == Object){
         var dirty = false;
@@ -54,11 +47,11 @@ function createErrorJSON(val = ""){
     
     return {error: errorMsg};
 }
-function createResJSON(val){
+global.createResJSON = function(val){
     return {result: val};
 }
 
-function keccak256(itemList){
+global.keccak256 = function(itemList){
     var res_list = [];
     for (var item of itemList){
         res_list.push(tronWeb.sha3(item));
@@ -66,7 +59,7 @@ function keccak256(itemList){
     return res_list;
 }
 
-function contractCall(contractFunc, args){
+global.contractCall = function(contractFunc, args){
     return new Promise((resolve,reject)=>{
         try{
             tronWeb.contract().at(TNSContractAddress).then(contract=>{
@@ -108,94 +101,118 @@ function getAliasTagArgs(req,alias,tag){
 
 exports.isAliasAvailable = function(req,res){
     var alias = req.params.alias;
-
-    preCheck([alias]);
-    var args = getConditionedArgs(req.query.raw, [alias]);
-    contractCall("isAliasAvailable", args).then(result=>{
-        res.json(createResJSON(result));
-    }).catch(e=>{
+    
+    try{
+        preCheck([alias]);
+        var args = getConditionedArgs(req.query.raw, [alias]);
+        contractCall("isAliasAvailable", args).then(result=>{
+            res.json(createResJSON(result));
+        }).catch(e=>{
+            throw e;
+        });
+    }catch(e){
         res.status(400).json(createErrorJSON(e));
-    });
+    }
 }
 
 exports.isTagAvailable = function(req,res){
     var alias = req.params.alias;
     var tag = req.params.tag;
 
-    preCheck([alias,tag]);
-    var args = getConditionedArgs(req.query.raw, [alias,tag]);
-    contractCall("isTagAvailable",args).then(result=>{
-        res.json(createResJSON(result));
-    }).catch(e=>{
+    try{
+        preCheck([alias,tag]);
+        var args = getConditionedArgs(req.query.raw, [alias,tag]);
+        contractCall("isTagAvailable",args).then(result=>{
+            res.json(createResJSON(result));
+        }).catch(e=>{
+            throw e;
+        });
+    }catch(e){
         res.status(400).json(createErrorJSON(e));
-    });
+    }
 }
 
 //Need to decrypt the aliases with password in a second request to get the actual string back
 exports.getAliasesForOwner = function(req,res){
     var owner_address = req.params.owner;
 
-    preCheck([owner_address]);
-    if (tronWeb.isAddress(owner_address)){
-        contractCall("getAliasesForOwner",owner_address).then(result=>{
-            res.json(createResJSON(result));
-        }).catch(e=>{
-            res.status(400).json(createErrorJSON(e));
-        });
-    }else{
-        res.status(400).json(ApiConfig.errors.INVALID_PARAM);
+    try{
+        preCheck([owner_address]);
+        if (tronWeb.isAddress(owner_address)){
+            contractCall("getAliasesForOwner",owner_address).then(result=>{
+                res.json(createResJSON(result));
+            }).catch(e=>{
+                throw e;
+            });
+        }else{
+            throw ApiConfig.errors.INVALID_PARAM;
+        }
+    }catch(e){
+        res.status(400).json(createErrorJSON(e));
     }
 }
 
 exports.getAliasOwner = function(req,res){
     var alias = req.params.alias;
 
-    preCheck([alias]);
-    var args = getConditionedArgs(req.query.raw, [alias]);
-    contractCall("getAliasOwner", args).then(result=>{
-        res.json(createResJSON(result));
-    }).catch(e=>{
+    try{
+        preCheck([alias]);
+        var args = getConditionedArgs(req.query.raw, [alias]);
+        contractCall("getAliasOwner", args).then(result=>{
+            res.json(createResJSON(result));
+        }).catch(e=>{
+            throw e;
+        });
+    }catch(e){
         res.status(400).json(createErrorJSON(e));
-    });
+    }
 }
 
 exports.getAllTagsForAlias = function(req,res){
     var alias = req.params.alias;
 
-    preCheck([alias]);
-    var args = getConditionedArgs(req.query.raw, [alias]);
-    contractCall("getAllTagsForAlias",args).then(result=>{
-        res.json(createResJSON(result));
-    }).catch(e=>{
+    try{
+        preCheck([alias]);
+        var args = getConditionedArgs(req.query.raw, [alias]);
+        contractCall("getAllTagsForAlias",args).then(result=>{
+            res.json(createResJSON(result));
+        }).catch(e=>{
+            throw e;
+        });
+    }catch(e){
         res.status(400).json(createErrorJSON(e));
-    });
+    }
 }
 
 exports.getTagDataForTag = function(req,res){
     var alias = req.params.alias;
     var tag = req.params.tag;
 
-    preCheck([alias,tag]);
-    var args = getConditionedArgs(req.query.raw, [alias,tag]);
-    contractCall("getTagDataForTag",args).then(resultList=>{
-        var res_json = {
-            "generatorFlag": resultList[0],
-            "genAddressList": resultList[1],
-            "tagPubAddress": resultList[2]
-        };
-        res.json(createResJSON(res_json));
-    }).catch(e=>{
+    try{
+        preCheck([alias,tag]);
+        var args = getConditionedArgs(req.query.raw, [alias,tag]);
+        contractCall("getTagDataForTag",args).then(resultList=>{
+            var res_json = {
+                "generatorFlag": resultList[0],
+                "genAddressList": resultList[1],
+                "tagPubAddress": resultList[2]
+            };
+            res.json(createResJSON(res_json));
+        }).catch(e=>{
+            throw e;
+        });
+    }catch(e){
         res.status(400).json(createErrorJSON(e));
-    });
+    }
 }
 
 exports.getAllAliasInfo = async function(req,res){
     var owner_address = req.params.owner;
     var res_dict = {};
 
-    preCheck([owner_address]);
-    if (tronWeb.isAddress(owner_address)){
-        try{
+    try{
+        preCheck([owner_address]);
+        if (tronWeb.isAddress(owner_address)){
             var [err, aliasList] = await to(contractCall("getAliasesForOwner", [owner_address]));
             if (err) throw err;
             console.log(aliasList);
@@ -205,7 +222,7 @@ exports.getAllAliasInfo = async function(req,res){
 
                 var [err, tagList] = await to(contractCall("getAllTagsForAlias",[alias]));
                 if (err) throw err;
-               
+            
                 for (var tag of tagList){
                     var [err, encTag] = await to(contractCall("getEncryptedTagForKeccak",[alias,tag]));
                     if (err) throw err;
@@ -225,12 +242,11 @@ exports.getAllAliasInfo = async function(req,res){
                 }
             }
             res.json(createResJSON(res_dict));
-        }catch(e){
-            res.status(400).json(createErrorJSON(e));
+        }else{
+           throw ApiConfig.errors.INVALID_PARAM;
         }
-           
-    }else{
-        res.status(400).json(ApiConfig.errors.INVALID_PARAM);
+    }catch(e){
+        res.status(400).json(createErrorJSON(e));
     }
 }
 
@@ -238,86 +254,106 @@ exports.getGenAddressList = function(req,res){
     var alias = req.params.alias;
     var tag = req.params.tag;
 
-    preCheck([alias,tag]);
-    var args = getAliasTagArgs(req,alias,tag);
-    
-    contractCall("getGenAddressList",args).then(resultList=>{
-        res.json(createResJSON(resultList));
-    }).catch(e=>{
+    try{
+        preCheck([alias,tag]);
+        var args = getAliasTagArgs(req,alias,tag);
+        
+        contractCall("getGenAddressList",args).then(resultList=>{
+            res.json(createResJSON(resultList));
+        }).catch(e=>{
+            throw e;
+        });
+    }catch(e){
         res.status(400).json(createErrorJSON(e));
-    });
+    }
 }
 
 exports.getGenAddressListLen = function(req,res){
     var alias = req.params.alias;
     var tag = req.params.tag;
 
-    preCheck([alias,tag]);
-    var args = getAliasTagArgs(req,alias,tag);
-    
-    contractCall("getGenAddressListLen",args).then(result=>{
-        res.json(createResJSON(result));
-    }).catch(e=>{
+    try{
+        preCheck([alias,tag]);
+        var args = getAliasTagArgs(req,alias,tag);
+        
+        contractCall("getGenAddressListLen",args).then(result=>{
+            res.json(createResJSON(result));
+        }).catch(e=>{
+            throw e;
+        });
+    }catch(e){
         res.status(400).json(createErrorJSON(e));
-    });
+    }
 }
 
 exports.getPubAddress = function(req,res){
     var alias = req.params.alias;
     var tag = req.params.tag;
 
-    preCheck([alias,tag]);
-    var args = getAliasTagArgs(req,alias,tag);
-    contractCall("getPubAddressForTag",args).then(result=>{
-        res.json(createResJSON(result));
-    }).catch(e=>{
+    try{
+        preCheck([alias,tag]);
+        var args = getAliasTagArgs(req,alias,tag);
+        contractCall("getPubAddressForTag",args).then(result=>{
+            res.json(createResJSON(result));
+        }).catch(e=>{
+            throw e;
+        });
+    }catch(e){
         res.status(400).json(createErrorJSON(e));
-    });
+    }
 }
 
 exports.getGenAddressFlag = function(req,res){
     var alias = req.params.alias;
     var tag = req.params.tag;
 
-    preCheck([alias,tag]);
-    var args = getAliasTagArgs(req,alias,tag);
-    contractCall("getPubAddressForTag",args).then(result=>{
-        res.json(createResJSON(result));
-    }).catch(e=>{
+    try{
+        preCheck([alias,tag]);
+        var args = getAliasTagArgs(req,alias,tag);
+        contractCall("getPubAddressForTag",args).then(result=>{
+            res.json(createResJSON(result));
+        }).catch(e=>{
+            throw e;
+        });
+    }catch(e){
         res.status(400).json(createErrorJSON(e));
-    });
+    }
 }
 
 exports.getNextGenAddress = function(req,res){
     var alias = req.params.alias;
     var tag = req.params.tag;
 
-    preCheck([alias,tag]);
-    var args = getAliasTagArgs(req,alias,tag);
-
     //assumes checks for listLen > 0 are previously done
     function getListNextIdx(listLen){
         var key = alias + "-" + tag;
         if (key in genAddressListIdxDict){
-            var idx = getNextGenAddressForTag[key]
-            getNextGenAddressForTag[key] = (idx + 1) % listLen;
+            var idx = genAddressListIdxDict[key]
+            genAddressListIdxDict[key] = (idx + 1) % listLen;
         }else{
-            getNextGenAddressForTag[key] = 0;
+            genAddressListIdxDict[key] = 0;
         }
-        return getNextGenAddressForTag[key];
+        return genAddressListIdxDict[key];
     }
     
-    contractCall("getGenAddressListLen",args).then(genNumElems=>{
-        if (genNumElems < 1){
-            throw ApiConfig.errors.NO_ADDRESS_FOUND;
-        }
-        var next_idx = getListNextIdx(genNumElems);
-        contractCall("getGenAddressForTag",[...args,next_idx]).then(genAddress=>{
-            res.json(createResJSON(genAddress));
+    try{
+        preCheck([alias,tag]);
+        var args = getAliasTagArgs(req,alias,tag);
+
+        contractCall("getGenAddressListLen",args).then(genNumElems=>{
+            if (genNumElems < 1){
+                throw ApiConfig.errors.NO_ADDRESS_FOUND;
+            }
+            var next_idx = getListNextIdx(genNumElems);
+            contractCall("getGenAddressForTag",[...args,next_idx]).then(genAddress=>{
+                res.json(createResJSON(genAddress));
+            }).catch(e=>{
+                throw e;
+            });
         }).catch(e=>{
             throw e;
         });
-    }).catch(e=>{
+    }catch(e){
         res.status(400).json(createErrorJSON(e));
-    });
+    }
 }

@@ -189,7 +189,7 @@ export default class HomePageFeatures extends React.Component{
                             <div className="three wide center middle aligned column">
                                 <object type="image/svg+xml" data="../images/secret_anim.svg"/>
                             </div>
-                            <div className="ten wide column">
+                            <div className="twelve wide column">
                                 <div className="ui large header">
                                     Obfuscated Aliases & Confidentiality
                                 </div>
@@ -210,7 +210,7 @@ export default class HomePageFeatures extends React.Component{
                             <div className="three wide center middle aligned column">
                                 <img src="../images/non-reverse.svg"/>
                             </div>
-                            <div className="ten wide column">
+                            <div className="twelve wide column">
                                 <div className="ui large header">
                                     Non-Reversibility of Aliases to Addresses
                                 </div>
@@ -229,7 +229,7 @@ export default class HomePageFeatures extends React.Component{
                             <div className="three wide center middle aligned column">
                                 <img src="../images/hacker.png"/>
                             </div>
-                            <div className="ten wide column">
+                            <div className="twelve wide column">
                                 <div className="ui large header">
                                     Resistent to Homoglyph Attacks
                                 </div>

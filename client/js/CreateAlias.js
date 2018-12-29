@@ -248,7 +248,7 @@ export default class CreateAlias extends React.Component{
 					<div className="ui centered three column grid row margined_b">
                         <div className="column"></div>
                         <div className="column padding_y">
-                            <div className="ui huge center aligned header">
+                            <div className="ui huge center aligned purple_header header">
                                 Create New Alias
                             </div>
                         </div>

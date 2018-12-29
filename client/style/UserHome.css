@@ -14,16 +14,98 @@
     background-color: #3645b5 !important;
     color: white !important;
 }
+.purple_button:hover{
+    background-color: #3645b5ad !important;
+}
 .purple_button.red{
     background-color: #db2828 !important;
     color: white !important;
 }
 
-.disabled_text{
-    color: rgba(0,0,0,.5);
-}
-
 .alias_segment{
     border-radius: 1em !important;
     margin: 4em 2em !important;
+}
+.alias_segment>.ui.huge.header:first-child{
+    position: relative;
+}
+.purple_header{
+    color: #3741bb !important;
+}
+.purple_input{
+    color: #3741bb !important;
+    font-family: "Nunito SemiBold" !important;
+}
+
+.tag_config_label{
+    min-width: 6em !important;
+}
+
+.userhome_full_background{
+    height: auto !important;
+}
+.alias_loader_segment{
+    width: 50%;
+    background: transparent !important;
+    margin: 6em 2em !important;
+    border-radius: 1em !important;
+}
+.alias_loader_segment>.active.dimmer{
+    background: #ffffff91 !important;
+}
+.alias_loader_segment>.active.dimmer .ui.loader{
+    color: #3741bb !important;
+}
+.alias_loader_segment>.active.dimmer .ui.loader:before{
+    border-color: rgb(71, 139, 229) !important;
+}
+
+#userhome_main_buttons>button:first-child{
+    border-top-left-radius: 1em !important;
+    border-bottom-left-radius: 1em !important;
+    border-top-right-radius: 0em !important;
+    border-bottom-right-radius: 0em !important;
+}
+#userhome_main_buttons>*:last-child button{
+    border-top-right-radius: 1em !important;
+    border-bottom-right-radius: 1em !important;
+    border-top-left-radius: 0em !important;
+    border-bottom-left-radius: 0em !important;
+}
+.activity_badge_div{
+    position: relative;
+}
+.alias_edit_icon{
+    position: absolute;
+    right: 0;
+    font-size: 1.25em !important;
+    cursor: pointer;
+}
+
+.tag_edit_icon{
+    font-size: 1.25em !important;
+    cursor: pointer;
+}
+.alias_edit_icon.ui.red.icon:hover,
+.tag_edit_icon.ui.red.icon:hover{
+    color: #8c0a0a !important;
+}
+
+.edit_tag_buttons button{
+    background-color: #5854c5 !important;
+    color: white !important;
+}
+.edit_tag_buttons button.red{
+    background-color: #db2828 !important;
+}
+.edit_tag_buttons button:hover{
+    background-color: #8686d6 !important;
+}
+.edit_tag_buttons button:first-child{
+    border-top-left-radius: 1em !important;
+    border-bottom-left-radius: 1em !important;
+}
+.edit_tag_buttons button:last-child{
+    border-top-right-radius: 1em !important;
+    border-bottom-right-radius: 1em !important;
 }

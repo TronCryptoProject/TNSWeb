@@ -1,6 +1,7 @@
 .hp_background{
     background: linear-gradient(#4958a7,#8aa3d0, #6599f5);/*linear-gradient(rgba(10, 34, 97, 0.75),rgba(85,127,232,.75),rgba(85, 127, 232, 0.33));
     /*linear-gradient(10deg,rgba(154, 194, 222, 0.58),#e1e1e2 40%,rgba(47, 102, 206, 0.68));*/
+    position: relative;
 }
 
 #hp_logo_container>object{

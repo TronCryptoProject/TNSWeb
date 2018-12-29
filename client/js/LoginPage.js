@@ -26,15 +26,24 @@ export default class LoginPage extends React.Component{
 
         if (confirm_val != "" && initial_val != ""){
             if (initial_val == confirm_val){
-                button_conf_dict = {
-                    type: "success",
-                    success: {
-                        text: "Success"
+                if (confirm_val.length < 4){
+                    button_conf_dict = {
+                        type: "error",
+                        error: {
+                            text: "Password must be atleast 6 characters long"
+                        }
+                    };
+                }else{
+                    button_conf_dict = {
+                        type: "success",
+                        success: {
+                            text: "Success"
+                        }
+                    };
+                    func_callback = ()=>{
+                        localStorage.setItem("tnsx", confirm_val);
+                        this.props.onSuccessCallback();
                     }
-                };
-                func_callback = ()=>{
-                    localStorage.setItem("tnsx", confirm_val);
-                    this.props.onSuccessCallback();
                 }
             }else{
                 button_conf_dict = {
@@ -67,9 +76,8 @@ export default class LoginPage extends React.Component{
                         <div>
                             Your password will be used to encrypt/decrypt aliases and is never stored 
                             in the contract. If you forget or enter a wrong password, you'll still see
-                            data but will not be able to read it.
+                            data but will not be able to read it. Try a random password!
                         </div>
-
                         <div className="no_padding fullwidth row_spaced_div">
                             <div className="row">
                                 <div className="ui tiny statistic fullwidth">

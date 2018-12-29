@@ -1,0 +1,44 @@
+.activity_background{
+    background: linear-gradient(185deg,#558cde91 60%,rgba(136, 163, 212, 0.59),#bdd4f9bf 0);
+}
+.blurring.dimmable>.dimmer.activity_background{
+    background-color: transparent !important;
+}
+
+.activity_result_label{
+    font-family: "Nunito Bold" !important;
+}
+.activity_txid_button{
+    max-width: 80% !important;
+}
+.activity_txid_button>.visible.content{
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+.activity_timestamp{
+    font-size: 0.9em !important;
+}
+.activity_description{
+    font-size: 1.1em;
+}
+.activity_action{
+    font-family: "Nunito Bold" !important;
+    font-size: 1.1em;
+}
+
+#activity_table tbody tr td{
+    margin-top: 1em !important;
+    margin-bottom: 1em !important;
+}
+.activity_grid{
+    padding-left: 2rem !important;
+}
+@media screen and (max-width:900px){
+    .activity_grid{
+        padding-left: 0 !important;
+        display: flex!important;
+        justify-content: center!important;
+        align-items: center!important;
+    }
+}

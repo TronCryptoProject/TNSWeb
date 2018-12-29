@@ -8,6 +8,8 @@
 @import "./UserHome.css";
 @import "./CreateAlias.css";
 @import "./GenerateAddressSegment.css";
+@import "./GenAddresses.css";
+@import "./MyActivity.css";
 
 body{
 	line-height: inherit !important;
@@ -126,6 +128,12 @@ input::-webkit-inner-spin-button {
 	margin-bottom: 2rem !important;
 }
 
+.padding_l{
+	padding-left: 2rem !important;
+}
+.alot.padding_l{
+	padding-left: 4rem !important;
+}
 .alot.padding{
 	padding: 4rem !important;
 }
@@ -200,7 +208,7 @@ input::-webkit-inner-spin-button {
 }
 
 .mud_green_color{
-	color: #5d8849 !important;
+	color: #3b9c0e!important;
 }
 
 .no_border{
@@ -210,4 +218,12 @@ input::-webkit-inner-spin-button {
     background: #4c4747 !important;
     color: white !important;
 	border-radius: 0.6em !important;
+}
+
+#main_background_div{
+    transition: all .5s;
+}
+
+.disabled_text{
+    color: rgba(0,0,0,.5) !important;
 }

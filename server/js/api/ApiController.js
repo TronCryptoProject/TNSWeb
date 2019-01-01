@@ -24,6 +24,10 @@ function preCheck(itemArray){
         throw ApiConfig.errors.TRONWEB_NOT_CONNECTED;
     }
 }
+global.isZeroAddress = function(address){
+    if (address == "410000000000000000000000000000000000000000") return true;
+    return false;
+}
 
 global.createErrorJSON = function(val = ""){
     var errorMsg = val;
@@ -66,7 +70,8 @@ global.contractCall = function(contractFunc, args){
                 contract[contractFunc](...args).call().then(result=>{
                     resolve(result);
                 }).catch(e=>{
-                    throw e;
+                    console.log(e);
+                    reject(e);
                 });
             });            
         }catch(e){
@@ -76,27 +81,61 @@ global.contractCall = function(contractFunc, args){
 }
 
 function getConditionedArgs(isRaw, argsList){
-    if (isRaw){
-        isRaw = isRaw.toLowerCase();
-        if (String(isRaw) == "true"){
-            return keccak256(argsList);
-        }
+    if (!isRaw){
+        isRaw = "true";
+    }
+    isRaw = isRaw.toLowerCase();
+    if (String(isRaw) == "true"){
+        return keccak256(argsList);
     }
     return argsList;
 }
 
 //for 'default' tag, you don't have to set ?raw=true in request
-function getAliasTagArgs(req,alias,tag){
+function getAliasTagArgs(isRaw,alias,tag){
     tag = tag.toLowerCase();
     var args = [];
     if (tag == "default"){
-        var cond_args = getConditionedArgs(req.query.raw, [alias]);
+        var cond_args = getConditionedArgs(isRaw, [alias]);
         tag = keccak256([tag]);
         args = [...cond_args, ...tag];
     }else{
-        args = getConditionedArgs(req.query.raw, [alias,tag]);
+        args = getConditionedArgs(isRaw, [alias,tag]);
     }
     return args;
+}
+
+exports.resolveAliasTag = function(req,res){
+    var alias = req.params.alias;
+    var tag = req.params.tag;
+
+    try{
+        preCheck([alias,tag]);
+        var args = getConditionedArgs(req.query.raw, [alias,tag]);
+        console.log("resolved args: ", args);
+        contractCall("getGenAddressFlag",args).then(result=>{
+            console.log("resolve result:", result);
+            if (result == false){
+                contractCall("getPubAddressForTag",args).then(result=>{
+                    res.json(createResJSON(isZeroAddress(result)?"":result));
+                }).catch(e=>{
+                    throw e;
+                });
+            }else{
+                getNextGenAddress(alias,tag,req.query.raw).then(genAddress=>{
+                    res.json(createResJSON(isZeroAddress(genAddress)?"":genAddress))
+                }).catch(e=>{
+                    throw e;
+                });
+            }
+        }).catch(e=>{
+            console.log(JSON.stringify(e));
+            res.status(400).json(createErrorJSON(e));
+        });
+        
+    }catch(e){
+        res.status(400).json(createErrorJSON(e));
+    }
 }
 
 exports.isAliasAvailable = function(req,res){
@@ -219,7 +258,8 @@ exports.getAllAliasInfo = async function(req,res){
             for (var alias of aliasList){
                 var [err, encAlias] = await to(contractCall("getEncryptedAliasForKeccak",[alias]));
                 if (err) throw err;
-
+                
+                res_dict[encAlias] = {};
                 var [err, tagList] = await to(contractCall("getAllTagsForAlias",[alias]));
                 if (err) throw err;
             
@@ -229,16 +269,12 @@ exports.getAllAliasInfo = async function(req,res){
                     
                     var [err, tagDataList] = await to(contractCall("getTagDataForTag",[alias,tag]));
                     if (err) throw err;
-                    var res_json = {
+                    var tag_data_json = {
                         "generatorFlag": tagDataList[0],
                         "genAddressList": tagDataList[1],
                         "tagPubAddress": tagDataList[2]
                     };
-
-                    if (!(encAlias in res_dict)){
-                        res_dict[encAlias] = {};
-                    }
-                    res_dict[encAlias][encTag] = res_json;
+                    res_dict[encAlias][encTag] = tag_data_json;
                 }
             }
             res.json(createResJSON(res_dict));
@@ -253,10 +289,11 @@ exports.getAllAliasInfo = async function(req,res){
 exports.getGenAddressList = function(req,res){
     var alias = req.params.alias;
     var tag = req.params.tag;
+    var is_raw = req.query.raw? req.query.raw : "true";
 
     try{
         preCheck([alias,tag]);
-        var args = getAliasTagArgs(req,alias,tag);
+        var args = getAliasTagArgs(is_raw,alias,tag);
         
         contractCall("getGenAddressList",args).then(resultList=>{
             res.json(createResJSON(resultList));
@@ -271,10 +308,11 @@ exports.getGenAddressList = function(req,res){
 exports.getGenAddressListLen = function(req,res){
     var alias = req.params.alias;
     var tag = req.params.tag;
+    var is_raw = req.query.raw? req.query.raw : "true";
 
     try{
         preCheck([alias,tag]);
-        var args = getAliasTagArgs(req,alias,tag);
+        var args = getAliasTagArgs(is_raw,alias,tag);
         
         contractCall("getGenAddressListLen",args).then(result=>{
             res.json(createResJSON(result));
@@ -289,10 +327,11 @@ exports.getGenAddressListLen = function(req,res){
 exports.getPubAddress = function(req,res){
     var alias = req.params.alias;
     var tag = req.params.tag;
+    var is_raw = req.query.raw? req.query.raw : "true";
 
     try{
         preCheck([alias,tag]);
-        var args = getAliasTagArgs(req,alias,tag);
+        var args = getAliasTagArgs(is_raw,alias,tag);
         contractCall("getPubAddressForTag",args).then(result=>{
             res.json(createResJSON(result));
         }).catch(e=>{
@@ -306,10 +345,11 @@ exports.getPubAddress = function(req,res){
 exports.getGenAddressFlag = function(req,res){
     var alias = req.params.alias;
     var tag = req.params.tag;
+    var is_raw = req.query.raw? req.query.raw : "true";
 
     try{
         preCheck([alias,tag]);
-        var args = getAliasTagArgs(req,alias,tag);
+        var args = getAliasTagArgs(is_raw,alias,tag);
         contractCall("getPubAddressForTag",args).then(result=>{
             res.json(createResJSON(result));
         }).catch(e=>{
@@ -320,40 +360,50 @@ exports.getGenAddressFlag = function(req,res){
     }
 }
 
+function getNextGenAddress(alias, tag, isRaw){
+    return new Promise((resolve,reject)=>{
+        //assumes checks for listLen > 0 are previously done
+        function getListNextIdx(listLen){
+            var key = alias + "-" + tag;
+            if (key in genAddressListIdxDict){
+                var idx = genAddressListIdxDict[key]
+                genAddressListIdxDict[key] = (idx + 1) % listLen;
+            }else{
+                genAddressListIdxDict[key] = 0;
+            }
+            return genAddressListIdxDict[key];
+        }
+        
+        try{
+            preCheck([alias,tag]);
+            var args = getAliasTagArgs(isRaw,alias,tag);
+            contractCall("getGenAddressListLen",args).then(genNumElems=>{
+                if (genNumElems < 1){
+                    reject(ApiConfig.errors.NO_ADDRESS_FOUND);
+                }
+                var next_idx = getListNextIdx(genNumElems);
+                contractCall("getGenAddressForTag",[...args,next_idx]).then(genAddress=>{
+                    resolve(genAddress);
+                }).catch(e=>{
+                    reject(e);
+                });
+            }).catch(e=>{
+                reject(e);
+            });
+        }catch(e){
+            reject(e);
+        }
+    });
+}
 exports.getNextGenAddress = function(req,res){
     var alias = req.params.alias;
     var tag = req.params.tag;
+    var is_raw = req.query.raw? req.query.raw : "true";
 
-    //assumes checks for listLen > 0 are previously done
-    function getListNextIdx(listLen){
-        var key = alias + "-" + tag;
-        if (key in genAddressListIdxDict){
-            var idx = genAddressListIdxDict[key]
-            genAddressListIdxDict[key] = (idx + 1) % listLen;
-        }else{
-            genAddressListIdxDict[key] = 0;
-        }
-        return genAddressListIdxDict[key];
-    }
-    
-    try{
-        preCheck([alias,tag]);
-        var args = getAliasTagArgs(req,alias,tag);
-
-        contractCall("getGenAddressListLen",args).then(genNumElems=>{
-            if (genNumElems < 1){
-                throw ApiConfig.errors.NO_ADDRESS_FOUND;
-            }
-            var next_idx = getListNextIdx(genNumElems);
-            contractCall("getGenAddressForTag",[...args,next_idx]).then(genAddress=>{
-                res.json(createResJSON(genAddress));
-            }).catch(e=>{
-                throw e;
-            });
-        }).catch(e=>{
-            throw e;
-        });
-    }catch(e){
+    getNextGenAddress(alias,tag,is_raw).then(genAddress=>{
+        res.json(createResJSON(genAddress))
+    }).catch(e=>{
         res.status(400).json(createErrorJSON(e));
-    }
+    });
+    
 }

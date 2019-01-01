@@ -1,5 +1,9 @@
 @import "./CheckboxAnim.css";
 
+.livedemo_background{
+    background: linear-gradient(170deg,rgba(83,132,204,.82) 60%,#c7d6f1 10%, rgba(78, 116, 202, 0.56));
+}
+
 .CheckboxAnim_main_div{
     margin: 3rem 1rem 3rem 1rem;
 }
@@ -37,4 +41,16 @@
 #signed_tx_card .raised.card{
     box-shadow: 0 0 0 1px #d4d4d5, 3px 4px 4px 0 rgba(34,36,38,.12),
         8px 5px 10px 1px rgba(34,36,38,.15) !important;
+}
+.resolved_value{
+    max-width: 80%;
+    color: white !important;
+}
+.resolved_value_success{
+    background: #7568d8!important;
+    color: white !important;
+}
+#tns_resolve_div{
+    padding: 0;
+    min-height: 1.4em;
 }

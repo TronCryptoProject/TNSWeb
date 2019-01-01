@@ -89,6 +89,10 @@ input::-webkit-inner-spin-button {
 	border-radius: 1rem;
 }
 
+.border_radius_1em{
+	border-radius: 1em !important;
+}
+
 .no_padding{
 	padding: 0 !important;
 }
@@ -98,9 +102,14 @@ input::-webkit-inner-spin-button {
 .no_margin{
 	margin: 0 !important;
 }
-
+.auto_margin{
+	margin: 0 auto!important;
+}
 .padding{
 	padding: 2rem !important;
+}
+.no_margined_t{
+	margin-top: 0 !important;
 }
 .margined{
 	margin: 2rem !important;
@@ -130,6 +139,12 @@ input::-webkit-inner-spin-button {
 
 .padding_l{
 	padding-left: 2rem !important;
+}
+.padding_t{
+	padding-top: 2rem !important;
+}
+.padding_b{
+	padding-bottom: 2rem !important;
 }
 .alot.padding_l{
 	padding-left: 4rem !important;
@@ -226,4 +241,8 @@ input::-webkit-inner-spin-button {
 
 .disabled_text{
     color: rgba(0,0,0,.5) !important;
+}
+
+.large_text{
+	font-size: 1.2em !important;
 }

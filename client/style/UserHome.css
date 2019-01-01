@@ -87,7 +87,8 @@
     cursor: pointer;
 }
 .alias_edit_icon.ui.red.icon:hover,
-.tag_edit_icon.ui.red.icon:hover{
+.tag_edit_icon.ui.red.icon:hover,
+.gen_delete_icon.ui.red.icon:hover{
     color: #8c0a0a !important;
 }
 
@@ -100,6 +101,9 @@
 }
 .edit_tag_buttons button:hover{
     background-color: #8686d6 !important;
+}
+.edit_tag_buttons button.red:hover{
+    background-color: #d24545 !important;
 }
 .edit_tag_buttons button:first-child{
     border-top-left-radius: 1em !important;

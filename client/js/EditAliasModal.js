@@ -13,12 +13,12 @@ export default class EditAliasModal extends React.Component{
     }
 
     componentWillReceiveProps(nextProps){
-        this.setState({aliasInputVal: nextProps.alias});
+        this.setState({aliasInputVal: nextProps.alias.toLowerCase()});
     }
 
     eventSaveDataClick(e){
         e.persist();
-        
+        let is_succeeded = false;
         $(e.target).addClass("loading");
 
         let showBtnError = (errMsg)=>{
@@ -43,7 +43,9 @@ export default class EditAliasModal extends React.Component{
                 $("#edit_alias_conf_modal").modal({
                     closable: false,
                     onHidden: ()=>{
-                        $("#alias_modal").modal("toggle");
+                        if (!is_succeeded){
+                            $("#alias_modal").modal("toggle");
+                        }
                     }
                 }).modal("show");
             });
@@ -52,20 +54,22 @@ export default class EditAliasModal extends React.Component{
         let updateAlias = ()=>{
             let contract_params = [
                 tronWeb.sha3(this.props.alias),
-                window.hexToBytes32(encryptData(this.props.alias)),
+                encryptData(this.props.alias),
                 tronWeb.sha3(this.state.aliasInputVal),
-                window.hexToBytes32(encryptData(this.state.aliasInputVal)),
+                encryptData(this.state.aliasInputVal),
             ];
             console.log("params: ", contract_params);
             window.contractSend("updateAlias", contract_params).then(res=>{
                 console.log("updateAliasRes: ", res);
                 modal_dict.bodyText = `Transaction for updating your alias to ${'"' + this.state.aliasInputVal +
-                    '"'} successfully broadcasted. Hopefully someone else's transaction doesn't get that alias first.`;
+                    '"'} successfully broadcasted. However, this doesn't mean that the transaction won't return error
+                    or fail. Please, monitor your transaction in 'My Activity' tab on home page. Hopefully someone else's transaction doesn't get that alias first.`;
                 modal_dict.iconHeader = "green";
+                is_succeeded = true;
                 setConfState();
             }).catch(err=>{
                 console.log("updateAliasErr: ", err);
-                modal_dict.bodyText = err;
+                modal_dict.bodyText = JSON.stringify(err);
                 modal_dict.iconHeader = "red";
                 setConfState();
             });
@@ -87,7 +91,7 @@ export default class EditAliasModal extends React.Component{
                     throw err;
                 });
             }catch(errText){
-                modal_dict.bodyText = errText;
+                modal_dict.bodyText = JSON.stringify(errText);
                 modal_dict.iconHeader = "red";
                 setConfState();
             }
@@ -97,12 +101,16 @@ export default class EditAliasModal extends React.Component{
 
     render(){
         let onChange=(e)=>{
-            this.setState({aliasInputVal: $(e.target).val().trim()});
+            let val = $(e.target).val().trim();
+            val = val.replace(/[^a-zA-Z0-9_]/g, "");
+            val = val.toLowerCase();
+            $(e.target).val(val);
+            this.setState({aliasInputVal: val});
         }
         let onBlur = (e)=>{
             let val = $(e.target).val().trim();
             if (val == "")
-                this.setState({aliasInputVal: this.props.alias});
+                this.setState({aliasInputVal: this.props.alias.toLowerCase()});
         }
 
         return(
@@ -125,7 +133,8 @@ export default class EditAliasModal extends React.Component{
                     <div className="alot padding_x">
                         <div className="fluid dead_center lineheight margined_y text_center container">
                             For security reasons, aliases can only be updated. You cannot delete it and all of its tags
-                            at once.
+                            at once. By updating your alias you are giving up the rights to it and somebody else
+                            can claim it.
                         </div>
 
                         <div className="alot margined_y">

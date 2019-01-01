@@ -1,7 +1,11 @@
 import Injecter from "../../injecter.json";
 
+var ENC_PREFIX_HEX = "5454545454"; //TTTTT
+ 
 const TNSContractAddress = Injecter["TNS"]["address"];
 console.log("contract address", TNSContractAddress);
+
+window.zeroAddress = "410000000000000000000000000000000000000000";
 
 window.contractSend = function(contractFunc, args, sendParams){
     return new Promise((resolve,reject)=>{
@@ -37,12 +41,17 @@ window.base58 = function(address){
     return tronWeb.address.fromHex(address);
 }
 window.encryptData = function(data){
-    return blowfish.encrypt(data, localStorage.getItem("tnsx"), {cipherMode: 0, outputType: 1});
+    let encrypted = blowfish.encrypt(data, localStorage.getItem("tnsx"), {cipherMode: 0, outputType: 1});
+    return hexToBytes32(ENC_PREFIX_HEX + encrypted);
 }
 window.decryptData = function(data){
+    console.log("d in:", data);
     if (data.startsWith("0x")){
-        data = data.replace(/^0x0*/gi,"");
+        let regex = new RegExp(`^0x0*${ENC_PREFIX_HEX}`);
+        data = data.replace(regex,"");
     }
+    console.log("data:", data);
+    
     return blowfish.decrypt(data, localStorage.getItem("tnsx"), {cipherMode: 0, outputType: 1});
 }
 

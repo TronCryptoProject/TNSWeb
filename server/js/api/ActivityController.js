@@ -8,6 +8,7 @@ format.extend(String.prototype);
 
 const TNSContractAddress = Injecter["TNS"]["address"];
 var methodSigns = {};
+var txCache = {};
 var paramIdx = {}; //{"[func_name]": {"aliasName":0, "tagName":5}}
 var paramInjected = new Set(["aliasName", "newAliasName", "tagName", "newTagName", "oldEncryptedAlias",
     "oldEncryptedTag"]);
@@ -117,10 +118,15 @@ function fetchEncryptedDataforKeccak(entities){
             if (entity != "oldEncryptedAlias" && entity != "oldEncryptedTag"){
                 console.log("kk: ", entity, entity_val);
                 if (entity == "aliasName" || entity == "newAliasName"){
-                    promise_list.push(contractCall("getEncryptedAliasForKeccak",[entity_val]));
+                    promise_list.push(contractCall("getEncryptedAliasForKeccak",[entity_val]).catch(err=>{
+                        console.log("alias enc error: ", err);
+                    }));
 
                 }else if ((entity == "tagName" || entity == "newTagName") && "aliasName" in entities){
-                    promise_list.push(contractCall("getEncryptedTagForKeccak",["0x" + entities.aliasName, entity_val]));
+                    console.log(["0x" + entities.aliasName, entity_val]);
+                    promise_list.push(contractCall("getEncryptedTagForKeccak",["0x" + entities.aliasName, entity_val]).catch(err=>{
+                        console.log("tag enc error: ", err);
+                    }));
                 }else{
                     promise_list.push(entity_val);
                 }
@@ -129,11 +135,13 @@ function fetchEncryptedDataforKeccak(entities){
             }
         }
         Promise.all(promise_list).then(resList=>{
+            console.log("RESENC: ", resList);
             for(var enc_idx = 0; enc_idx < resList.length; enc_idx+= 2){
                 res_entities[resList[enc_idx]] = resList[enc_idx+1];
             }
             resolve(res_entities);
         }).catch(e=>{
+            console.log("Perr:",e);
             reject(e);
         });
     });
@@ -186,9 +194,11 @@ function getEntityActionFromContractData(data){
     return [func_called_name, res_dict];
 }
 
-function fetchAccountTxs(ownerAddress){
+function fetchAccountTxs(ownerAddress, offset){
     return new Promise((resolve, reject)=>{
-        tronWeb.trx.getTransactionsFromAddress(ownerAddress, 10000000000, 0).then(txList=>{
+        tronWeb.trx.getTransactionsFromAddress(ownerAddress, 10000000000, offset).then(txList=>{
+            console.log("TXLEN:", txList.length);
+            console.log("OFFSET:", offset);
             var res_list = []
             var addr_hex = addressToHex(ownerAddress);
 
@@ -201,6 +211,7 @@ function fetchAccountTxs(ownerAddress){
                         if (contract_elem.type == "TriggerSmartContract" && "parameter" in contract_elem
                             && "value" in contract_elem.parameter){
                             var c_val_dict = contract_elem.parameter.value;
+                            console.log("contract address: ", c_val_dict.contract_address);
                             if (c_val_dict.owner_address == addr_hex && 
                                 c_val_dict.contract_address == TNSContractAddress){
                                 var contract_result = "";
@@ -224,26 +235,30 @@ function fetchAccountTxs(ownerAddress){
                     }
                 }
             }
-            resolve(res_list);
+            resolve([res_list, txList.length]);
         }).catch(e=>{
             reject(e);
         });
     }).then(txResList=>{
-        console.log(txResList);
+        console.log("Got txresList:", txResList);
         var promise_list = [];
-        for (var tx of txResList){
+        for (var tx of txResList[0]){
+            console.log("EEEE", tx.entities);
             promise_list.push(
                 fetchEncryptedDataforKeccak(tx.entities)
             );
         }
-
+        console.log("Passed fetchencrypt");
+        
         return Promise.all(promise_list).then(entityResList=>{
             console.log("ENTITYLIST", entityResList);
-            for(var tx_idx = 0; tx_idx < txResList.length; tx_idx++){
-                txResList[tx_idx].entities = entityResList[tx_idx];
-                txResList[tx_idx].action = getActionStr(entityResList[tx_idx], txResList[tx_idx].funcName);
+            for(var tx_idx = 0; tx_idx < txResList[0].length; tx_idx++){
+                txResList[0][tx_idx].entities = entityResList[tx_idx];
+                txResList[0][tx_idx].action = getActionStr(entityResList[tx_idx], txResList[0][tx_idx].funcName);
             }
             return txResList;
+        }).catch(e=>{
+            console.log("entity err",e);
         });
     }).then(resVal=>{
         return resVal;
@@ -257,8 +272,24 @@ exports.getOwnerActivity = function(req,res){
     try{
         preCheck([owner_address]);
         if (tronWeb.isAddress(owner_address)){
-            fetchAccountTxs(owner_address).then(resList=>{
-                res.json(createResJSON(resList));
+            var offset = 0;
+            if (owner_address in txCache){
+                offset = txCache[owner_address].currTxIdx;
+            }
+            fetchAccountTxs(owner_address, offset).then(([resList,txListLen])=>{
+                if (owner_address in txCache){
+                    txCache[owner_address].currTxIdx = offset + txListLen;
+                    resList.push.apply(resList,txCache[owner_address].data);
+                    txCache[owner_address].data = resList;
+                    res.json(createResJSON(txCache[owner_address].data));
+                }else{
+                    txCache[owner_address] = {
+                        currTxIdx: txListLen,
+                        data: resList
+                    }
+                    res.json(createResJSON(resList));
+                }
+                
             }).catch(e=>{
                 throw e;
             })

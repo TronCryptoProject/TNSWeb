@@ -26,7 +26,7 @@ export default class LoginPage extends React.Component{
 
         if (confirm_val != "" && initial_val != ""){
             if (initial_val == confirm_val){
-                if (confirm_val.length < 4){
+                if (confirm_val.length < 6){
                     button_conf_dict = {
                         type: "error",
                         error: {

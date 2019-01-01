@@ -38,7 +38,7 @@ export default class ConfirmationModal extends React.Component{
             if (typeof this.props.bodyText == "object"){
                 return this.props.bodyText;
             }else{
-                return <p>{this.props.bodyText}</p>;
+                return <p className="alot-lineheight">{this.props.bodyText}</p>;
             }
         }
 
@@ -48,7 +48,7 @@ export default class ConfirmationModal extends React.Component{
                     <i className={"icon " + this.props.icon}/>
                     {this.props.headerTitle}
                 </div>
-                <div className="content dead_center">
+                <div className="content dead_center text_center large_text">
                     {getBody()}
                 </div>
                 <div className="actions">

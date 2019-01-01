@@ -51,6 +51,7 @@ export default class CreateAlias extends React.Component{
     eventAliasOnChange(e){
         let val = $(e.target).val().trim();
         val = val.replace(/[^a-zA-Z0-9_]/g, "");
+        val = val.toLowerCase();
         $(e.target).val(val);
         let input_len = Math.ceil(val.length - (val.length * 0.10));
         let max_len = Math.max(input_len , $(e.target).attr("placeholder").length);
@@ -60,6 +61,7 @@ export default class CreateAlias extends React.Component{
     eventTagOnChange(e){
         let val = $(e.target).val().trim();
         val = val.replace(/[^a-zA-Z0-9_]/g, "")
+        val = val.toLowerCase();
         $(e.target).val(val);
         let input_len = Math.ceil(val.length - (val.length * 0.20));
         let max_len = Math.max(input_len, $(e.target).attr("placeholder").length);
@@ -101,8 +103,8 @@ export default class CreateAlias extends React.Component{
             if (alias != ""){
                 let is_static = this.isStaticAddr();
                 if (is_static == -1){
-                    reject(`You can't set both static & generated 
-                        addresses. Please remove one.`);
+                    reject(`Can't set both static & generated 
+                        addresses during creation. Please remove one.`);
 
                 }else if (is_static == -2){
                     reject(`No static or generated address(s) found`);
@@ -125,6 +127,7 @@ export default class CreateAlias extends React.Component{
         e.persist();
         let alias = $("#create_alias_input").val().trim();
         let tag = $("#create_tag_input").val().trim();
+        let is_succeeded = false;
         tag = (tag == "" ? "default": tag);
         
         $(e.target).addClass("loading");
@@ -152,7 +155,9 @@ export default class CreateAlias extends React.Component{
                 $("#create_alias_conf_modal").modal({
                     closable: false,
                     onHidden: ()=>{
-                        $("#create_alias_modal").modal("toggle");
+                        if (!is_succeeded){
+                            $("#create_alias_modal").modal("toggle");
+                        }
                     }
                 }).modal("show");
             });
@@ -160,17 +165,19 @@ export default class CreateAlias extends React.Component{
         let setAlias = (isStatic)=>{
             let contract_params = [
                 tronWeb.sha3(alias),
-                window.hexToBytes32(encryptData(alias)),
+                encryptData(alias),
                 tronWeb.sha3(tag),
-                window.hexToBytes32(encryptData(tag)),
+                encryptData(tag),
                 (isStatic? tronWeb.address.toHex(this.getStaticAddr()): this.state.genAddrs)
             ];
             console.log("params: ", contract_params);
             window.contractSend(isStatic?"setAliasStatic": "setAliasGenerated", contract_params).then(res=>{
                 console.log("setAliasRes: ", res);
                 modal_dict.bodyText = `Transaction for alias creation successfully broadcasted. Hopefully
-                    someone else doesn't get it first.`;
+                    someone else doesn't get it first. You can monitor your transaction in 'My Activity' tab to see if
+                    contract update succeeded.`;
                 modal_dict.iconHeader = "green";
+                is_succeeded = true;
                 setConfState();
             }).catch(err=>{
                 console.log("setAliasErr: ", err);
@@ -180,6 +187,8 @@ export default class CreateAlias extends React.Component{
             });
         }
         this.createAliasPrecheck(alias).then(async (isStatic)=>{
+            alias = alias.toLowerCase();
+            tag = tag.toLowerCase();
             let [err, res] = await to(get(`api/aliasAvailable/${alias}`,{params:{raw:true}}));
             try{
                 if (!err && !("error" in res.data)){
@@ -204,7 +213,7 @@ export default class CreateAlias extends React.Component{
                     if (err) throw (err);
                     else throw(res.data.error);
                 }
-            }catch(errText){
+            }catch(errText){                
                 modal_dict.bodyText = errText;
                 modal_dict.iconHeader = "red";
                 setConfState();
@@ -260,7 +269,7 @@ export default class CreateAlias extends React.Component{
                     </div>
                       
 					<div className="fluid dead_center container">
-                        <div className="ui tiny statistic" id="create_alias_div">
+                        <div className="ui tiny dead_center statistic" id="create_alias_div">
                             <div className="value">
                                 <div className="ui transparent large input">
                                     <input type="text" placeholder="Alias"
@@ -286,6 +295,11 @@ export default class CreateAlias extends React.Component{
                             </div>
                             <div className="label lowercase extra content">
                                 (tag is optional)
+                            </div>
+                            <div className="label initialcase extra content lineheight alot padding_x">
+                                You can enter `tag` to add multiple addresses under same main alias.
+                                When people send you TRX using just your alias, it will resolve to an empty
+                                default tag if it's set.
                             </div>
                         </div>
                     </div>

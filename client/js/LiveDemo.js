@@ -1,19 +1,40 @@
 import React from "react";
 import ConfirmationModal from "./ConfirmationModal.js";
+import axios from "axios";
+const CancelToken = axios.CancelToken;
 
 export default class LiveDemo extends React.Component{
     constructor(props){
         super(props);
         this.state = {
             isRawTxTab: false,
-            ConfModalProps: {}
+            ConfModalProps: {},
+            tns:{
+                unsigned:{
+                    isValueResolved: false,
+                    isResolveError: false,
+                    resolvedValueStr: "",
+                    isLoading: false
+                },
+                signed:{
+                    isValueResolved: false,
+                    isResolveError: false,
+                    resolvedValueStr: "",
+                    isLoading: false,
+                },
+                cardSideActive: ""
+            }
         }
         this.tabChanged = this.tabChanged.bind(this);
         this.renderSignedTxCard = this.renderSignedTxCard.bind(this);
-        this.eventToInputChanged = this.eventToInputChanged.bind(this);
+        this.eventAddressOnChange = this.eventAddressOnChange.bind(this);
+        this.eventAddressInputBlur = this.eventAddressInputBlur.bind(this);
         this.eventAmtChanged = this.eventAmtChanged.bind(this);
         this.eventTxSend = this.eventTxSend.bind(this);
         this.getTxBuilderConfTable = this.getTxBuilderConfTable.bind(this);
+        this.resetTNSResolverStates = this.resetTNSResolverStates.bind(this);
+        this.getCurrentSide = this.getCurrentSide.bind(this);
+        this.requestToken = null;
     }
 
     componentDidMount(){
@@ -45,6 +66,10 @@ export default class LiveDemo extends React.Component{
         );
     }
 
+    getCurrentSide(){
+        return (this.state.isRawTxTab ? "unsigned": "signed");
+    }
+
     tabChanged(){
         this.setState({
             isRawTxTab: !this.state.isRawTxTab
@@ -57,18 +82,129 @@ export default class LiveDemo extends React.Component{
         });
     }
 
-    eventToInputChanged(e){
-        let val = $(e.target).val().trim();
-        if (val != ""){
-            if (window.tronWeb.isAddress(val)){
-                //$("#to_input_suffix").text("");
-            }else{
-                //$("#to_input_suffix").text("@TRX");
+    resetTNSResolverStates(){
+        let current_side = this.getCurrentSide();
+        let tns_dict = Object.assign(this.state.tns, {
+            [current_side]: {
+                isValueResolved:false,
+                resolvedValueStr: "",
+                isResolveError: false,
+                isLoading: false,
+                cardSideActive: ""
             }
+        });
+        this.setState({tns:tns_dict});
+    }
+
+    eventAddressOnChange(e){
+        let val = $(e.target).val().trim();
+        val = val.replace(/[^a-zA-Z0-9_{}]/g, "");
+        $(e.target).val(val);
+
+        if (this.state.tns[this.getCurrentSide()].isLoading){
+            console.log("canceling");
+            if (this.requestToken != null){
+                this.requestToken.cancel();
+                this.requestToken = null;
+            }
+            this.resetTNSResolverStates();
+        }
+    }
+
+    eventAddressInputBlur(e){ 
+        let current_side = this.getCurrentSide();
+        if (this.state.tns[current_side].isLoading && this.requestToken != null){
+            return;
         }
         
+        let val = $(e.target).val().trim();
+        let resetResolvedStates = ()=>{
+            setTimeout(()=>{
+                this.resetTNSResolverStates();
+            }, 1500);
+        }
+       
+        let showState = (msg,isError)=>{
+            if (isError == undefined || isError == null) isError = true;
+            let tns_dict = Object.assign(this.state.tns, {
+                [current_side]: {
+                    resolvedValueStr: msg,
+                    isResolveError: isError,
+                    isValueResolved: true,
+                    isLoading: false,
+                    cardSideActive: current_side
+                }
+            });
+            this.setState({tns:tns_dict}, ()=>{
+                $("#tns_resolve_div>.ui.label").animateCss("zoomIn");
+                if(isError) resetResolvedStates();
+            });
+        }
+        let checkifTRXAddress = (callback)=>{
+            if (window.tronWeb.isAddress(val)){
+                if (val[0] == "T"){
+                    showState(val,false);
+                }else{
+                    showState("Hex addresses are not allowed");
+                }
+            }else{
+                if (callback) callback();
+            }
+        }
+
+        if (val != ""){
+            this.requestToken = axios.CancelToken.source();
+            let tmp_side_card_dict = Object.assign(this.state.tns[current_side], {isLoading: true});
+            let tmp_dict = Object.assign(this.state.tns, {[current_side]:tmp_side_card_dict});
+            this.setState({tns:tmp_dict});
+
+            let alias_tag_match = val.match(/^([\w_]+)\{([\w_]+)\}$/);
+            let alias_match = val.match(/^[\w_]+$/);
+            if (alias_tag_match || alias_match){
+                let alias = "";
+                let tag = "default";
+                if (alias_tag_match){
+                    if (alias_tag_match[1] && alias_tag_match[2]){
+                        alias = alias_tag_match[1].toLowerCase();
+                        tag = alias_tag_match[2].toLowerCase();
+                    }else{
+                        showState("Unable to parse alias/tag");
+                        return;
+                    }
+                }else if (alias_match){
+                    alias = alias_match[0].toLowerCase();
+                }
+                
+                checkifTRXAddress(()=>{
+                    axios.get(`api/resolveAlias/${alias}/${tag}`,{
+                        params:{raw:true},
+                        cancelToken: this.requestToken.token
+                    }).then(res=>{
+                        if ("result" in res.data){
+                            var resolved_address = res.data.result;
+                            if (resolved_address != ""){
+                                showState(base58(resolved_address),false)
+                            }else{
+                                showState("Unable to resolve alias");
+                            }
+                        }else if ("error" in res.data){
+                            showState(`Error: ${res.data.error}`);
+                        }
+                    }).catch(e=>{
+                        console.log("resolved err:",e);
+                        if (axios.isCancel(e)){
+                            this.resetTNSResolverStates();
+                        }else{
+                            showState("Network Error");
+                        }
+                    })
+                });
+            }else{
+                showState("Invalid Address or Alias");
+            }
+        }
     }
-    
+
     eventAmtChanged(e){
         let target_id = e.target;
 		let val = $(target_id).val().trim();
@@ -80,9 +216,13 @@ export default class LiveDemo extends React.Component{
     
     eventTxSend(e, txState){
         e.persist();
-
+        let current_side = this.getCurrentSide();
         let to = $("#to_input_" + txState).val().trim();
         let amt = $("#amt_input_" + txState).val().trim();
+
+        if (this.state.tns[current_side].isValueResolved && !this.state.tns[current_side].isResolveError){
+            to = this.state.tns[current_side].resolvedValueStr.trim();
+        }
 
         if (to != "" && (amt != "" || amt != "0")){
             $(e.target).addClass("loading");
@@ -106,7 +246,7 @@ export default class LiveDemo extends React.Component{
                     modal_dict.iconHeader = "green";
                     setConfState();
                 }).catch(err=>{
-                    modal_dict.bodyText = err;
+                    modal_dict.bodyText = JSON.stringify(err);
                     modal_dict.iconHeader = "red";
                     setConfState();
                 });
@@ -123,7 +263,7 @@ export default class LiveDemo extends React.Component{
                     modal_dict.iconHeader = "green";
                     setConfState();
                 }).catch(err=>{
-                    modal_dict.bodyText = err;
+                    modal_dict.bodyText = JSON.stringify(err);
                     modal_dict.iconHeader = "red";
                     setConfState();
                 });
@@ -166,6 +306,31 @@ export default class LiveDemo extends React.Component{
             }
         }
 
+        let getResolvedAddress = ()=>{
+            let current_side = this.getCurrentSide();
+            if (txState == this.state.tns[current_side].cardSideActive){
+                if (this.state.tns[current_side].isLoading){
+                    return(
+                       
+                            <i className="spinner small orange loading icon"></i>
+                       
+                    );
+                }
+                if (this.state.tns[current_side].isValueResolved){
+                    let class_resolved = "resolved_value ";
+                    class_resolved += this.state.tns[current_side].isResolveError ? "red": "resolved_value_success";
+    
+                    return(
+                       
+                            <div className={`ui small label ${class_resolved}`}>
+                                {this.state.tns[current_side].resolvedValueStr}
+                            </div>
+
+                    )
+                }
+            }
+        }
+
         let to_input_id = "to_input_" + txState;
         let amount_id = "amt_input_" + txState;
 
@@ -174,13 +339,17 @@ export default class LiveDemo extends React.Component{
                 {getTitle()}
 
                 <div className="no_padding fullwidth row_spaced_div">
-                    <div className="row">
+                    <div className="row no_margined_t">
                         <div className="ui tiny statistic fullwidth">
+                            <div className="value" id="tns_resolve_div">
+                                {getResolvedAddress()}
+                            </div>
                             <div className="value">
                                 <div className="ui transparent small input">
-                                    <input type="text" placeholder="Recipient alias or address"
-                                        onChange={e=>{this.eventToInputChanged(e)}} id={to_input_id}
-                                        className="text_center" autoComplete="off" spellCheck="false"/>
+                                    <input type="text" placeholder="Recipient alias or address" id={to_input_id}
+                                        className="text_center" autoComplete="off" spellCheck="false"
+                                        onBlur={e=>{this.eventAddressInputBlur(e)}}
+                                        onChange={e=>{this.eventAddressOnChange(e)}}/>
                                 </div>
                             </div>
                             <div className="label">

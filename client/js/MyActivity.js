@@ -10,28 +10,31 @@ export default class MyActivity extends React.Component{
         this.state = {
             data: [],
             error: "",
-            isfetch: false
+            isfetch: false,
+            currPage: 1
         };
         this.createActivityTable = this.createActivityTable.bind(this);
         this.createActivityRows = this.createActivityRows.bind(this);
+        this.createPagination = this.createPagination.bind(this);
         this.eventCopyToClipboard = this.eventCopyToClipboard.bind(this);
+        this.eventPageNumClick = this.eventPageNumClick.bind(this);
         this.fetchData = this.fetchData.bind(this);
         this.showDataState = this.showDataState.bind(this);
-        this.interval = null;
+        this.hideModal = this.hideModal.bind(this);
+        this.itemsPerPage = 8;
+        this.maxPages = 5;
     }
 
     componentDidMount(){
         this.fetchData();
-        this.interval = setInterval(this.fetchData, 15000);
-    }
-
-    componentWillMount(){
-        clearInterval(this.interval);
-        this.interval = null;
     }
 
     fetchData(){
+        let fetchTimeout = ()=>{
+            setTimeout(this.fetchData, 15000);
+        };
         this.setState({isfetch: true});
+        console.log("FETCHING");
         get(`activityApi/activity/${tronWeb.defaultAddress.base58}`).then(res=>{
             let data = res.data;
             if ("error" in data){
@@ -41,11 +44,18 @@ export default class MyActivity extends React.Component{
                     this.props.activityCounterCallback(this.state.data.length);
                 });
             }
+            fetchTimeout();
         }).catch(err=>{
-            this.setState({error: err, isfetch: false});
+            console.log("my_activity_err", err);
+            this.setState({error: "Network error", isfetch: false});
+            fetchTimeout();
         });
     }
 
+    hideModal(e){
+        this.setState({currPage:1});
+        this.props.hideModal();
+    }
     eventCopyToClipboard(e, data){
         e.persist();
         copy(data);
@@ -60,6 +70,10 @@ export default class MyActivity extends React.Component{
 		},300);
     }
 
+    eventPageNumClick(e, nextPage){
+        this.setState({currPage:nextPage});
+    }
+
     showDataState(text){
         let isloader = false;
         if (text == undefined || text == null || text == ""){
@@ -67,12 +81,35 @@ export default class MyActivity extends React.Component{
             text = "Fetching Data";
         }
         return(
-            <div className="ui padding compact raised dead_center segment alias_loader_segment">
+            <div className={`ui padding compact raised dead_center segment auto_margin
+                alias_loader_segment ` + (isloader?"loading":"")}>
                 <div className="ui active dimmer dead_center">
-                    <div className={"ui medium text " + (isloader?"loader":"")}>{text}</div>
+                    <div className={"ui medium text"}>{text}</div>
                 </div>
                 <p></p>
                 <p></p>
+            </div>
+        );
+    }
+
+    createPagination(){
+        let num_items = this.state.data.length;
+        let num_pages = Math.min(Math.ceil(num_items/this.itemsPerPage), this.maxPages);
+
+        let res_pages = [];
+        for (let page_idx = 0; page_idx < num_pages; page_idx++){
+            let page_num = page_idx + 1;
+            let is_active = this.state.currPage == page_num;
+            res_pages.push(
+                <a className={`item ${is_active?"active":""}`} key={`activity_page_${page_num}`}
+                    onClick={e=>{this.eventPageNumClick(e, page_num)}}>
+                    {page_num}
+                </a>
+            );
+        }
+        return(
+            <div className="ui pagination menu">
+                {res_pages}
             </div>
         );
     }
@@ -110,7 +147,10 @@ export default class MyActivity extends React.Component{
             return res_list;
         }
 
-        for (let data_row of this.state.data){
+        let start_idx = (this.state.currPage - 1) * this.itemsPerPage;
+        let end_idx = Math.min((start_idx + this.itemsPerPage), this.state.data.length);
+        for (let row_num = start_idx; row_num < end_idx; row_num++){
+            let data_row = this.state.data[row_num];
             let decrypted_entities = {};
             for (let entity in data_row.entities){
                 decrypted_entities[entity] = decryptData(data_row.entities[entity]);
@@ -166,13 +206,13 @@ export default class MyActivity extends React.Component{
                     <thead>
                         <tr className="center aligned">
                             <th className=""></th>
-                            <th className="">
+                            <th>
                                 Activity
                             </th>
-                            <th className="">
+                            <th>
                                 Timestamp
                             </th>
-                            <th className="">
+                            <th>
                                 Reason
                             </th>
                         </tr>
@@ -197,19 +237,25 @@ export default class MyActivity extends React.Component{
                             </div>
                         </div>
                         <div className="one wide column">
-                            <button className="ui right floated icon circular button" onClick={e=>{this.props.hideModal(e)}}>
+                            <button className="ui right floated icon circular button" onClick={e=>{this.hideModal(e)}}>
                                 <i className="close icon"/>
                             </button>
                         </div>
                     </div>
                     
                     <div className="alot padding_x">
-                        <div className="fluid dead_center lineheight margined_y text_center container activity_description">
+                        <div className="lineheight text_center activity_description">
                             You can monitor here whether your TNS transactions were successful or not. 
+                        </div>
+                        <div className="text_center lineheight disabled_text">
+                            Reason 'REVERT' indicates failure to update contract due to user error
                         </div>
                     </div>
                     <div className="alot margined_y">
                         {this.createActivityTable()}
+                    </div>
+                    <div className="alot margined_b dead_center">
+                        {this.createPagination()}
                     </div>
                 </div>
             </div>

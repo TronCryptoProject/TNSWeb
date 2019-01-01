@@ -6,3 +6,17 @@
 .tns_modal>.modal_layout_segment *{
     transition: all .5s !important;
 }
+
+.gen_delete_icon{
+    cursor: pointer;
+}
+#gen_address_edit_main_div{
+    padding-right: 4rem !important;
+    padding-left: 4rem !important;
+}
+@media screen and (max-width: 550px){
+    #gen_address_edit_main_div{
+        padding-right: 2rem !important;
+        padding-left: 2rem !important;
+    }
+}

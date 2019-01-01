@@ -299,7 +299,7 @@ class Index extends React.Component{
 				background = "hp_background";
 				break;
 			case "LiveDemo":
-				background = "hp_background";
+				background = "livedemo_background";
 				break;
 			case "LoginPage":
 				background = "hp_background";

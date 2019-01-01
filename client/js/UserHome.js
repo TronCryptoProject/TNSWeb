@@ -19,7 +19,7 @@ export default class UserHome extends React.Component{
             genAddrModalProps: {},
             aliasEditModalProps: {},
             tagDataEditModalProps: {},
-            currTxCount: 0
+            currTxCount: localStorage.getItem("myActivityTXCount") || 0
         };
         this.fetchData = this.fetchData.bind(this);
         this.createAliasInfoCards = this.createAliasInfoCards.bind(this);
@@ -40,7 +40,6 @@ export default class UserHome extends React.Component{
     }
 
     componentDidMount(){
-        localStorage.setItem("myActivityTXCount", 0);
         this.fetchData(this.props);
         let modal_ids = ["#create_alias_modal", "#alias_gen_addresses_modal",
             "#alias_modal", "#tag_data_modal", "#my_activity_modal"];
@@ -131,15 +130,17 @@ export default class UserHome extends React.Component{
     activityCounterCallback(newTxCount){
         this.setState({currTxCount: newTxCount}, ()=>{
             if ($("#notif_badge").length > 0){
-                $("#notif_badge").animateCss("rubberBand");
+                $("#notif_badge").animateCss("zoomIn");
             }
         });
     }
 
-    eventAliasGenAddressClick(e,alias, genList){
+    eventAliasGenAddressClick(e,alias, tag, tagData){
         let tmp_dict = {
-            alias: alias,
-            genList: genList,
+            alias: decryptData(alias),
+            tag: decryptData(tag),
+            pubAddress: tagData.tagPubAddress,
+            genList: tagData.genAddressList,
             isOpen: true
         };
         tmp_dict = Object.assign(this.state.genAddrModalProps, tmp_dict);
@@ -158,9 +159,13 @@ export default class UserHome extends React.Component{
     }
 
     eventTagDataEditClick(e, alias, tag, tagData){
+        console.log("rawtag:", tag, "END");
+        console.log("TAGEDIT:", decryptData(tag), "END");
         let mod_dict = {
             alias: decryptData(alias),
             tag: decryptData(tag),
+            ttlTags: Object.keys(this.state.data[alias]).length,
+            ttlGenAddrs: tagData.genAddressList.length,
             data: {
                 pubAddress: tagData.tagPubAddress,
                 permissionConfig: ("permission" in tagData? tagData.permission: "public"),
@@ -187,6 +192,8 @@ export default class UserHome extends React.Component{
         }
     }
     createAliasCard(alias, rowList){
+        console.log("aliasstate:", alias);
+        console.log("decrypt:", decryptData(alias));
         return(
             <div className="ui padding compact raised segment alias_segment" key={alias} id={alias}>
                 <div className="ui text_center big fluid label ui huge header purple_header">
@@ -237,17 +244,17 @@ export default class UserHome extends React.Component{
             
         }
         let getAutoGenAddresses = ()=>{
-            if ("genAddressList" in tag_data && tag_data.genAddressList.length > 0){
+            if ("genAddressList" in tag_data){
                 return(
                     <button className="ui button"
-                        onClick={e=>{this.eventAliasGenAddressClick(e,alias,tag_data.genAddressList)}}>
+                        onClick={e=>{this.eventAliasGenAddressClick(e,alias,tag,tag_data)}}>
                         {tag_data.genAddressList.length} addresses
                     </button>
                 );
             }else{
                 return(
                     <button className="ui disabled button">
-                        0 addresses
+                        unavailable
                     </button>
                 );
             }
@@ -316,7 +323,16 @@ export default class UserHome extends React.Component{
             let alias_list = [];
             for (let alias in this.state.data){
                 let row_list = [];
+                let sort_tag = [];
                 for(let tag in this.state.data[alias]){
+                    sort_tag.push([decryptData(tag), tag]);
+                }
+                sort_tag.sort(function(a,b){
+                    if (a[0] == b[0]) return 0;
+                    return a[0] < b[0] ? -1:1;
+                });
+
+                for(let [_,tag] of sort_tag){
                     let tag_data = this.state.data[alias][tag];
                     row_list.push(this.createAliasRow(alias,tag,tag_data));
                 }
@@ -329,7 +345,7 @@ export default class UserHome extends React.Component{
     render(){
         let getMyActivityNotifBadge = ()=>{
             let storage_tx_count = localStorage.getItem("myActivityTXCount");
-            let countdiff = Math.abs(this.state.currTxCount - storage_tx_count);
+            let countdiff = this.state.currTxCount - storage_tx_count;
             if (countdiff > 0){
                 return <div className="floating ui red circular small label" id="notif_badge">{countdiff}</div>;
             }

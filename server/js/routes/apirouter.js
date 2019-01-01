@@ -2,6 +2,7 @@ var Express = require("express");
 var Router = Express.Router();
 var ApiController = require("./../api/ApiController.js");
 
+Router.get("/resolveAlias/:alias/:tag", ApiController.resolveAliasTag);
 Router.get("/aliasAvailable/:alias", ApiController.isAliasAvailable);
 Router.get("/tagAvailable/:alias/:tag", ApiController.isTagAvailable);
 Router.get("/aliases/:owner", ApiController.getAliasesForOwner);

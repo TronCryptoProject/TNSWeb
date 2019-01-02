@@ -40,7 +40,9 @@ export default class GenerateAddressSegment extends React.Component{
     }
 
     eventImportMNClick(e){
-        this.setState({importMNState: "editable"});
+        this.setState({importMNState: "editable"}, ()=>{
+            $("#import_wallet_input_div>input").focus();
+        });
     }
 
     eventImportMNInputBlur(e){
@@ -248,7 +250,7 @@ export default class GenerateAddressSegment extends React.Component{
                     click_func = this.eventImportMNClick;
                 }
                 return(
-                    <div className="ui basic segment" id="new_wallet_segment"
+                    <div className="ui basic segment new_wallet_segment"
                         onClick={e=>{click_func(e)}}>
                         {this.createLabeledMnemonic()}
                     </div>

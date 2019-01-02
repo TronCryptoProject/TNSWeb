@@ -59,34 +59,39 @@
     margin-top: 0em;
 }
 
-#create_alias_address_div{
-    background: transparent;
-    box-shadow: none;
-    width: 90%;
+.alias_round_tab_menu{
+    background: transparent !important;
+    box-shadow: none !important;
+    width: 90% !important;
 }
-#create_alias_address_div>.content .ui.menu .item{
+.alias_round_tab_menu.fullwidth{
+    width: 100% !important;
+}
+.alias_round_tab_menu>.content .ui.menu .item{
     font-weight: lighter !important;
-    color: #447bd4;
+    color: #447bd4 !important;
     border-top-right-radius: 0.8em !important;
     border-top-left-radius: 0.8em !important;
-    border: none;
-    cursor: pointer;
-    font-size: 1.15em;
+    border: none !important;
+    cursor: pointer !important;
+    font-size: 1.15em !important;
 }
-#create_alias_address_div>.content .ui.menu .item.active{
+.alias_round_tab_menu>.content .ui.menu .item.active{
     font-weight: 600 !important;
     background: #79757512 !important;
+    border-top-right-radius: 0.8em !important;
+    border-top-left-radius: 0.8em !important;
 }
-#create_alias_address_div>.content>.segment{
+.alias_round_tab_menu>.content>.segment{
     border: none !important;
     border-bottom-left-radius: 0.8em !important;
     border-bottom-right-radius: 0.8em !important;
     background: #79757512 !important;
 }
-#static_address_segment{
+.menu_left_segment{
     border-top-right-radius: 0.8em !important;
 }
-#generate_address_segment{
+.menu_right_segment{
     border-top-left-radius: 0.8em !important;
 }
 #static_address_div .value{
@@ -94,17 +99,17 @@
     padding-top: 0.5em;
 }
 
-#static_address_segment,
-#generate_address_segment{
+.menu_left_segment,
+.menu_right_segment{
     padding-top: 4rem !important;
     padding-bottom: 4rem !important;
 }
-#static_address_segment *,
-#generate_address_segment *{
+.menu_left_segment *,
+.menu_right_segment *{
     transition: all .5s;
 }
-#static_address_segment .description,
-#generate_address_segment .description{
+.menu_left_segment .description,
+.menu_right_segment .description{
     padding-bottom: 2rem !important;
 }
 

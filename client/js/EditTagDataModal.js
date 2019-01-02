@@ -331,7 +331,36 @@ export default class EditTagDataModal extends React.Component{
         
     }
     handlePermissionUpdate(){
+        let conf_text_suffix = `permission state from ${this.state.permStateOriginal} to ${this.state.permState}`;
+        let modal_dict = {
+            icon: "toggle on",
+            headerTitle: `Update Permission State for Tag`,
+            bodyText: `Are you sure you want to update ${conf_text_suffix}?`,
+            iconHeader: "orange",
+            actions: ["ok", "cancel"],
+            actionsText: ["Yes I do", "Cancel"]
+        }
 
+        return new Promise((resolve,reject)=>{
+            this.showConfModal(modal_dict, ()=>{
+                return {
+                    method: "updateTagIsSecret",
+                    params:[
+                        tronWeb.sha3(this.props.alias),
+                        tronWeb.sha3(this.props.tag),
+                        (this.state.permState == "secret" ? true:false)
+                    ],
+                    conf:{
+                        headerTitle: "Tag Permission Update Status",
+                        bodyText: `Transaction successfully broadcasted to update ${conf_text_suffix}. Please monitor the transaction
+                        to see if contract update was successful.`
+                    }
+                };
+            }, (isError)=>{
+                if (isError) reject();
+                else resolve();
+            });
+        });
     }
     handleAddrStateUpdate(){
         console.log("addrstate alias:", this.props.alias);

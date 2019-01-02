@@ -6,6 +6,7 @@ import GenAddresses from "./GenAddresses.js";
 import EditTagDataModal from "./EditTagDataModal.js";
 import EditAliasModal from "./EditAliasModal.js";
 import MyActivity from "./MyActivity.js";
+import SecretUsers from "./SecretUsers.js";
 import "./GlobalScope.js";
 
 
@@ -17,6 +18,7 @@ export default class UserHome extends React.Component{
             data: {},
             showAliasLoader: true,
             genAddrModalProps: {},
+            secretUsersModalProps:{},
             aliasEditModalProps: {},
             tagDataEditModalProps: {},
             currTxCount: localStorage.getItem("myActivityTXCount") || 0
@@ -30,10 +32,12 @@ export default class UserHome extends React.Component{
         this.hideAliasModalCallback = this.hideAliasModalCallback.bind(this);
         this.hideGenAddressCallback = this.hideGenAddressCallback.bind(this);
         this.hideMyActivityModalCallback = this.hideMyActivityModalCallback.bind(this);
+        this.hideSecretUsersCallback = this.hideSecretUsersCallback.bind(this);
         this.createAliasRow = this.createAliasRow.bind(this);
         this.createAliasCard = this.createAliasCard.bind(this);
         this.createAliasLoader = this.createAliasLoader.bind(this);
         this.eventAliasGenAddressClick = this.eventAliasGenAddressClick.bind(this);
+        this.eventAliasSecretUsersClick = this.eventAliasSecretUsersClick.bind(this);
         this.eventAliasEditClick = this.eventAliasEditClick.bind(this);
         this.eventTagDataEditClick = this.eventTagDataEditClick.bind(this);
         this.activityCounterCallback = this.activityCounterCallback.bind(this);
@@ -42,7 +46,7 @@ export default class UserHome extends React.Component{
     componentDidMount(){
         this.fetchData(this.props);
         let modal_ids = ["#create_alias_modal", "#alias_gen_addresses_modal",
-            "#alias_modal", "#tag_data_modal", "#my_activity_modal"];
+            "#alias_modal", "#tag_data_modal", "#my_activity_modal","#secret_users_modal"];
         for (let id of modal_ids){
             let background_class = (id == "#my_activity_modal")?"activity_background": "create_alias_background";
             $(id).modal({
@@ -109,6 +113,9 @@ export default class UserHome extends React.Component{
         $("#my_activity_modal").modal("show");
     }
 
+    hideSecretUsersCallback(){
+        $("#secret_users_modal").modal("hide");
+    }
     hideCreateAliasCallback(){
         $("#create_alias_modal").modal("hide");
     }
@@ -149,6 +156,18 @@ export default class UserHome extends React.Component{
         });
     }
 
+    eventAliasSecretUsersClick(e, alias, tag, tagData){
+        let tmp_dict = {
+            alias: decryptData(alias),
+            tag: decryptData(tag),
+            usersList: tagData.secretMembers
+        };
+        tmp_dict = Object.assign(this.state.secretUsersModalProps, tmp_dict);
+        this.setState({secretUsersModalProps: tmp_dict}, ()=>{
+            $("#secret_users_modal").modal("show");
+        });
+    }
+
     eventAliasEditClick(e, alias){
         let tmp_dict = Object.assign(this.state.aliasEditModalProps, {
             alias: decryptData(alias)
@@ -168,7 +187,7 @@ export default class UserHome extends React.Component{
             ttlGenAddrs: tagData.genAddressList.length,
             data: {
                 pubAddress: tagData.tagPubAddress,
-                permissionConfig: ("permission" in tagData? tagData.permission: "public"),
+                permissionConfig: (tagData.isSecret? "secret": "public"),
                 addressConfig: (tagData.generatorFlag? "auto-gen": "static")
             }
         };
@@ -260,16 +279,18 @@ export default class UserHome extends React.Component{
             }
         }
         let getPermissions = ()=>{
+            let secret_mem_num = tag_data.secretMembers.length % 2 == 0 ? tag_data.secretMembers.length/2:0;
             if ("secretMembers" in tag_data){
                 return(
-                    <button className="ui button">
-                        {tag_data.secretMembers.length} addresses
+                    <button className="ui button"
+                        onClick={e=>{this.eventAliasSecretUsersClick(e,alias,tag,tag_data)}}>
+                        {secret_mem_num} addresses
                     </button>
                 );
             }else{
                 return(
                     <button className="ui disabled button">
-                        0 members
+                        unavailable
                     </button>
                 );
             }
@@ -288,7 +309,7 @@ export default class UserHome extends React.Component{
                         <div className="two column row no_padding_t">
                             <div className="column right aligned">
                                 <div className="ui tiny orange center aligned label tag_config_label">
-                                    {"permission" in tag_data? tag_data.permission: "public"}
+                                    {tag_data.isSecret? "secret": "public"}
                                 </div>
                             </div>
                             <div className="column left aligned">
@@ -391,6 +412,7 @@ export default class UserHome extends React.Component{
                 </div>
                 <CreateAlias hideModal={this.hideCreateAliasCallback}/>
                 <GenAddresses hideModal={this.hideGenAddressCallback} {...this.state.genAddrModalProps}/>
+                <SecretUsers hideModal={this.hideSecretUsersCallback} {...this.state.secretUsersModalProps}/>
                 <EditTagDataModal hideModal={this.hideTagDataModalCallback} {...this.state.tagDataEditModalProps}/>
                 <EditAliasModal hideModal={this.hideAliasModalCallback} 
                     {...this.state.aliasEditModalProps}/>

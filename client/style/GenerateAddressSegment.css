@@ -4,9 +4,9 @@
     border-radius: 0.7em !important;
 }
 
-#new_wallet_segment{
-    background: rgba(189, 180, 180, 0.1);
-    border-radius: 1em;
+.new_wallet_segment{
+    background: rgba(189, 180, 180, 0.1) !important;
+    border-radius: 1em !important;
 }
 
 .mnemonic_detail{

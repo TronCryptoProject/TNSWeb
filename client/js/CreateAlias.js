@@ -14,7 +14,6 @@ export default class CreateAlias extends React.Component{
             genAddrs: []
         };
         this.eventCloseCreateAliasModal = this.eventCloseCreateAliasModal.bind(this);
-        this.eventAliasPrivacyClick = this.eventAliasPrivacyClick.bind(this);
         this.eventAliasOnChange = this.eventAliasOnChange.bind(this);
         this.eventTagOnChange = this.eventTagOnChange.bind(this);
         this.createStaticAddressSegment = this.createStaticAddressSegment.bind(this);
@@ -36,16 +35,6 @@ export default class CreateAlias extends React.Component{
 
     eventCloseCreateAliasModal(){
         this.props.hideModal();
-    }
-
-    eventAliasPrivacyClick(e, state){
-        if (state == "public"){
-            $("#alias_secret_button").removeClass("orange");
-            $("#alias_public_button").addClass("orange");
-        }else{
-            $("#alias_public_button").removeClass("orange");
-            $("#alias_secret_button").addClass("orange");
-        }
     }
 
     eventAliasOnChange(e){
@@ -304,21 +293,7 @@ export default class CreateAlias extends React.Component{
                         </div>
                     </div>
 
-                    <div className="fluid dead_center container padding_y margined_y">
-                        <div className="ui buttons">
-                            <button className="ui orange button" onClick={e=>{this.eventAliasPrivacyClick(e,"public")}}
-                                id="alias_public_button">
-                                Public
-                            </button>
-                            <div className="or"></div>
-                            <button className="ui button" onClick={e=>{this.eventAliasPrivacyClick(e,"secret")}}
-                                id="alias_secret_button">
-                                Secret
-                            </button>
-                        </div>
-                    </div>
-
-                    <div className="ui centered card" id="create_alias_address_div">
+                    <div className="ui centered card alot margined_t alias_round_tab_menu">
                         <div className="content">
                             <div className="ui top attached tabular two item menu no_border">
                                 <div className="item active" data-tab="static"
@@ -330,12 +305,12 @@ export default class CreateAlias extends React.Component{
                                     Generate Addresses on Fly
                                 </div>
                             </div>
-                            <div className="ui bottom attached tab segment padding active"
-                                data-tab="static" id="static_address_segment">
+                            <div className="ui bottom attached tab segment very padded active menu_left_segment"
+                                data-tab="static">
                                 {this.createStaticAddressSegment()}
                             </div>
-                            <div className="ui bottom attached tab padding segment"
-                                data-tab="generate" id="generate_address_segment">
+                            <div className="ui bottom attached tab very padded segment menu_right_segment"
+                                data-tab="generate">
                                 <GenerateAddressSegment updateGenAddrs={this.updateGenAddrs}/>
                             </div>
                         </div>

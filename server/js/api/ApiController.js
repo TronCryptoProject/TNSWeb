@@ -105,7 +105,7 @@ function getAliasTagArgs(isRaw,alias,tag){
     return args;
 }
 
-exports.resolveAliasTag = function(req,res){
+exports.resolveAliasTag = async function(req,res){
     var alias = req.params.alias;
     var tag = req.params.tag;
 
@@ -113,14 +113,19 @@ exports.resolveAliasTag = function(req,res){
         preCheck([alias,tag]);
         var args = getConditionedArgs(req.query.raw, [alias,tag]);
         console.log("resolved args: ", args);
-        contractCall("getGenAddressFlag",args).then(result=>{
-            console.log("resolve result:", result);
-            if (result == false){
-                contractCall("getPubAddressForTag",args).then(result=>{
-                    res.json(createResJSON(isZeroAddress(result)?"":result));
-                }).catch(e=>{
-                    throw e;
-                });
+        
+        var [err, secretResult] = await to(contractCall("getIsTagSecret", args));
+        if (err) throw err;
+        
+        if (secretResult == true){
+            res.json(createResJSON(""));
+        }else{
+            var [err, genFlagResult] = await to(contractCall("getGenAddressFlag", args));
+            if (err) throw err;
+            if (genFlagResult == false){
+                var [err, pubAddressResult] = await to(contractCall("getPubAddressForTag", args));
+                if (err) throw err;
+                res.json(createResJSON(isZeroAddress(pubAddressResult)?"":pubAddressResult));
             }else{
                 getNextGenAddress(alias,tag,req.query.raw).then(genAddress=>{
                     res.json(createResJSON(isZeroAddress(genAddress)?"":genAddress))
@@ -128,11 +133,7 @@ exports.resolveAliasTag = function(req,res){
                     throw e;
                 });
             }
-        }).catch(e=>{
-            console.log(JSON.stringify(e));
-            res.status(400).json(createErrorJSON(e));
-        });
-        
+        }
     }catch(e){
         res.status(400).json(createErrorJSON(e));
     }
@@ -233,8 +234,10 @@ exports.getTagDataForTag = function(req,res){
         contractCall("getTagDataForTag",args).then(resultList=>{
             var res_json = {
                 "generatorFlag": resultList[0],
-                "genAddressList": resultList[1],
-                "tagPubAddress": resultList[2]
+                "isSecret": resultList[1],
+                "genAddressList": resultList[2],
+                "secretMembers": resultList[3],
+                "tagPubAddress": resultList[4]
             };
             res.json(createResJSON(res_json));
         }).catch(e=>{
@@ -271,8 +274,10 @@ exports.getAllAliasInfo = async function(req,res){
                     if (err) throw err;
                     var tag_data_json = {
                         "generatorFlag": tagDataList[0],
-                        "genAddressList": tagDataList[1],
-                        "tagPubAddress": tagDataList[2]
+                        "isSecret": tagDataList[1],
+                        "genAddressList": tagDataList[2],
+                        "secretMembers": tagDataList[3],
+                        "tagPubAddress": tagDataList[4]
                     };
                     res_dict[encAlias][encTag] = tag_data_json;
                 }

@@ -184,11 +184,6 @@ export default class GenAddresses extends React.Component{
     }
 
     eventAddGenAddrClick(e){
-        console.log("genaddr:",this.state.genAddrInputVal);
-        if (!tronWeb.isAddress(this.state.genAddrInputVal)){
-            this.showButtonError("Address is not valid", e.target);
-            return;
-        }
         let parseAddr = (addr)=>{
             if (addr == "T") return tronWeb.address.toHex(addr);
             return addr;
@@ -197,6 +192,17 @@ export default class GenAddresses extends React.Component{
             if (addr != "T") return base58(addr);
             return addr;
         }
+
+        console.log("genaddr:",this.state.genAddrInputVal);
+        if (!tronWeb.isAddress(this.state.genAddrInputVal)){
+            this.showButtonError("Address is not valid", e.target);
+            return;
+        }
+        if (isZeroAddress(parseAddr(this.state.genAddrInputVal))){
+            this.showButtonError("Address cannot be zero", e.target);
+            return;
+        }
+        
 
         let is_default = this.state.tag == "default";
 
@@ -430,7 +436,6 @@ export default class GenAddresses extends React.Component{
 
 GenAddresses.defaultProps = {
     hideModal: (function(){}),
-    isEdit: false,
     alias: "",
     tag: "",
     pubAddress: "",

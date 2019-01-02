@@ -20,7 +20,11 @@
         "updateGenAddressFlag": "Update auto-gen setting for {aliasName} {{{tagName}}}",
         "updateGenAddressListReplace": "Replace auto-gen address list for {aliasName} {{{tagName}}}",
         "updateGenAddressListAppend": "Add auto-gen address for {aliasName} {{{tagName}}}",
-        "updateGenAddressListDelete": "Delete auto-gen address for {aliasName} {{{tagName}}}"
+        "updateGenAddressListDelete": "Delete auto-gen address for {aliasName} {{{tagName}}}",
+        "updateTagIsSecret": "Update permission for {aliasName} {{{tagName}}}",
+        "updateTagSecretUserList": "Add & replace secret user list for {aliasName} {{{tagName}}}",
+        "updateTagSecretUserListAppend" : "Append secret user for {aliasName} {{{tagName}}}",
+        "updateTagSecretUserDelete": "Delete secret user{aliasName} {{{tagName}}}"
     },
     "funcActionRemoveWords":{
         "setAliasStatic":{

@@ -10,6 +10,7 @@
 @import "./GenerateAddressSegment.css";
 @import "./GenAddresses.css";
 @import "./MyActivity.css";
+@import "./SecretUsers.css";
 
 body{
 	line-height: inherit !important;
@@ -98,6 +99,10 @@ input::-webkit-inner-spin-button {
 }
 .no_padding_t{
 	padding-top: 0 !important;
+}
+.no_padding_x{
+	padding-left: 0 !important;
+	padding-right: 0 !important;
 }
 .no_margin{
 	margin: 0 !important;
@@ -245,4 +250,14 @@ input::-webkit-inner-spin-button {
 
 .large_text{
 	font-size: 1.2em !important;
+}
+
+.ui.table thead tr:first-child>th:first-child{
+	border-radius: 1em 0 0 0 !important;
+}
+.ui.table thead tr:last-child>th:last-child{
+	border-radius: 0 1em 0 0 !important;
+}
+.ui.table{
+	border-radius: 1em !important;
 }

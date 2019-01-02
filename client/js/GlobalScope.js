@@ -1,6 +1,6 @@
 import Injecter from "../../injecter.json";
 
-var ENC_PREFIX_HEX = "5454545454"; //TTTTT
+window.ENC_PREFIX_HEX = "5454545454"; //TTTTT
  
 const TNSContractAddress = Injecter["TNS"]["address"];
 console.log("contract address", TNSContractAddress);
@@ -40,21 +40,31 @@ window.base58 = function(address){
     }
     return tronWeb.address.fromHex(address);
 }
-window.encryptData = function(data){
+window.encryptData = function(data, addPrefix){
     let encrypted = blowfish.encrypt(data, localStorage.getItem("tnsx"), {cipherMode: 0, outputType: 1});
-    return hexToBytes32(ENC_PREFIX_HEX + encrypted);
+    if (addPrefix == undefined || addPrefix == true || addPrefix == null){
+        return hexToBytes32(ENC_PREFIX_HEX + encrypted);
+    }else{
+        return encrypted;
+    }
+    
 }
 window.decryptData = function(data){
-    console.log("d in:", data);
     if (data.startsWith("0x")){
         let regex = new RegExp(`^0x0*${ENC_PREFIX_HEX}`);
         data = data.replace(regex,"");
     }
-    console.log("data:", data);
     
     return blowfish.decrypt(data, localStorage.getItem("tnsx"), {cipherMode: 0, outputType: 1});
 }
-
+window.decodeEncryptFormat = function(data){
+    let regex = new RegExp(`^0x0*${ENC_PREFIX_HEX}`);
+    data = data.replace(regex,"");
+    
+    let prefix_reg = new RegExp(`^0x`);
+    data = data.replace(prefix_reg, "");
+    return data;
+}
 window.resizePopup = function(){
     $('.ui.popup').css('max-height', "100vh");
 };

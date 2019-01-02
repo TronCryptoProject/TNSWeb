@@ -126,7 +126,8 @@ export default class MyActivity extends React.Component{
         let getHTMLActionStr = (baseStr, entities)=>{
             let str_split = baseStr.split(" ");
             let res_list = [];
-            for (let word of str_split){
+            for (let word_idx = 0; word_idx < str_split.length; word_idx++){
+                let word = str_split[word_idx];
                 if (word != ""){
                     if (word[0] == "{" && word[word.length-1] == "}"){
                         let content = word.format(entities) + " ";
@@ -135,12 +136,12 @@ export default class MyActivity extends React.Component{
                             action_class += " disabled_text";
                         }
                         res_list.push(
-                            <span className={action_class} key={content}>
+                            <span className={action_class} key={content + word_idx}>
                                 {content}
                             </span>
                         );
                     }else{
-                        res_list.push(word + " ");
+                        res_list.push(<span key={word + word_idx}>{word + " "}</span>);
                     }
                 }
             }
@@ -248,7 +249,8 @@ export default class MyActivity extends React.Component{
                             You can monitor here whether your TNS transactions were successful or not. 
                         </div>
                         <div className="text_center lineheight disabled_text">
-                            Reason 'REVERT' indicates failure to update contract due to user error
+                            Reason 'REVERT' indicates failure to update contract due to user error. It may take
+                            few minutes for the transaction to be confirmed and show up here.
                         </div>
                     </div>
                     <div className="alot margined_y">

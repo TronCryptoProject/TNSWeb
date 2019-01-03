@@ -75,8 +75,8 @@ export default class LoginPage extends React.Component{
                         </h2>
                         <div>
                             Your password will be used to encrypt/decrypt aliases and is never stored 
-                            in the contract. If you forget or enter a wrong password, you'll still see
-                            data but will not be able to read it. Try a random password!
+                            in the contract. If you forget or enter a wrong password, you'll not be able to 
+                            modify existing alias/tag. You'll still see data but will not be able to read it. Try a random password!
                         </div>
                         <div className="no_padding fullwidth row_spaced_div">
                             <div className="row">

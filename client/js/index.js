@@ -103,7 +103,7 @@ import LiveDemo from "./LiveDemo.js";
 import HomePageFeatures from "./HomePageFeatures.js";
 import LoginPage from "./LoginPage.js";
 import UserHome from "./UserHome.js";
-
+import APIPage from "./APIPage.js";
 
 class Index extends React.Component{
 	constructor(props){
@@ -174,7 +174,15 @@ class Index extends React.Component{
 		if (this.state.currPage != ""){
 			$("#" + this.state.currPage).removeClass("active");
 		}
-		this.setState({currPage: id});
+		this.setState({currPage: id}, ()=>{
+			if (this.state.currPage == "api_item"){
+				$("#navbar").addClass("no_margined_b");
+			}else{
+				if ($("#navbar").hasClass("no_margined_b")){
+					$("#navbar").removeClass("no_margined_b");
+				}
+			}
+		});
 	}
 
 	switchToUserHome(){
@@ -204,6 +212,7 @@ class Index extends React.Component{
 						main_comp = <LiveDemo/>;
 						break;
 					case "api_item":
+						main_comp = <APIPage/>;
 						break;
 					case "login_item":
 						main_comp = <LoginPage onSuccessCallback={this.switchToUserHome}/>;
@@ -306,6 +315,9 @@ class Index extends React.Component{
 				break;
 			case "UserHome":
 				background = "userhome_background";
+				break;
+			case "APIPage":
+				background = "hp_background";
 				break;
 			default:
 				break;

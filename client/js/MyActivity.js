@@ -23,15 +23,22 @@ export default class MyActivity extends React.Component{
         this.hideModal = this.hideModal.bind(this);
         this.itemsPerPage = 8;
         this.maxPages = 5;
+        this.timeoutFetch = null;
     }
 
     componentDidMount(){
         this.fetchData();
     }
 
+    componentWillMount(){
+        console.log("clearing timeout");
+        clearTimeout(this.timeoutFetch);
+        this.timeoutFetch = null;
+    }
+
     fetchData(){
         let fetchTimeout = ()=>{
-            setTimeout(this.fetchData, 15000);
+            this.timeoutFetch = setTimeout(this.fetchData, 15000);
         };
         this.setState({isfetch: true});
         console.log("FETCHING");
@@ -154,7 +161,9 @@ export default class MyActivity extends React.Component{
             let data_row = this.state.data[row_num];
             let decrypted_entities = {};
             for (let entity in data_row.entities){
-                decrypted_entities[entity] = decryptData(data_row.entities[entity]);
+                try{
+                    decrypted_entities[entity] = decryptData(data_row.entities[entity]);
+                }catch(e){}
             }
             row_list.push(
                 <tr key={data_row.txid}>

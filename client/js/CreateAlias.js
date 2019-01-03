@@ -52,7 +52,7 @@ export default class CreateAlias extends React.Component{
         val = val.replace(/[^a-zA-Z0-9_]/g, "")
         val = val.toLowerCase();
         $(e.target).val(val);
-        let input_len = Math.ceil(val.length - (val.length * 0.20));
+        let input_len = Math.ceil(val.length - (val.length * 0.10));
         let max_len = Math.max(input_len, $(e.target).attr("placeholder").length);
         this.setState({tagSize: max_len});
     }

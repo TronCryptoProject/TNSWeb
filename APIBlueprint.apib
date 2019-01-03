@@ -1,0 +1,429 @@
+FORMAT: 1A
+
+# Tron Name Service API Doc
+
+API Documentation for exchange/wallet developers to integrate TNS
+into their application to make Tron addresses human readable. 
+You can easily call our API endpoints to resolve aliases like a 
+DNS server resolves website names. We have enabled several ways for
+you to fetch user data (all of which is either keccak256 or encrypted
+with user password). 
+
+_Since contract state updates can only be made by the original alias/tag
+owner, API endpoints are only GET requests so that you can display the
+necessary data in your application, or even host your own API using 
+our backend scripts._
+
+
+<br/><br/>
+### Query Parameter Rules
+* In all query requests that require alias & tag parameters, if `raw=true` parameter is specified,
+both alias & tag parameters must be ASCII human readable characters (not keccak256 hex value). Otherwise,
+keccak256 value can be specified. The default is `true`.
+<p/>
+* For aliases without a tag, the tag parameter when required will use `default` value.
+
+<br/><br/>
+
+# Group Availability
+
+## Alias Availability [GET /aliasAvailable/{alias}]
+
+Check for alias availability
+
++ Parameters
+    + alias (string, required) - Alias for which to check its availability
+    + raw (boolean,optional) - whether alias & tag are hex or ASCII value
+        + Default: true
+
++ Response 200 (application/json)
+    + Attributes
+        - result: `true` (boolean) - True if alias is available to claim
+
++ Response 400 (application/json)
+    + Attributes
+        - Include ResultError
+
+
+## Tag Availability [GET /tagAvailable/{alias}/{tag}]
+
+Check for tag availability. This request works the same as `/aliasAvailable/{alias}`
+request, however, this one makes sure that the tag for the specified alias
+is also available. 
+
++ Parameters
+    + alias (string,required) - Alias for which to check its availability
+    + tag (string,required) -  Tag for the alias. Use `default` if tag is empty/default for above alias
+    + raw (boolean,optional) - whether alias & tag are hex or ASCII value
+        + Default: true
+        
++ Response 200 (application/json)
+    + Attributes
+        - result: `true` (boolean) - True if alias & tag is available to claim
+
++ Response 400 (application/json)
+    + Attributes
+        - Include ResultError
+
+
+
+# Group Resolve Alias/Tag
+
+## Resolve Alias/Tag [GET /resolveAlias/{alias}/{tag}]
+
+Given the current setting the alias owner has specified, TNS
+will resolve the alias/tag to a Tron public address accordingly.
+
+If auto-generate address setting is turned on by the owner, then
+you will get new address every time this endpoint is called. The number
+of new addresses is limited by however many the user has generated (up to 20).
+
+_An empty `result` response doesn't mean there was an error calling the 
+contract. According to the owner's settings some aliases/tags cannot be shown
+to everyone but selected secret users._ 
+
++ Parameters
+    + alias (string, required) - Alias to resolve
+    + tag (string, required) - Tag for alias
+    + raw (boolean,optional) - whether alias & tag are hex or ASCII value
+        + Default: true
+
++ Response 200 (application/json)
+    + Attributes
+        - result: `41a9058fb7b21d19ec93900e92ef1e56fe2ca603ee` (string) - Resolved Tron public addresses (hex) for given alias/tag
+
++ Response 200 (application/json)
+    + Attributes
+        - result: '' (string) - Empty string if alias/tag cannot be resolved
+
++ Response 400 (application/json)
+    + Attributes
+        - Include ResultError
+
+
+
+## Auto-Gen Address [GET /genNextAddress/{alias}/{tag}]
+
+Returns an auto-generated address to be resolved for alias/tag.
+It only returns an address if auto-gen setting is turned on for the tag, 
+otherwise an empty string is returned if there are no auto-gen 
+addresses to be found.
+
++ Parameters
+    + alias (string, required)
+    + tag (string, required) - Tag for which you want to resolve auto-gen address of
+    + raw (boolean,optional) - whether alias & tag are hex or ASCII value
+        + Default: true
+        
++ Response 200 (application/json)
+    + Attributes
+        - result: 41b70e6d5982426f03c72c3613429f7d072a40f872 (string)
+        Auto-gen address (hex)
+
++ Response 200 (application/json)
+    + Attributes
+        - result: ''
+        Unable to resolve alias/tag
+
++ Response 400 (application/json)
+    + Attributes
+        - Include ResultError
+
+
+
+# Group Info for Alias
+
+## Alias Owner [GET /aliasOwner/{alias}]
+
+Fetches the Tron public address of the user who owns the alias
+
++ Parameters
+    + alias (string, required) - Alias of which you want to know the owner
+    + raw (boolean,optional) - whether alias & tag are hex or ASCII value
+        + Default: true
+
++ Response 200 (application/json)
+    + Attributes
+        - result: `41a9058fb7b21d19ec93900e92ef1e56fe2ca603ee` (string) - Tron public addresses (hex) of owner
+
++ Response 400 (application/json)
+    + Attributes
+        - Include ResultError
+
+
+## Aliases for Owner [GET /aliases/{owner}]
+
+Fetches the aliases that belong to an owner. The returned object
+contains encrypted strings of the aliases/tags which only the owner
+can decrypt with his password. 
+
+`tagPubAddress` field in the result object will be 
+`410000000000000000000000000000000000000000` (zero address) if static public address
+is not set for an alias/tag.
+
++ Parameters
+    + owner (string, required) - base58 Tron public address
+
++ Response 200 (application/json)
+    + Attributes
+        - result: 0x5cc2ac62eeec1807c65d225d7059ed53df61e2899d4618084e9059073ad41200 (array)
+            Array of keccak256 aliases of owner
+
++ Response 400 (application/json)
+    + Attributes
+        - Include ResultError
+
+
+## All Info about Alias/Tag [GET /allAliasInfo/{owner}]
+
+Fetches all the available info for an owner in one request. It fetches the following
+items:
+* **Encrypted aliases**
+* **Encrypted tags** under alias
+* **generateFlag**: Is the tag set to use auto-generated address or static public address?
+    - `true` if to use auto-gen addresses
+* **isSecret**: Is the tag secret?
+* **genAddressList**: Auto-generated addresses
+* **secretMembers**: Encrypted Tron public addresses that are the only ones allowed to resolve 
+    an alias
+* **tagPubAddress**: Static public address for tag if set. If it's not set, it defaults to zero address in hex.
+
+
++ Parameters
+    + owner (string, required) - base58 Tron public address
+
++ Response 200 (application/json)
+    + Body 
+        {
+            "result": {
+                "0x000000000000000000000000000000000000005454545454254a2fcdedc2b9c1": {
+                    "0x000000000000000000000054545454545f6cb4d77cc62cf7df03e9e15b230bd2": {
+                        "generatorFlag": false,
+                        "isSecret": false,
+                        "genAddressList": [],
+                        "secretMembers": [],
+                        "tagPubAddress": "41a9058fb7b21d19ec93900e92ef1e56fe2ca603ee"
+                    },
+                    "0x000000000000000000000000000000000000005454545454421213b77a1c4f1a": {
+                        "generatorFlag": true,
+                        "isSecret": true,
+                        "genAddressList": [
+                            "0xC95772fC74b4fDCCADf7fF48Fd620FE3B0Dbd201",
+                            "0xB70e6D5982426F03C72c3613429f7D072A40F872",
+                            "0x7CEC8335a033d5aEE830a2E984Ddf5FD9851476A",
+                            "0x18AC2A2948A11329FA06aDBc70bd10221711d7B1",
+                        ],
+                        "secretMembers": [
+                            "0x0000000000000000000000000000000000000054545454547853ea51b5f8d82f",
+                            "0x272bc3acc367a8e14a3ba8fdc29b53778ce8830378a8ecef9f7d485808c8607b"
+                        ],
+                        "tagPubAddress": "410000000000000000000000000000000000000000"
+                    }
+                }
+            }
+        }
+
++ Response 400 (application/json)
+    + Attributes
+        - Include ResultError
+
+
+# Group Info for Tags
+
+## Tags for Alias [GET /tags/{alias}]
+
+A list of all tags that are under a specific alias. These are an
+array of keccak256 tag values and are not ordered in any fashion.
+
+
++ Parameters
+    + alias (string, required) - Alias to fetch all tags of
+    + raw (boolean,optional) - whether alias & tag are hex or ASCII value
+        + Default: true
+
++ Response 200 (application/json)
+    + Attributes
+        - result: 0x5cc2ac62eeec1807c65d225d7059ed53df61e2899d4618084e9059073ad41200 (array)
+            Array of keccak256 tags of owner
+            
++ Response 400 (application/json)
+    + Attributes
+        - Include ResultError
+
+
+
+## Tag Data for Alias/Tag [GET /tagInfo/{alias}/{tag}]
+
+All the data related to a tag under a specific alias. This result
+object is also included in `/allAliasInfo/{owner}` request
+* **generateFlag**: Is the tag set to use auto-generated address or static public address?
+    - `true` if to use auto-gen addresses
+* **isSecret**: Determines whether or not tag is secret
+* **genAddressList**: Auto-generated addresses list
+* **secretMembers**: Encrypted Tron public addresses that only the owner can decrypt & see
+* **tagPubAddress**: Static public address for tag in hex
+
+
++ Parameters
+    + alias (string, required)
+    + tag (string, required) - Tag for which to fetch data
+        If alias doesn't have a tag, tag value is `default`
+    + raw (boolean,optional) - whether alias & tag are hex or ASCII value
+        + Default: true
+
++ Response 200 (application/json)
+    + Body
+        {
+            "result": {
+                "generatorFlag": true,
+                "isSecret": false,
+                "genAddressList": [
+                    "0xC95772fC74b4fDCCADf7fF48Fd620FE3B0Dbd201",
+                    "0xB70e6D5982426F03C72c3613429f7D072A40F872",
+                    "0x7CEC8335a033d5aEE830a2E984Ddf5FD9851476A",
+                    "0x18AC2A2948A11329FA06aDBc70bd10221711d7B1",
+                    "0x68581ba726D7759F23d015Fb17FE46da5AE57391",
+                ],
+                "secretMembers": [
+                    "0x0000000000000000000000000000000000000054545454541306c416cd2bc030",
+                    "0x0f3b8e9231d990d0eb736ae82f101274200665721f9070031ce69d2f957fad1a",
+                    "0x0000000000000000000000000000000000000054545454547853ea51b5f8d82f",
+                    "0x272bc3acc367a8e14a3ba8fdc29b53778ce8830378a8ecef9f7d485808c8607b"
+                ],
+                "tagPubAddress": "41a9058fb7b21d19ec93900e92ef1e56fe2ca603ee"
+            }
+        }
+            
++ Response 400 (application/json)
+    + Attributes
+        - Include ResultError
+
+
+
+## Static Public Address [GET /pubAddress/{alias}/{tag}]
+
+Fetches static public address for the given alias/tag. If static
+address is not set by the user, a zero address will be returned in hex
+`410000000000000000000000000000000000000000`.
+
+This is the main address that an alias/tag resolves to if it's not secret
+or have auto-generated addresses flag setting turned on.
+
++ Parameters
+    + alias (string, required)
+    + tag (string, required) - Tag for which you want to fetch public address of
+    + raw (boolean,optional) - whether alias & tag are hex or ASCII value
+        + Default: true
+
++ Response 200 (application/json)
+    + Attributes
+        - result: 41a9058fb7b21d19ec93900e92ef1e56fe2ca603ee (array)
+            Tron public address (hex) of user
+            
++ Response 400 (application/json)
+    + Attributes
+        - Include ResultError
+
+
+## Auto-Gen Addreses [GET /genAddressList/{alias}/{tag}]
+
+Returns all the auto-generated addresses for alias/tag. 
+
++ Parameters
+    + alias (string, required)
+    + tag (string, required) - Tag for which you want to fetch auto-gen addresses of
+    + raw (boolean,optional) - whether alias & tag are hex or ASCII value
+        + Default: true
+        
++ Response 200 (application/json)
+    + Attributes
+        - result: 0x25B9620Bd4675f778E6eAA4463aB4EF6be3FC329, 0x4897e301F6B289C4819fba930d333646c266d8D8 (array)
+            Tron public address (hex)
+            
++ Response 400 (application/json)
+    + Attributes
+        - Include ResultError
+
+
+## Length of Auto-Gen Addreseses [GET /genAddressListLen/{alias}/{tag}]
+
+Returns the total number of auto-generated addresses found for an alias/tag.
+The maximum number of addresses that you can set currently is 20 so that users
+do not exceed maximum size of transaction. 
+
+Use this endpoint if you don't want to fetch a large array unnecessarily
+and only want its length.
+
++ Parameters
+    + alias (string, required)
+    + tag (string, required) - Tag for which you want to fetch length of auto-gen addresses
+    + raw (boolean,optional) - whether alias & tag are hex or ASCII value
+        + Default: true
+        
++ Response 200 (application/json)
+    + Attributes
+        - result: 20 (number)
+            
++ Response 400 (application/json)
+    + Attributes
+        - Include ResultError
+
+
+## Auto-Gen Flag [GET /genAddressFlag/{alias}/{tag}]
+
+Tells you whether or not alias/tag is set to use auto-generated addresses.
+If this flag is turned on, it means length returned by `/genAddressListLen/{alias}/{tag}`
+must be greater than 0 and tag will subsequently be resolved using auto-gen
+addresses, not static public address.
+
++ Parameters
+    + alias (string, required)
+    + tag (string, required) - Tag for which you want to fetch auto-gen flag of
+    + raw (boolean,optional) - whether alias & tag are hex or ASCII value
+        + Default: true
+        
++ Response 200 (application/json)
+    + Attributes
+        - result: true (boolean)
+        Auto-gen flag is turned on for tag
+            
++ Response 400 (application/json)
+    + Attributes
+        - Include ResultError
+
+
+# Group 400 Errors
+
+## 400 API Errors
+
+There are different kinds of errors that TNS API can return, however, for sanity checks
+and validation you may see the following kinds of errors being returned.
+
+Not all errors may be strings; they can be returned as objects as well.
+
+* **TRONWEB_NOT_CONNECTED**: API was unable to connect to TronWeb 
+
+```
+{
+    "error": "Unable to connect to any nodes at this time"
+}
+```
+* **INVALID_PARAM**: Invalid parameters were inputted during request
+
+```
+{
+    "error": "Given parameter(s) are not valid"
+}
+```
+* **NO_ADDRESS_FOUND**: Address was not found for your request
+```
+{
+    "error": "No addresses found"
+}
+```
+
+
+# Data Structures
+
+## ResultError (object)
+- result: `Error Message` (string) - Message can be returned as an object in some cases but primarily it's string.

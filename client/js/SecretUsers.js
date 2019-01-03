@@ -59,7 +59,7 @@ export default class SecretUsers extends React.Component{
 
     parseUsersList(usersList){
         let res_list = [];
-        if (usersList.length % 2 == 0){
+        if (usersList.length % 2 == 0 && usersList.length != 0){
             for (let addr_idx = 0; addr_idx < usersList.length - 1; addr_idx+=2){
                 let first_hex = decodeEncryptFormat(usersList[addr_idx]);
                 let sec_hex = decodeEncryptFormat(usersList[addr_idx + 1]);
@@ -156,6 +156,9 @@ export default class SecretUsers extends React.Component{
         if (this.state.replaceUserList.length == 0){
             this.showButtonError("No addresses found!", e.target);
             return;
+        }else if (this.state.replaceUserList.length >= 10){
+            this.showButtonError("Up to 10 users allowed, or choose public setting", e.target);
+            return;
         }
 
         let getBase58Addr = (addr)=>{
@@ -236,6 +239,9 @@ export default class SecretUsers extends React.Component{
         let new_addr = $("#secret_user_append_addr_input").val().trim();
         if (!tronWeb.isAddress(new_addr)){
             this.showButtonError("Address is not valid!", e.target);
+            return;
+        }else if (this.state.usersList.length >= 10){
+            this.showButtonError("Up to 10 users allowed, or choose public setting", e.target);
             return;
         }
 
@@ -374,7 +380,7 @@ export default class SecretUsers extends React.Component{
         let row_list = [];
         for(let idx = 0; idx < this.state.usersList.length; idx++){
             let addr = this.state.usersList[idx];
-          
+            console.log("secret addr:",addr);
             row_list.push(
                 <tr key={addr}>
                     <td className="center aligned">
@@ -517,7 +523,7 @@ export default class SecretUsers extends React.Component{
                             at once (up to 10) or append their new address to your secret users list.
                         </div>
                         <div className="fluid dead_center disabled_text container">
-                            Only the alias owner can see these decrypted account addresses.
+                            Only the alias owner can see the decrypted account addresses.
                         </div>
 
                         <div className="margined_y">

@@ -185,7 +185,7 @@ export default class LiveDemo extends React.Component{
                             if (resolved_address != ""){
                                 showState(base58(resolved_address),false)
                             }else{
-                                showState("Unable to resolve alias");
+                                showState("no alias/tag found");
                             }
                         }else if ("error" in res.data){
                             showState(`Error: ${res.data.error}`);
@@ -201,6 +201,10 @@ export default class LiveDemo extends React.Component{
                 });
             }else{
                 showState("Invalid Address or Alias");
+            }
+        }else{
+            if (this.state.tns[current_side].isValueResolved){
+                this.resetTNSResolverStates();
             }
         }
     }

@@ -152,22 +152,39 @@ export default class CreateAlias extends React.Component{
             });
         }
         let setAlias = (isStatic)=>{
+            let enc_alias = encryptData(alias);
+            let enc_tag = encryptData(tag);
             let contract_params = [
                 tronWeb.sha3(alias),
-                encryptData(alias),
+                enc_alias,
                 tronWeb.sha3(tag),
-                encryptData(tag),
+                enc_tag,
                 (isStatic? tronWeb.address.toHex(this.getStaticAddr()): this.state.genAddrs)
             ];
             console.log("params: ", contract_params);
-            window.contractSend(isStatic?"setAliasStatic": "setAliasGenerated", contract_params).then(res=>{
-                console.log("setAliasRes: ", res);
-                modal_dict.bodyText = `Transaction for alias creation successfully broadcasted. Hopefully
+            window.contractSend(isStatic?"setAliasStatic": "setAliasGenerated", contract_params).then(txid=>{
+                console.log("setAliasRes: ", txid);
+                let store_params = {
+                    txid: txid,
+                    owner: tronWeb.defaultAddress.base58,
+                    entities: {
+                        aliasName: enc_alias,
+                        tagName: enc_tag
+                    }
+                }
+                window.storeTx(store_params).then(storeRes=>{
+                    modal_dict.bodyText = `Transaction for alias creation successfully broadcasted. Hopefully
                     someone else doesn't get it first. You can monitor your transaction in 'My Activity' tab to see if
                     contract update succeeded.`;
-                modal_dict.iconHeader = "green";
-                is_succeeded = true;
-                setConfState();
+                    modal_dict.iconHeader = "green";
+                    is_succeeded = true;
+                    setConfState();
+                }).catch(err=>{
+                    modal_dict.bodyText = "Unable to record transaction but was able to create alias/tag successfully.";
+                    modal_dict.iconHeader = "red";
+                    setConfState();
+                })
+                
             }).catch(err=>{
                 console.log("setAliasErr: ", err);
                 modal_dict.bodyText = err;

@@ -52,21 +52,38 @@ export default class EditAliasModal extends React.Component{
         }
 
         let updateAlias = ()=>{
+            let old_enc_alias = encryptData(this.props.alias);
+            let new_enc_alias = encryptData(this.state.aliasInputVal);
             let contract_params = [
                 tronWeb.sha3(this.props.alias),
-                encryptData(this.props.alias),
+                old_enc_alias,
                 tronWeb.sha3(this.state.aliasInputVal),
-                encryptData(this.state.aliasInputVal),
+                new_enc_alias,
             ];
             console.log("params: ", contract_params);
-            window.contractSend("updateAlias", contract_params).then(res=>{
-                console.log("updateAliasRes: ", res);
-                modal_dict.bodyText = `Transaction for updating your alias to ${'"' + this.state.aliasInputVal +
+            window.contractSend("updateAlias", contract_params).then(txid=>{
+                console.log("updateAliasRes: ", txid);
+                is_succeeded = true;
+
+                let store_params = {
+                    txid: txid,
+                    owner: tronWeb.defaultAddress.base58,
+                    entities: {
+                        oldEncryptedAlias: old_enc_alias,
+                        newAliasName: new_enc_alias
+                    }
+                }
+                window.storeTx(store_params).then(storeRes=>{
+                    modal_dict.bodyText = `Transaction for updating your alias to ${'"' + this.state.aliasInputVal +
                     '"'} successfully broadcasted. However, this doesn't mean that the transaction won't return error
                     or fail. Please, monitor your transaction in 'My Activity' tab on home page. Hopefully someone else's transaction doesn't get that alias first.`;
-                modal_dict.iconHeader = "green";
-                is_succeeded = true;
-                setConfState();
+                    modal_dict.iconHeader = "green";
+                    setConfState();
+                }).catch(err=>{
+                    modal_dict.bodyText = "Unable to record transaction but alias change was successful";
+                    modal_dict.iconHeader = "red";
+                    setConfState();
+                })
             }).catch(err=>{
                 console.log("updateAliasErr: ", err);
                 modal_dict.bodyText = JSON.stringify(err);

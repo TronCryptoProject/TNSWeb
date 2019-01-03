@@ -11,7 +11,8 @@ export default class MyActivity extends React.Component{
             data: [],
             error: "",
             isfetch: false,
-            currPage: 1
+            currPage: 1,
+            needToFetch: false
         };
         this.createActivityTable = this.createActivityTable.bind(this);
         this.createActivityRows = this.createActivityRows.bind(this);
@@ -21,44 +22,50 @@ export default class MyActivity extends React.Component{
         this.fetchData = this.fetchData.bind(this);
         this.showDataState = this.showDataState.bind(this);
         this.hideModal = this.hideModal.bind(this);
+        this.forceRefresh = this.forceRefresh.bind(this);
         this.itemsPerPage = 8;
         this.maxPages = 5;
-        this.timeoutFetch = null;
     }
 
     componentDidMount(){
         this.fetchData();
+        this.props.onRef(this);
+    }
+    componentWillUnmount(){
+        this.props.onRef(null);
     }
 
-    componentWillMount(){
-        console.log("clearing timeout");
-        clearTimeout(this.timeoutFetch);
-        this.timeoutFetch = null;
-    }
-
-    fetchData(){
-        let fetchTimeout = ()=>{
-            this.timeoutFetch = setTimeout(this.fetchData, 15000);
-        };
+    fetchData(callback){
         this.setState({isfetch: true});
         console.log("FETCHING");
         get(`activityApi/activity/${tronWeb.defaultAddress.base58}`).then(res=>{
             let data = res.data;
             if ("error" in data){
-                this.setState({error: data.error, isfetch: false});
+                this.setState({error: data.error, isfetch: false},()=>{
+                    if (callback) callback();
+                });
             }else{
                 this.setState({data: data.result, isfetch: false}, ()=>{
                     this.props.activityCounterCallback(this.state.data.length);
+                    if (callback) callback();
                 });
             }
-            fetchTimeout();
         }).catch(err=>{
             console.log("my_activity_err", err);
-            this.setState({error: "Network error", isfetch: false});
-            fetchTimeout();
+            this.setState({error: "Network error", isfetch: false}, ()=>{
+                if (callback) callback();
+            });
         });
     }
 
+    forceRefresh(e){
+        e.persist();
+       
+        $(e.target).addClass("loading");
+        this.fetchData(()=>{
+            $(e.target).removeClass("loading")
+        });
+    }
     hideModal(e){
         this.setState({currPage:1});
         this.props.hideModal();
@@ -261,7 +268,14 @@ export default class MyActivity extends React.Component{
                             Reason 'REVERT' indicates failure to update contract due to user error. It may take
                             few minutes for the transaction to be confirmed and show up here.
                         </div>
+                        <div className="dead_center margined_t">
+                            <button className="ui right labeled icon button " onClick={e=>{this.forceRefresh(e)}}>
+                                <i className="spinner icon"/>
+                                Force Refresh
+                            </button>
+                        </div>
                     </div>
+
                     <div className="alot margined_y">
                         {this.createActivityTable()}
                     </div>

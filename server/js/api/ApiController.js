@@ -112,7 +112,6 @@ exports.resolveAliasTag = async function(req,res){
     try{
         preCheck([alias,tag]);
         var args = getConditionedArgs(req.query.raw, [alias,tag]);
-        console.log("resolved args: ", args);
         
         var [err, secretResult] = await to(contractCall("getIsTagSecret", args));
         if (err) throw err;
@@ -257,7 +256,7 @@ exports.getAllAliasInfo = async function(req,res){
         if (tronWeb.isAddress(owner_address)){
             var [err, aliasList] = await to(contractCall("getAliasesForOwner", [owner_address]));
             if (err) throw err;
-            console.log(aliasList);
+
             for (var alias of aliasList){
                 var [err, encAlias] = await to(contractCall("getEncryptedAliasForKeccak",[alias]));
                 if (err) throw err;

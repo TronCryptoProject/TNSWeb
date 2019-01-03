@@ -1,4 +1,5 @@
 import Injecter from "../../injecter.json";
+import axios from "axios";
 
 window.ENC_PREFIX_HEX = "5454545454"; //TTTTT
  
@@ -25,6 +26,20 @@ window.contractSend = function(contractFunc, args, sendParams){
         }catch(e){
             reject(e);
         }
+    });
+}
+window.storeTx = function(params){
+    return new Promise((resolve,reject)=>{
+        if (params.txid.trim() == "") reject("Couldn't find transaction id of created transaction");
+        axios.post(`/activityApi/txStore`,{
+            txid: params.txid,
+            aliasOwner: params.owner,
+            entities: JSON.stringify(params.entities)
+        }).then(res=>{
+            resolve(res);
+        }).catch(e=>{
+            reject(e);
+        })
     });
 }
 window.hexToBytes32 = function(hex){

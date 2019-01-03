@@ -8,7 +8,7 @@ import EditAliasModal from "./EditAliasModal.js";
 import MyActivity from "./MyActivity.js";
 import SecretUsers from "./SecretUsers.js";
 import "./GlobalScope.js";
-
+import io from 'socket.io-client';
 
 export default class UserHome extends React.Component{
 	constructor(props){
@@ -41,10 +41,13 @@ export default class UserHome extends React.Component{
         this.eventAliasEditClick = this.eventAliasEditClick.bind(this);
         this.eventTagDataEditClick = this.eventTagDataEditClick.bind(this);
         this.activityCounterCallback = this.activityCounterCallback.bind(this);
+        this.handleSocketEvents = this.handleSocketEvents.bind(this);
+        this.socket = null;
+        this.myActivityRef = null;
     }
 
     componentDidMount(){
-        this.fetchData(this.props);
+        this.fetchData(this.props, true);
         let modal_ids = ["#create_alias_modal", "#alias_gen_addresses_modal",
             "#alias_modal", "#tag_data_modal", "#my_activity_modal","#secret_users_modal"];
         for (let id of modal_ids){
@@ -60,6 +63,7 @@ export default class UserHome extends React.Component{
                     $(id).parent().addClass("overflow_hidden");
                     if (id == "#my_activity_modal"){
                         localStorage.setItem("myActivityTXCount", this.state.currTxCount);
+                        this.forceUpdate();
                     }
                 },
                 onHidden:()=>{
@@ -68,15 +72,40 @@ export default class UserHome extends React.Component{
                 }
             });
         }
-        
+        this.handleSocketEvents();
+    }
+
+    handleSocketEvents(){
+        this.socket = io("http://localhost:8888");
+        this.socket.on("connect", ()=>{
+            console.log("connected");
+            this.socket.emit("watchMe", tronWeb.defaultAddress.base58);
+        });
+        this.socket.on("gotMail", ()=>{
+            console.log("got mail emit received");
+            this.fetchData(this.props);
+            if (this.myActivityRef != null){
+                this.myActivityRef.fetchData();
+            }
+        });
     }
 
     componentWillUnmount(){
         $("#main_background_div").removeClass("userhome_full_background");
+        if (this.socket != null){
+            this.socket.close();
+            this.socket = null;
+        }
+        this.myActivityRef = null;
     }
 
-    async fetchData(props){
-        this.setState({showAliasLoader: true});
+    async fetchData(props, showLoader){
+        if (showLoader == undefined || showLoader == null) showLoader = false;
+
+        if (showLoader){
+            this.setState({showAliasLoader: true});
+        }
+        
         let [err, response] = await to(get(`api/allAliasInfo/${this.state.userAccount}`));
         if (!err){
             let data = response.data;
@@ -216,8 +245,6 @@ export default class UserHome extends React.Component{
         }
     }
     createAliasCard(alias, rowList){
-        console.log("aliasstate:", alias);
-        console.log("decrypt:", decryptData(alias));
         return(
             <div className="ui padding compact raised segment alias_segment" key={alias} id={alias}>
                 <div className="ui text_center big fluid label ui huge header purple_header">
@@ -424,7 +451,9 @@ export default class UserHome extends React.Component{
                 <EditTagDataModal hideModal={this.hideTagDataModalCallback} {...this.state.tagDataEditModalProps}/>
                 <EditAliasModal hideModal={this.hideAliasModalCallback} 
                     {...this.state.aliasEditModalProps}/>
-                <MyActivity hideModal={this.hideMyActivityModalCallback} activityCounterCallback={this.activityCounterCallback}/>
+                <MyActivity hideModal={this.hideMyActivityModalCallback}
+                    activityCounterCallback={this.activityCounterCallback}
+                    onRef={ref=>(this.myActivityRef = ref)}/>
             </div>            
         );
     }

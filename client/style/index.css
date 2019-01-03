@@ -264,3 +264,6 @@ input::-webkit-inner-spin-button {
 .ui.table{
 	border-radius: 1em !important;
 }
+button>i{
+	pointer-events: none;
+}

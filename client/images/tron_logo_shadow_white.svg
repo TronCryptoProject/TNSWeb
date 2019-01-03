@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <svg viewBox="0 0 500 500" class="tron_logo_svg" style="" xmlns="http://www.w3.org/2000/svg" xmlns:bx="https://boxy-svg.com">
   <defs>
-    <style type="text/css"><![CDATA[
+    <style type="text/css">
       .svg_line2, .svg_line3, .svg_line4, .svg_line6, .svg_line7, .svg_line8{
           stroke-dasharray: 560;
           stroke-dashoffset: 560;
@@ -46,7 +46,7 @@
             opacity: 1;
         }
       }
-    ]]></style>
+    </style>
     <bx:grid x="0" y="0" width="38.879" height="43.973"/>
     <pattern id="pattern-0" x="0" y="0" width="25" height="25" patternUnits="userSpaceOnUse" viewBox="0 0 100 100">
       <rect x="0" y="0" width="50" height="100" style="fill: black;"/>
@@ -57,7 +57,7 @@
     </radialGradient>
   </defs>
   <line style="stroke: rgb(0, 0, 0); stroke-miterlimit: 21;" x1="63.66723404083071" y1="101.0186780114514" x2="63.66723404083071" y2="101.0186780114514"/>
-  <g filter="">
+  <g filter="" transform="matrix(1, 0, 0, 1, 15.72599, -13.158501)">
     <polygon points="196.095 439.728 390.492 180.815 328.523 129.032 83.192 86.587" style="fill-opacity: 0.36; opacity: 0.4; fill: rgb(13, 125, 244); stroke-opacity: 0.12; stroke: rgb(187, 218, 85);"/>
     <line style="stroke-width: 9px; stroke-linejoin: round; stroke-linecap: round; fill-rule: evenodd; stroke-opacity: 0.69; fill: url(#gradient-8); stroke: rgb(255, 255, 255);" x1="77.758" y1="87.946" x2="213.073" y2="239.389" class="svg_line1"/>
     <line x1="79.456" y1="90.493" x2="194.395" y2="439.73" style="stroke-linecap: round; stroke-linejoin: round; stroke-width: 15px; stroke-opacity: 0.75; fill: rgba(0, 0, 0, 0.7); fill-rule: evenodd; stroke: rgb(255, 255, 255);" class="svg_line2"/>

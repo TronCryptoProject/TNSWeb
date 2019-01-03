@@ -180,10 +180,15 @@ export default class UserHome extends React.Component{
     eventTagDataEditClick(e, alias, tag, tagData){
         console.log("rawtag:", tag, "END");
         console.log("TAGEDIT:", decryptData(tag), "END");
+
+        let all_tags = [];
+        for(let tag in this.state.data[alias]){
+            all_tags.push(decryptData(tag));
+        }
         let mod_dict = {
             alias: decryptData(alias),
             tag: decryptData(tag),
-            ttlTags: Object.keys(this.state.data[alias]).length,
+            allTags: all_tags,
             ttlGenAddrs: tagData.genAddressList.length,
             data: {
                 pubAddress: tagData.tagPubAddress,
@@ -348,11 +353,14 @@ export default class UserHome extends React.Component{
                 for(let tag in this.state.data[alias]){
                     sort_tag.push([decryptData(tag), tag]);
                 }
+       
                 sort_tag.sort(function(a,b){
-                    if (a[0] == b[0]) return 0;
-                    return a[0] < b[0] ? -1:1;
+                    let a_tag = a[0] == "default" ? "": a[0];
+                    let b_tag = b[0] == "default" ? "": b[0];
+                    if (a_tag == b_tag) return 0;
+                    return a_tag < b_tag ? -1:1;
                 });
-
+      
                 for(let [_,tag] of sort_tag){
                     let tag_data = this.state.data[alias][tag];
                     row_list.push(this.createAliasRow(alias,tag,tag_data));

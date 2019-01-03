@@ -179,7 +179,7 @@ exports.getAliasesForOwner = function(req,res){
     try{
         preCheck([owner_address]);
         if (tronWeb.isAddress(owner_address)){
-            contractCall("getAliasesForOwner",owner_address).then(result=>{
+            contractCall("getAliasesForOwner",[owner_address]).then(result=>{
                 res.json(createResJSON(result));
             }).catch(e=>{
                 throw e;
@@ -320,7 +320,7 @@ exports.getGenAddressListLen = function(req,res){
         var args = getAliasTagArgs(is_raw,alias,tag);
         
         contractCall("getGenAddressListLen",args).then(result=>{
-            res.json(createResJSON(result));
+            res.json(createResJSON(tronWeb.toDecimal(result)));
         }).catch(e=>{
             throw e;
         });
@@ -355,7 +355,7 @@ exports.getGenAddressFlag = function(req,res){
     try{
         preCheck([alias,tag]);
         var args = getAliasTagArgs(is_raw,alias,tag);
-        contractCall("getPubAddressForTag",args).then(result=>{
+        contractCall("getGenAddressFlag",args).then(result=>{
             res.json(createResJSON(result));
         }).catch(e=>{
             throw e;
@@ -366,7 +366,7 @@ exports.getGenAddressFlag = function(req,res){
 }
 
 function getNextGenAddress(alias, tag, isRaw){
-    return new Promise((resolve,reject)=>{
+    return new Promise(async (resolve,reject)=>{
         //assumes checks for listLen > 0 are previously done
         function getListNextIdx(listLen){
             var key = alias + "-" + tag;
@@ -382,19 +382,26 @@ function getNextGenAddress(alias, tag, isRaw){
         try{
             preCheck([alias,tag]);
             var args = getAliasTagArgs(isRaw,alias,tag);
-            contractCall("getGenAddressListLen",args).then(genNumElems=>{
-                if (genNumElems < 1){
-                    reject(ApiConfig.errors.NO_ADDRESS_FOUND);
-                }
-                var next_idx = getListNextIdx(genNumElems);
-                contractCall("getGenAddressForTag",[...args,next_idx]).then(genAddress=>{
-                    resolve(genAddress);
+            
+            var [err, genFlagResult] = await to(contractCall("getGenAddressFlag", args));
+            if (err) reject(err);
+            if (genFlagResult == false){
+                resolve("");
+            }else{
+                contractCall("getGenAddressListLen",args).then(genNumElems=>{
+                    if (genNumElems < 1){
+                        reject(ApiConfig.errors.NO_ADDRESS_FOUND);
+                    }
+                    var next_idx = getListNextIdx(genNumElems);
+                    contractCall("getGenAddressForTag",[...args,next_idx]).then(genAddress=>{
+                        resolve(genAddress);
+                    }).catch(e=>{
+                        reject(e);
+                    });
                 }).catch(e=>{
                     reject(e);
                 });
-            }).catch(e=>{
-                reject(e);
-            });
+            }
         }catch(e){
             reject(e);
         }

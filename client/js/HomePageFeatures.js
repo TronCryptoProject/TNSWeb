@@ -20,10 +20,12 @@ export default class HomePageFeatures extends React.Component{
 			<div className="ui stackable grid" id="home_features_grid">
 				<div className="left middle aligned two column row">
 					<div className="left floated center aligned column">
-					
+                        <video className="tns_resolver_video border_radius_1em" autoPlay="autoplay" loop muted>
+                            <source src="images/tns_resolver.mp4" type="video/mp4" />
+                        </video>
 					</div>
 					<div className="right floated column">
-						<div className="ui huge center aligned margined_y header">
+						<div className="ui huge center aligned margined_b header">
 							Chat-like Usernames for Tron Addresses
 						</div>
 						<p>

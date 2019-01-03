@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html><head><meta charset="utf-8"/><title>Tron Name Service API Doc</title><link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet"/><style>@import url('https://fonts.googleapis.com/css?family=Roboto:400,700|Inconsolata|Raleway:200');.hljs-comment,.hljs-title{color:#8e908c}.hljs-variable,.hljs-attribute,.hljs-tag,.hljs-regexp,.ruby .hljs-constant,.xml .hljs-tag .hljs-title,.xml .hljs-pi,.xml .hljs-doctype,.html .hljs-doctype,.css .hljs-id,.css .hljs-class,.css .hljs-pseudo{color:#c82829}.hljs-number,.hljs-preprocessor,.hljs-pragma,.hljs-built_in,.hljs-literal,.hljs-params,.hljs-constant{color:#f5871f}.ruby .hljs-class .hljs-title,.css .hljs-rules .hljs-attribute{color:#eab700}.hljs-string,.hljs-value,.hljs-inheritance,.hljs-header,.ruby .hljs-symbol,.xml .hljs-cdata{color:#718c00}.css .hljs-hexcolor{color:#3e999f}.hljs-function,.python .hljs-decorator,.python .hljs-title,.ruby .hljs-function .hljs-title,.ruby .hljs-title .hljs-keyword,.perl .hljs-sub,.javascript .hljs-title,.coffeescript .hljs-title{color:#4271ae}.hljs-keyword,.javascript .hljs-function{color:#8959a8}.hljs{display:block;background:white;color:#4d4d4c;padding:.5em}.coffeescript .javascript,.javascript .xml,.tex .hljs-formula,.xml .javascript,.xml .vbscript,.xml .css,.xml .hljs-cdata{opacity:.5}.right .hljs-comment{color:#969896}.right .css .hljs-class,.right .css .hljs-id,.right .css .hljs-pseudo,.right .hljs-attribute,.right .hljs-regexp,.right .hljs-tag,.right .hljs-variable,.right .html .hljs-doctype,.right .ruby .hljs-constant,.right .xml .hljs-doctype,.right .xml .hljs-pi,.right .xml .hljs-tag .hljs-title{color:#c66}.right .hljs-built_in,.right .hljs-constant,.right .hljs-literal,.right .hljs-number,.right .hljs-params,.right .hljs-pragma,.right .hljs-preprocessor{color:#de935f}.right .css .hljs-rule .hljs-attribute,.right .ruby .hljs-class .hljs-title{color:#f0c674}.right .hljs-header,.right .hljs-inheritance,.right .hljs-name,.right .hljs-string,.right .hljs-value,.right .ruby .hljs-symbol,.right .xml .hljs-cdata{color:#b5bd68}.right .css .hljs-hexcolor,.right .hljs-title{color:#8abeb7}.right .coffeescript .hljs-title,.right .hljs-function,.right .javascript .hljs-title,.right .perl .hljs-sub,.right .python .hljs-decorator,.right .python .hljs-title,.right .ruby .hljs-function .hljs-title,.right .ruby .hljs-title .hljs-keyword{color:#81a2be}.right .hljs-keyword,.right .javascript .hljs-function{color:#b294bb}.right .hljs{display:block;overflow-x:auto;background:#1d1f21;color:#c5c8c6;padding:.5em;-webkit-text-size-adjust:none}.right .coffeescript .javascript,.right .javascript .xml,.right .tex .hljs-formula,.right .xml .css,.right .xml .hljs-cdata,.right .xml .javascript,.right .xml .vbscript{opacity:.5}body{color:black;background:white;font:400 14px / 1.42 'Roboto',Helvetica,sans-serif}header{border-bottom:1px solid #ededed;margin-bottom:12px}h1,h2,h3,h4,h5{color:black;margin:12px 0}h1 .permalink,h2 .permalink,h3 .permalink,h4 .permalink,h5 .permalink{margin-left:0;opacity:0;transition:opacity .25s ease}h1:hover .permalink,h2:hover .permalink,h3:hover .permalink,h4:hover .permalink,h5:hover .permalink{opacity:1}.triple h1 .permalink,.triple h2 .permalink,.triple h3 .permalink,.triple h4 .permalink,.triple h5 .permalink{opacity:.15}.triple h1:hover .permalink,.triple h2:hover .permalink,.triple h3:hover .permalink,.triple h4:hover .permalink,.triple h5:hover .permalink{opacity:.15}h1{font:200 36px 'Raleway',Helvetica,sans-serif;font-size:36px}h2{font:200 36px 'Raleway',Helvetica,sans-serif;font-size:30px}h3{font-size:100%;text-transform:uppercase}h5{font-size:100%;font-weight:normal}p{margin:0 0 10px}p.choices{line-height:1.6}a{color:#18bc9c;text-decoration:none}li p{margin:0}hr.split{border:0;height:1px;width:100%;padding-left:6px;margin:12px auto;background-image:linear-gradient(to right, rgba(0,0,0,0) 20%, rgba(0,0,0,0.2) 51.4%, rgba(255,255,255,0.2) 51.4%, rgba(255,255,255,0) 80%)}dl dt{float:left;width:130px;clear:left;text-align:right;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:700}dl dd{margin-left:150px}blockquote{color:rgba(0,0,0,0.5);font-size:15.5px;padding:10px 20px;margin:12px 0;border-left:5px solid #e8e8e8}blockquote p:last-child{margin-bottom:0}pre{background-color:#f5f5f5;padding:12px;border:1px solid #cfcfcf;border-radius:6px;overflow:auto}pre code{color:black;background-color:transparent;padding:0;border:none}code{color:#444;background-color:#f5f5f5;font:'Inconsolata',monospace;padding:1px 4px;border:1px solid #cfcfcf;border-radius:3px}ul,ol{padding-left:2em}table{border-collapse:collapse;border-spacing:0;margin-bottom:12px}table tr:nth-child(2n){background-color:#fafafa}table th,table td{padding:6px 12px;border:1px solid #e6e6e6}.text-muted{opacity:.5}.note,.warning{padding:.3em 1em;margin:1em 0;border-radius:2px;font-size:90%}.note h1,.warning h1,.note h2,.warning h2,.note h3,.warning h3,.note h4,.warning h4,.note h5,.warning h5,.note h6,.warning h6{font-family:200 36px 'Raleway',Helvetica,sans-serif;font-size:135%;font-weight:500}.note p,.warning p{margin:.5em 0}.note{color:black;background-color:#eff7fc;border-left:4px solid #3498db}.note h1,.note h2,.note h3,.note h4,.note h5,.note h6{color:#3498db}.warning{color:black;background-color:#fcf0ef;border-left:4px solid #d62c1a}.warning h1,.warning h2,.warning h3,.warning h4,.warning h5,.warning h6{color:#d62c1a}header{margin-top:24px}nav{position:fixed;top:24px;bottom:0;overflow-y:auto}nav .resource-group{padding:0}nav .resource-group .heading{position:relative}nav .resource-group .heading .chevron{position:absolute;top:12px;right:12px;opacity:.5}nav .resource-group .heading a{display:block;color:black;opacity:.7;border-left:2px solid transparent;margin:0}nav .resource-group .heading a:hover{text-decoration:none;background-color:bad-color;border-left:2px solid black}nav ul{list-style-type:none;padding-left:0}nav ul a{display:block;font-size:13px;color:rgba(0,0,0,0.7);padding:8px 12px;border-top:1px solid #ededed;border-left:2px solid transparent;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}nav ul a:hover{text-decoration:none;background-color:bad-color;border-left:2px solid black}nav ul>li{margin:0}nav ul>li:first-child{margin-top:-12px}nav ul>li:last-child{margin-bottom:-12px}nav ul ul a{padding-left:24px}nav ul ul li{margin:0}nav ul ul li:first-child{margin-top:0}nav ul ul li:last-child{margin-bottom:0}nav>div>div>ul>li:first-child>a{border-top:none}.preload *{transition:none !important}.pull-left{float:left}.pull-right{float:right}.badge{display:inline-block;float:right;min-width:10px;min-height:14px;padding:3px 7px;font-size:12px;color:#000;background-color:#ededed;border-radius:10px;margin:-2px 0}.badge.get{color:white;background-color:#3498db}.badge.head{color:white;background-color:#3498db}.badge.options{color:white;background-color:#3498db}.badge.put{color:white;background-color:#f39c12}.badge.patch{color:white;background-color:#f39c12}.badge.post{color:white;background-color:#18bc9c}.badge.delete{color:white;background-color:#e74c3c}.collapse-button{float:right}.collapse-button .close{display:none;color:#18bc9c;cursor:pointer}.collapse-button .open{color:#18bc9c;cursor:pointer}.collapse-button.show .close{display:inline}.collapse-button.show .open{display:none}.collapse-content{max-height:0;overflow:hidden;transition:max-height .3s ease-in-out}nav{width:220px}.container{max-width:940px;margin-left:auto;margin-right:auto}.container .row .content{margin-left:244px;width:696px}.container .row:after{content:'';display:block;clear:both}.container-fluid nav{width:22%}.container-fluid .row .content{margin-left:24%}.container-fluid.triple nav{width:16.5%;padding-right:1px}.container-fluid.triple .row .content{position:relative;margin-left:16.5%;padding-left:24px}.middle:before,.middle:after{content:'';display:table}.middle:after{clear:both}.middle{box-sizing:border-box;width:51.5%;padding-right:12px}.right{box-sizing:border-box;float:right;width:48.5%;padding-left:12px}.right a{color:#18bc9c}.right h1,.right h2,.right h3,.right h4,.right h5,.right p,.right div{color:white}.right pre{background-color:#1d1f21;border:1px solid #1d1f21}.right pre code{color:#c5c8c6}.right .description{margin-top:12px}.triple .resource-heading{font-size:125%}.definition{margin-top:12px;margin-bottom:12px}.definition .method{font-weight:bold}.definition .method.get{color:#2e80b8}.definition .method.head{color:#2e80b8}.definition .method.options{color:#2e80b8}.definition .method.post{color:#2eb89d}.definition .method.put{color:#b8822e}.definition .method.patch{color:#b8822e}.definition .method.delete{color:#b83b2e}.definition .uri{word-break:break-all;word-wrap:break-word}.definition .hostname{opacity:.5}.example-names{background-color:#eee;padding:12px;border-radius:6px}.example-names .tab-button{cursor:pointer;color:black;border:1px solid #ddd;padding:6px;margin-left:12px}.example-names .tab-button.active{background-color:#d5d5d5}.right .example-names{background-color:#444}.right .example-names .tab-button{color:white;border:1px solid #666;border-radius:6px}.right .example-names .tab-button.active{background-color:#5e5e5e}#nav-background{position:fixed;left:0;top:0;bottom:0;width:16.5%;padding-right:14.4px;background-color:#fbfbfb;border-right:1px solid #f0f0f0;z-index:-1}#right-panel-background{position:absolute;right:-12px;top:-12px;bottom:-12px;width:48.6%;background-color:#333;z-index:-1}@media (max-width:1200px){nav{width:198px}.container{max-width:840px}.container .row .content{margin-left:224px;width:606px}}@media (max-width:992px){nav{width:169.4px}.container{max-width:720px}.container .row .content{margin-left:194px;width:526px}}@media (max-width:768px){nav{display:none}.container{width:95%;max-width:none}.container .row .content,.container-fluid .row .content,.container-fluid.triple .row .content{margin-left:auto;margin-right:auto;width:95%}#nav-background{display:none}#right-panel-background{width:48.6%}}.back-to-top{position:fixed;z-index:1;bottom:0;right:24px;padding:4px 8px;color:rgba(0,0,0,0.5);background-color:#ededed;text-decoration:none !important;border-top:1px solid #ededed;border-left:1px solid #ededed;border-right:1px solid #ededed;border-top-left-radius:3px;border-top-right-radius:3px}.resource-group{padding:12px;margin-bottom:12px;background-color:white;border:1px solid #ededed;border-radius:6px}.resource-group h2.group-heading,.resource-group .heading a{padding:12px;margin:-12px -12px 12px -12px;background-color:#ededed;border-bottom:1px solid #ededed;border-top-left-radius:6px;border-top-right-radius:6px;white-space:nowrap;text-overflow:ellipsis;overflow:hidden}.triple .content .resource-group{padding:0;border:none}.triple .content .resource-group h2.group-heading,.triple .content .resource-group .heading a{margin:0 0 12px 0;border:1px solid #ededed}nav .resource-group .heading a{padding:12px;margin-bottom:0}nav .resource-group .collapse-content{padding:0}.action{margin-bottom:12px;padding:12px 12px 0 12px;overflow:hidden;border:1px solid transparent;border-radius:6px}.action h4.action-heading{padding:6px 12px;margin:-12px -12px 12px -12px;border-bottom:1px solid transparent;border-top-left-radius:6px;border-top-right-radius:6px;overflow:hidden}.action h4.action-heading .name{float:right;font-weight:normal;padding:6px 0}.action h4.action-heading .method{padding:6px 12px;margin-right:12px;border-radius:3px;display:inline-block}.action h4.action-heading .method.get{color:#000;background-color:white}.action h4.action-heading .method.head{color:#000;background-color:white}.action h4.action-heading .method.options{color:#000;background-color:white}.action h4.action-heading .method.put{color:#000;background-color:white}.action h4.action-heading .method.patch{color:#000;background-color:white}.action h4.action-heading .method.post{color:#000;background-color:white}.action h4.action-heading .method.delete{color:#000;background-color:white}.action h4.action-heading code{color:#444;background-color:rgba(255,255,255,0.7);border-color:transparent;font-weight:normal;word-break:break-all;display:inline-block;margin-top:2px}.action dl.inner{padding-bottom:2px}.action .title{border-bottom:1px solid white;margin:0 -12px -1px -12px;padding:12px}.action.get{border-color:#3498db}.action.get h4.action-heading{color:white;background:#3498db;border-bottom-color:#3498db}.action.head{border-color:#3498db}.action.head h4.action-heading{color:white;background:#3498db;border-bottom-color:#3498db}.action.options{border-color:#3498db}.action.options h4.action-heading{color:white;background:#3498db;border-bottom-color:#3498db}.action.post{border-color:#18bc9c}.action.post h4.action-heading{color:white;background:#18bc9c;border-bottom-color:#18bc9c}.action.put{border-color:#f39c12}.action.put h4.action-heading{color:white;background:#f39c12;border-bottom-color:#f39c12}.action.patch{border-color:#f39c12}.action.patch h4.action-heading{color:white;background:#f39c12;border-bottom-color:#f39c12}.action.delete{border-color:#e74c3c}.action.delete h4.action-heading{color:white;background:#e74c3c;border-bottom-color:#e74c3c}</style></head><body class="preload"><div id="nav-background"></div><div class="container-fluid triple"><div class="row"><nav><div class="resource-group"><div class="heading"><div class="chevron"><i class="open fa fa-angle-down"></i></div><a href="#top">Overview</a></div><div class="collapse-content"><ul><li><a href="#header-query-parameter-rules">Query Parameter Rules</a></li></ul></div></div><div class="resource-group"><div class="heading"><div class="chevron"><i class="open fa fa-angle-down"></i></div><a href="#availability">Availability</a></div><div class="collapse-content"><ul><li><a href="#availability-alias-availability-get"><span class="badge get"><i class="fa fa-arrow-down"></i></span>Alias Availability</a></li><li><a href="#availability-tag-availability-get"><span class="badge get"><i class="fa fa-arrow-down"></i></span>Tag Availability</a></li></ul></div></div><div class="resource-group"><div class="heading"><div class="chevron"><i class="open fa fa-angle-down"></i></div><a href="#resolve-alias-tag">Resolve Alias/Tag</a></div><div class="collapse-content"><ul><li><a href="#resolve-alias-tag-resolve-alias-tag-get"><span class="badge get"><i class="fa fa-arrow-down"></i></span>Resolve Alias/Tag</a></li><li><a href="#resolve-alias-tag-auto-gen-address-get"><span class="badge get"><i class="fa fa-arrow-down"></i></span>Auto-Gen Address</a></li></ul></div></div><div class="resource-group"><div class="heading"><div class="chevron"><i class="open fa fa-angle-down"></i></div><a href="#info-for-alias">Info for Alias</a></div><div class="collapse-content"><ul><li><a href="#info-for-alias-alias-owner-get"><span class="badge get"><i class="fa fa-arrow-down"></i></span>Alias Owner</a></li><li><a href="#info-for-alias-aliases-for-owner-get"><span class="badge get"><i class="fa fa-arrow-down"></i></span>Aliases for Owner</a></li><li><a href="#info-for-alias-all-info-about-alias-tag-get"><span class="badge get"><i class="fa fa-arrow-down"></i></span>All Info about Alias/Tag</a></li></ul></div></div><div class="resource-group"><div class="heading"><div class="chevron"><i class="open fa fa-angle-down"></i></div><a href="#info-for-tags">Info for Tags</a></div><div class="collapse-content"><ul><li><a href="#info-for-tags-tags-for-alias-get"><span class="badge get"><i class="fa fa-arrow-down"></i></span>Tags for Alias</a></li><li><a href="#info-for-tags-tag-data-for-alias-tag-get"><span class="badge get"><i class="fa fa-arrow-down"></i></span>Tag Data for Alias/Tag</a></li><li><a href="#info-for-tags-static-public-address-get"><span class="badge get"><i class="fa fa-arrow-down"></i></span>Static Public Address</a></li><li><a href="#info-for-tags-auto-gen-addreses-get"><span class="badge get"><i class="fa fa-arrow-down"></i></span>Auto-Gen Addreses</a></li><li><a href="#info-for-tags-length-of-auto-gen-addreseses-get"><span class="badge get"><i class="fa fa-arrow-down"></i></span>Length of Auto-Gen Addreseses</a></li><li><a href="#info-for-tags-auto-gen-flag-get"><span class="badge get"><i class="fa fa-arrow-down"></i></span>Auto-Gen Flag</a></li></ul></div></div><div class="resource-group"><div class="heading"><div class="chevron"><i class="open fa fa-angle-down"></i></div><a href="#400-errors">400 Errors</a></div><div class="collapse-content"><ul><li><a href="#header-400-api-errors">400 API Errors</a></li></ul></div></div></nav><div class="content"><div id="right-panel-background"></div><div class="middle"><header><h1 id="top">Tron Name Service API Doc</h1></header></div><div class="right"><h5 style="font-size: 3em;text-align: center;">API Documentation</h5><object data="./images/tron_logo_shadow_white.svg" type="image/svg+xml"></object></div><div class="middle"><p>API Documentation for exchange/wallet developers to integrate TNS
+into their application to make Tron addresses human readable.
+You can easily call our API endpoints to resolve aliases like a
+DNS server resolves website names. We have enabled several ways for
+you to fetch user data (all of which is either keccak256 or encrypted
+with user password).</p>
+<p><em>Since contract state updates can only be made by the original alias/tag
+owner, API endpoints are only GET requests so that you can display the
+necessary data in your application, or even host your own API using
+our backend scripts.</em></p>
+<p><br/><br/></p>
+<h3 id="header-query-parameter-rules">Query Parameter Rules <a aria-hidden="true" class="permalink" href="#header-query-parameter-rules">¶</a></h3>
+<ul>
+<li>In all query requests that require alias &amp; tag parameters, if <code>raw=true</code> parameter is specified,
+both alias &amp; tag parameters must be ASCII human readable characters (not keccak256 hex value). Otherwise,
+keccak256 value can be specified. The default is <code>true</code>.</li>
+</ul>
+<p></p>
+<ul>
+<li>For aliases without a tag, the tag parameter when required will use <code>default</code> value.</li>
+</ul>
+<p><br/><br/></p>
+</div><div class="middle"><section class="resource-group" id="availability"><h2 class="group-heading">Availability <a class="permalink" href="#availability">¶</a></h2></section></div><div class="middle"><div class="resource" id="availability-alias-availability"><h3 class="resource-heading">Alias Availability <a class="permalink" href="#availability-alias-availability">¶</a></h3></div></div><div class="right"><div class="definition"><span class="method get">GET</span> <span class="uri"><span class="hostname"></span>/aliasAvailable/<span class="hljs-attribute" title="alias">alias</span></span></div><div class="tabs"><div class="tabs"><div class="example-names"><span>Responses</span><span class="tab-button">200</span><span class="tab-button">400</span></div><div class="tab"><div><div class="inner"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/json</span></code></pre><div style="height: 1px;"></div><h5>Body</h5><pre><code>{
+  "<span class="hljs-attribute">result</span>": <span class="hljs-value"><span class="hljs-literal">true</span>
+</span>}</code></pre><div style="height: 1px;"></div><h5>Schema</h5><pre><code>{
+  "<span class="hljs-attribute">$schema</span>": <span class="hljs-value"><span class="hljs-string">"http://json-schema.org/draft-04/schema#"</span></span>,
+  "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"object"</span></span>,
+  "<span class="hljs-attribute">properties</span>": <span class="hljs-value">{
+    "<span class="hljs-attribute">result</span>": <span class="hljs-value">{
+      "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"boolean"</span></span>,
+      "<span class="hljs-attribute">description</span>": <span class="hljs-value"><span class="hljs-string">"True if alias is available to claim"</span>
+    </span>}
+  </span>}
+</span>}</code></pre><div style="height: 1px;"></div></div></div></div><div class="tab"><div><div class="inner"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/json</span></code></pre><div style="height: 1px;"></div><h5>Body</h5><pre><code>{
+  "<span class="hljs-attribute">result</span>": <span class="hljs-value"><span class="hljs-string">"Error Message"</span>
+</span>}</code></pre><div style="height: 1px;"></div><h5>Schema</h5><pre><code>{
+  "<span class="hljs-attribute">$schema</span>": <span class="hljs-value"><span class="hljs-string">"http://json-schema.org/draft-04/schema#"</span></span>,
+  "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"object"</span></span>,
+  "<span class="hljs-attribute">properties</span>": <span class="hljs-value">{
+    "<span class="hljs-attribute">result</span>": <span class="hljs-value">{
+      "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"string"</span></span>,
+      "<span class="hljs-attribute">description</span>": <span class="hljs-value"><span class="hljs-string">"Message can be returned as an object in some cases but primarily it's string."</span>
+    </span>}
+  </span>}
+</span>}</code></pre><div style="height: 1px;"></div></div></div></div></div></div></div><div class="middle"><div class="action get" id="availability-alias-availability-get"><h4 class="action-heading"><div class="name">Alias Availability</div><a class="method get" href="#availability-alias-availability-get">GET</a><code class="uri">/aliasAvailable/{alias}</code></h4><p>Check for alias availability</p>
+<div class="title"><strong>URI Parameters</strong><div class="collapse-button show"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><dl class="inner"><dt>alias</dt><dd><code>string</code> <span class="required">(required)</span> <p>Alias for which to check its availability</p>
+</dd><dt>raw</dt><dd><code>boolean</code> <span>(optional)</span> <span class="text-info default"><strong>Default: </strong><span>true</span></span> <p>whether alias &amp; tag are hex or ASCII value</p>
+</dd></dl></div></div></div><hr class="split"/><div class="middle"><div class="resource" id="availability-tag-availability"><h3 class="resource-heading">Tag Availability <a class="permalink" href="#availability-tag-availability">¶</a></h3></div></div><div class="right"><div class="definition"><span class="method get">GET</span> <span class="uri"><span class="hostname"></span>/tagAvailable/<span class="hljs-attribute" title="alias">alias</span>/<span class="hljs-attribute" title="tag">tag</span></span></div><div class="tabs"><div class="tabs"><div class="example-names"><span>Responses</span><span class="tab-button">200</span><span class="tab-button">400</span></div><div class="tab"><div><div class="inner"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/json</span></code></pre><div style="height: 1px;"></div><h5>Body</h5><pre><code>{
+  "<span class="hljs-attribute">result</span>": <span class="hljs-value"><span class="hljs-literal">true</span>
+</span>}</code></pre><div style="height: 1px;"></div><h5>Schema</h5><pre><code>{
+  "<span class="hljs-attribute">$schema</span>": <span class="hljs-value"><span class="hljs-string">"http://json-schema.org/draft-04/schema#"</span></span>,
+  "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"object"</span></span>,
+  "<span class="hljs-attribute">properties</span>": <span class="hljs-value">{
+    "<span class="hljs-attribute">result</span>": <span class="hljs-value">{
+      "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"boolean"</span></span>,
+      "<span class="hljs-attribute">description</span>": <span class="hljs-value"><span class="hljs-string">"True if alias &amp; tag is available to claim"</span>
+    </span>}
+  </span>}
+</span>}</code></pre><div style="height: 1px;"></div></div></div></div><div class="tab"><div><div class="inner"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/json</span></code></pre><div style="height: 1px;"></div><h5>Body</h5><pre><code>{
+  "<span class="hljs-attribute">result</span>": <span class="hljs-value"><span class="hljs-string">"Error Message"</span>
+</span>}</code></pre><div style="height: 1px;"></div><h5>Schema</h5><pre><code>{
+  "<span class="hljs-attribute">$schema</span>": <span class="hljs-value"><span class="hljs-string">"http://json-schema.org/draft-04/schema#"</span></span>,
+  "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"object"</span></span>,
+  "<span class="hljs-attribute">properties</span>": <span class="hljs-value">{
+    "<span class="hljs-attribute">result</span>": <span class="hljs-value">{
+      "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"string"</span></span>,
+      "<span class="hljs-attribute">description</span>": <span class="hljs-value"><span class="hljs-string">"Message can be returned as an object in some cases but primarily it's string."</span>
+    </span>}
+  </span>}
+</span>}</code></pre><div style="height: 1px;"></div></div></div></div></div></div></div><div class="middle"><div class="action get" id="availability-tag-availability-get"><h4 class="action-heading"><div class="name">Tag Availability</div><a class="method get" href="#availability-tag-availability-get">GET</a><code class="uri">/tagAvailable/{alias}/{tag}</code></h4><p>Check for tag availability. This request works the same as <code>/aliasAvailable/{alias}</code>
+request, however, this one makes sure that the tag for the specified alias
+is also available.</p>
+<div class="title"><strong>URI Parameters</strong><div class="collapse-button show"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><dl class="inner"><dt>alias</dt><dd><code>string</code> <span class="required">(required)</span> <p>Alias for which to check its availability</p>
+</dd><dt>tag</dt><dd><code>string</code> <span class="required">(required)</span> <p>Tag for the alias. Use <code>default</code> if tag is empty/default for above alias</p>
+</dd><dt>raw</dt><dd><code>boolean</code> <span>(optional)</span> <span class="text-info default"><strong>Default: </strong><span>true</span></span> <p>whether alias &amp; tag are hex or ASCII value</p>
+</dd></dl></div></div></div><hr class="split"/><div class="middle"><section class="resource-group" id="resolve-alias-tag"><h2 class="group-heading">Resolve Alias/Tag <a class="permalink" href="#resolve-alias-tag">¶</a></h2></section></div><div class="middle"><div class="resource" id="resolve-alias-tag-resolve-alias-tag"><h3 class="resource-heading">Resolve Alias/Tag <a class="permalink" href="#resolve-alias-tag-resolve-alias-tag">¶</a></h3></div></div><div class="right"><div class="definition"><span class="method get">GET</span> <span class="uri"><span class="hostname"></span>/resolveAlias/<span class="hljs-attribute" title="alias">alias</span>/<span class="hljs-attribute" title="tag">tag</span></span></div><div class="tabs"><div class="tabs"><div class="example-names"><span>Responses</span><span class="tab-button">200</span><span class="tab-button">200</span><span class="tab-button">400</span></div><div class="tab"><div><div class="inner"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/json</span></code></pre><div style="height: 1px;"></div><h5>Body</h5><pre><code>{
+  "<span class="hljs-attribute">result</span>": <span class="hljs-value"><span class="hljs-string">"41a9058fb7b21d19ec93900e92ef1e56fe2ca603ee"</span>
+</span>}</code></pre><div style="height: 1px;"></div><h5>Schema</h5><pre><code>{
+  "<span class="hljs-attribute">$schema</span>": <span class="hljs-value"><span class="hljs-string">"http://json-schema.org/draft-04/schema#"</span></span>,
+  "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"object"</span></span>,
+  "<span class="hljs-attribute">properties</span>": <span class="hljs-value">{
+    "<span class="hljs-attribute">result</span>": <span class="hljs-value">{
+      "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"string"</span></span>,
+      "<span class="hljs-attribute">description</span>": <span class="hljs-value"><span class="hljs-string">"Resolved Tron public addresses (hex) for given alias/tag"</span>
+    </span>}
+  </span>}
+</span>}</code></pre><div style="height: 1px;"></div></div></div></div><div class="tab"><div><div class="inner"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/json</span></code></pre><div style="height: 1px;"></div><h5>Body</h5><pre><code>{
+  "<span class="hljs-attribute">result</span>": <span class="hljs-value"><span class="hljs-string">"''"</span>
+</span>}</code></pre><div style="height: 1px;"></div><h5>Schema</h5><pre><code>{
+  "<span class="hljs-attribute">$schema</span>": <span class="hljs-value"><span class="hljs-string">"http://json-schema.org/draft-04/schema#"</span></span>,
+  "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"object"</span></span>,
+  "<span class="hljs-attribute">properties</span>": <span class="hljs-value">{
+    "<span class="hljs-attribute">result</span>": <span class="hljs-value">{
+      "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"string"</span></span>,
+      "<span class="hljs-attribute">description</span>": <span class="hljs-value"><span class="hljs-string">"Empty string if alias/tag cannot be resolved"</span>
+    </span>}
+  </span>}
+</span>}</code></pre><div style="height: 1px;"></div></div></div></div><div class="tab"><div><div class="inner"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/json</span></code></pre><div style="height: 1px;"></div><h5>Body</h5><pre><code>{
+  "<span class="hljs-attribute">result</span>": <span class="hljs-value"><span class="hljs-string">"Error Message"</span>
+</span>}</code></pre><div style="height: 1px;"></div><h5>Schema</h5><pre><code>{
+  "<span class="hljs-attribute">$schema</span>": <span class="hljs-value"><span class="hljs-string">"http://json-schema.org/draft-04/schema#"</span></span>,
+  "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"object"</span></span>,
+  "<span class="hljs-attribute">properties</span>": <span class="hljs-value">{
+    "<span class="hljs-attribute">result</span>": <span class="hljs-value">{
+      "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"string"</span></span>,
+      "<span class="hljs-attribute">description</span>": <span class="hljs-value"><span class="hljs-string">"Message can be returned as an object in some cases but primarily it's string."</span>
+    </span>}
+  </span>}
+</span>}</code></pre><div style="height: 1px;"></div></div></div></div></div></div></div><div class="middle"><div class="action get" id="resolve-alias-tag-resolve-alias-tag-get"><h4 class="action-heading"><div class="name">Resolve Alias/Tag</div><a class="method get" href="#resolve-alias-tag-resolve-alias-tag-get">GET</a><code class="uri">/resolveAlias/{alias}/{tag}</code></h4><p>Given the current setting the alias owner has specified, TNS
+will resolve the alias/tag to a Tron public address accordingly.</p>
+<p>If auto-generate address setting is turned on by the owner, then
+you will get new address every time this endpoint is called. The number
+of new addresses is limited by however many the user has generated (up to 20).</p>
+<p><em>An empty <code>result</code> response doesn’t mean there was an error calling the
+contract. According to the owner’s settings some aliases/tags cannot be shown
+to everyone but selected secret users.</em></p>
+<div class="title"><strong>URI Parameters</strong><div class="collapse-button show"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><dl class="inner"><dt>alias</dt><dd><code>string</code> <span class="required">(required)</span> <p>Alias to resolve</p>
+</dd><dt>tag</dt><dd><code>string</code> <span class="required">(required)</span> <p>Tag for alias</p>
+</dd><dt>raw</dt><dd><code>boolean</code> <span>(optional)</span> <span class="text-info default"><strong>Default: </strong><span>true</span></span> <p>whether alias &amp; tag are hex or ASCII value</p>
+</dd></dl></div></div></div><hr class="split"/><div class="middle"><div class="resource" id="resolve-alias-tag-auto-gen-address"><h3 class="resource-heading">Auto-Gen Address <a class="permalink" href="#resolve-alias-tag-auto-gen-address">¶</a></h3></div></div><div class="right"><div class="definition"><span class="method get">GET</span> <span class="uri"><span class="hostname"></span>/genNextAddress/<span class="hljs-attribute" title="alias">alias</span>/<span class="hljs-attribute" title="tag">tag</span></span></div><div class="tabs"><div class="tabs"><div class="example-names"><span>Responses</span><span class="tab-button">200</span><span class="tab-button">200</span><span class="tab-button">400</span></div><div class="tab"><div><div class="inner"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/json</span></code></pre><div style="height: 1px;"></div><h5>Body</h5><pre><code>{
+  "<span class="hljs-attribute">result</span>": <span class="hljs-value"><span class="hljs-string">"41b70e6d5982426f03c72c3613429f7d072a40f872"</span>
+</span>}</code></pre><div style="height: 1px;"></div><h5>Schema</h5><pre><code>{
+  "<span class="hljs-attribute">$schema</span>": <span class="hljs-value"><span class="hljs-string">"http://json-schema.org/draft-04/schema#"</span></span>,
+  "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"object"</span></span>,
+  "<span class="hljs-attribute">properties</span>": <span class="hljs-value">{
+    "<span class="hljs-attribute">result</span>": <span class="hljs-value">{
+      "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"string"</span></span>,
+      "<span class="hljs-attribute">description</span>": <span class="hljs-value"><span class="hljs-string">"Auto-gen address (hex)"</span>
+    </span>}
+  </span>}
+</span>}</code></pre><div style="height: 1px;"></div></div></div></div><div class="tab"><div><div class="inner"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/json</span></code></pre><div style="height: 1px;"></div><h5>Body</h5><pre><code>{
+  "<span class="hljs-attribute">result</span>": <span class="hljs-value"><span class="hljs-string">"''"</span>
+</span>}</code></pre><div style="height: 1px;"></div><h5>Schema</h5><pre><code>{
+  "<span class="hljs-attribute">$schema</span>": <span class="hljs-value"><span class="hljs-string">"http://json-schema.org/draft-04/schema#"</span></span>,
+  "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"object"</span></span>,
+  "<span class="hljs-attribute">properties</span>": <span class="hljs-value">{
+    "<span class="hljs-attribute">result</span>": <span class="hljs-value">{
+      "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"string"</span></span>,
+      "<span class="hljs-attribute">description</span>": <span class="hljs-value"><span class="hljs-string">"Unable to resolve alias/tag"</span>
+    </span>}
+  </span>}
+</span>}</code></pre><div style="height: 1px;"></div></div></div></div><div class="tab"><div><div class="inner"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/json</span></code></pre><div style="height: 1px;"></div><h5>Body</h5><pre><code>{
+  "<span class="hljs-attribute">result</span>": <span class="hljs-value"><span class="hljs-string">"Error Message"</span>
+</span>}</code></pre><div style="height: 1px;"></div><h5>Schema</h5><pre><code>{
+  "<span class="hljs-attribute">$schema</span>": <span class="hljs-value"><span class="hljs-string">"http://json-schema.org/draft-04/schema#"</span></span>,
+  "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"object"</span></span>,
+  "<span class="hljs-attribute">properties</span>": <span class="hljs-value">{
+    "<span class="hljs-attribute">result</span>": <span class="hljs-value">{
+      "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"string"</span></span>,
+      "<span class="hljs-attribute">description</span>": <span class="hljs-value"><span class="hljs-string">"Message can be returned as an object in some cases but primarily it's string."</span>
+    </span>}
+  </span>}
+</span>}</code></pre><div style="height: 1px;"></div></div></div></div></div></div></div><div class="middle"><div class="action get" id="resolve-alias-tag-auto-gen-address-get"><h4 class="action-heading"><div class="name">Auto-Gen Address</div><a class="method get" href="#resolve-alias-tag-auto-gen-address-get">GET</a><code class="uri">/genNextAddress/{alias}/{tag}</code></h4><p>Returns an auto-generated address to be resolved for alias/tag.
+It only returns an address if auto-gen setting is turned on for the tag,
+otherwise an empty string is returned if there are no auto-gen
+addresses to be found.</p>
+<div class="title"><strong>URI Parameters</strong><div class="collapse-button show"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><dl class="inner"><dt>alias</dt><dd><code>string</code> <span class="required">(required)</span> </dd><dt>tag</dt><dd><code>string</code> <span class="required">(required)</span> <p>Tag for which you want to resolve auto-gen address of</p>
+</dd><dt>raw</dt><dd><code>boolean</code> <span>(optional)</span> <span class="text-info default"><strong>Default: </strong><span>true</span></span> <p>whether alias &amp; tag are hex or ASCII value</p>
+</dd></dl></div></div></div><hr class="split"/><div class="middle"><section class="resource-group" id="info-for-alias"><h2 class="group-heading">Info for Alias <a class="permalink" href="#info-for-alias">¶</a></h2></section></div><div class="middle"><div class="resource" id="info-for-alias-alias-owner"><h3 class="resource-heading">Alias Owner <a class="permalink" href="#info-for-alias-alias-owner">¶</a></h3></div></div><div class="right"><div class="definition"><span class="method get">GET</span> <span class="uri"><span class="hostname"></span>/aliasOwner/<span class="hljs-attribute" title="alias">alias</span></span></div><div class="tabs"><div class="tabs"><div class="example-names"><span>Responses</span><span class="tab-button">200</span><span class="tab-button">400</span></div><div class="tab"><div><div class="inner"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/json</span></code></pre><div style="height: 1px;"></div><h5>Body</h5><pre><code>{
+  "<span class="hljs-attribute">result</span>": <span class="hljs-value"><span class="hljs-string">"41a9058fb7b21d19ec93900e92ef1e56fe2ca603ee"</span>
+</span>}</code></pre><div style="height: 1px;"></div><h5>Schema</h5><pre><code>{
+  "<span class="hljs-attribute">$schema</span>": <span class="hljs-value"><span class="hljs-string">"http://json-schema.org/draft-04/schema#"</span></span>,
+  "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"object"</span></span>,
+  "<span class="hljs-attribute">properties</span>": <span class="hljs-value">{
+    "<span class="hljs-attribute">result</span>": <span class="hljs-value">{
+      "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"string"</span></span>,
+      "<span class="hljs-attribute">description</span>": <span class="hljs-value"><span class="hljs-string">"Tron public addresses (hex) of owner"</span>
+    </span>}
+  </span>}
+</span>}</code></pre><div style="height: 1px;"></div></div></div></div><div class="tab"><div><div class="inner"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/json</span></code></pre><div style="height: 1px;"></div><h5>Body</h5><pre><code>{
+  "<span class="hljs-attribute">result</span>": <span class="hljs-value"><span class="hljs-string">"Error Message"</span>
+</span>}</code></pre><div style="height: 1px;"></div><h5>Schema</h5><pre><code>{
+  "<span class="hljs-attribute">$schema</span>": <span class="hljs-value"><span class="hljs-string">"http://json-schema.org/draft-04/schema#"</span></span>,
+  "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"object"</span></span>,
+  "<span class="hljs-attribute">properties</span>": <span class="hljs-value">{
+    "<span class="hljs-attribute">result</span>": <span class="hljs-value">{
+      "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"string"</span></span>,
+      "<span class="hljs-attribute">description</span>": <span class="hljs-value"><span class="hljs-string">"Message can be returned as an object in some cases but primarily it's string."</span>
+    </span>}
+  </span>}
+</span>}</code></pre><div style="height: 1px;"></div></div></div></div></div></div></div><div class="middle"><div class="action get" id="info-for-alias-alias-owner-get"><h4 class="action-heading"><div class="name">Alias Owner</div><a class="method get" href="#info-for-alias-alias-owner-get">GET</a><code class="uri">/aliasOwner/{alias}</code></h4><p>Fetches the Tron public address of the user who owns the alias</p>
+<div class="title"><strong>URI Parameters</strong><div class="collapse-button show"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><dl class="inner"><dt>alias</dt><dd><code>string</code> <span class="required">(required)</span> <p>Alias of which you want to know the owner</p>
+</dd><dt>raw</dt><dd><code>boolean</code> <span>(optional)</span> <span class="text-info default"><strong>Default: </strong><span>true</span></span> <p>whether alias &amp; tag are hex or ASCII value</p>
+</dd></dl></div></div></div><hr class="split"/><div class="middle"><div class="resource" id="info-for-alias-aliases-for-owner"><h3 class="resource-heading">Aliases for Owner <a class="permalink" href="#info-for-alias-aliases-for-owner">¶</a></h3></div></div><div class="right"><div class="definition"><span class="method get">GET</span> <span class="uri"><span class="hostname"></span>/aliases/<span class="hljs-attribute" title="owner">owner</span></span></div><div class="tabs"><div class="tabs"><div class="example-names"><span>Responses</span><span class="tab-button">200</span><span class="tab-button">400</span></div><div class="tab"><div><div class="inner"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/json</span></code></pre><div style="height: 1px;"></div><h5>Body</h5><pre><code>{
+  "<span class="hljs-attribute">result</span>": <span class="hljs-value">[
+    <span class="hljs-string">"0x5cc2ac62eeec1807c65d225d7059ed53df61e2899d4618084e9059073ad41200"</span>
+  ]
+</span>}</code></pre><div style="height: 1px;"></div><h5>Schema</h5><pre><code>{
+  "<span class="hljs-attribute">$schema</span>": <span class="hljs-value"><span class="hljs-string">"http://json-schema.org/draft-04/schema#"</span></span>,
+  "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"object"</span></span>,
+  "<span class="hljs-attribute">properties</span>": <span class="hljs-value">{
+    "<span class="hljs-attribute">result</span>": <span class="hljs-value">{
+      "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"array"</span></span>,
+      "<span class="hljs-attribute">description</span>": <span class="hljs-value"><span class="hljs-string">"Array of keccak256 aliases of owner"</span>
+    </span>}
+  </span>}
+</span>}</code></pre><div style="height: 1px;"></div></div></div></div><div class="tab"><div><div class="inner"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/json</span></code></pre><div style="height: 1px;"></div><h5>Body</h5><pre><code>{
+  "<span class="hljs-attribute">result</span>": <span class="hljs-value"><span class="hljs-string">"Error Message"</span>
+</span>}</code></pre><div style="height: 1px;"></div><h5>Schema</h5><pre><code>{
+  "<span class="hljs-attribute">$schema</span>": <span class="hljs-value"><span class="hljs-string">"http://json-schema.org/draft-04/schema#"</span></span>,
+  "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"object"</span></span>,
+  "<span class="hljs-attribute">properties</span>": <span class="hljs-value">{
+    "<span class="hljs-attribute">result</span>": <span class="hljs-value">{
+      "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"string"</span></span>,
+      "<span class="hljs-attribute">description</span>": <span class="hljs-value"><span class="hljs-string">"Message can be returned as an object in some cases but primarily it's string."</span>
+    </span>}
+  </span>}
+</span>}</code></pre><div style="height: 1px;"></div></div></div></div></div></div></div><div class="middle"><div class="action get" id="info-for-alias-aliases-for-owner-get"><h4 class="action-heading"><div class="name">Aliases for Owner</div><a class="method get" href="#info-for-alias-aliases-for-owner-get">GET</a><code class="uri">/aliases/{owner}</code></h4><p>Fetches the aliases that belong to an owner. The returned object
+contains encrypted strings of the aliases/tags which only the owner
+can decrypt with his password.</p>
+<p><code>tagPubAddress</code> field in the result object will be
+<code>410000000000000000000000000000000000000000</code> (zero address) if static public address
+is not set for an alias/tag.</p>
+<div class="title"><strong>URI Parameters</strong><div class="collapse-button show"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><dl class="inner"><dt>owner</dt><dd><code>string</code> <span class="required">(required)</span> <p>base58 Tron public address</p>
+</dd></dl></div></div></div><hr class="split"/><div class="middle"><div class="resource" id="info-for-alias-all-info-about-alias-tag"><h3 class="resource-heading">All Info about Alias/Tag <a class="permalink" href="#info-for-alias-all-info-about-alias-tag">¶</a></h3></div></div><div class="right"><div class="definition"><span class="method get">GET</span> <span class="uri"><span class="hostname"></span>/allAliasInfo/<span class="hljs-attribute" title="owner">owner</span></span></div><div class="tabs"><div class="tabs"><div class="example-names"><span>Responses</span><span class="tab-button">200</span><span class="tab-button">400</span></div><div class="tab"><div><div class="inner"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/json</span></code></pre><div style="height: 1px;"></div><h5>Body</h5><pre><code>{
+    "<span class="hljs-attribute">result</span>": <span class="hljs-value">{
+        "<span class="hljs-attribute">0x000000000000000000000000000000000000005454545454254a2fcdedc2b9c1</span>": <span class="hljs-value">{
+            "<span class="hljs-attribute">0x000000000000000000000054545454545f6cb4d77cc62cf7df03e9e15b230bd2</span>": <span class="hljs-value">{
+                "<span class="hljs-attribute">generatorFlag</span>": <span class="hljs-value"><span class="hljs-literal">false</span></span>,
+                "<span class="hljs-attribute">isSecret</span>": <span class="hljs-value"><span class="hljs-literal">false</span></span>,
+                "<span class="hljs-attribute">genAddressList</span>": <span class="hljs-value">[]</span>,
+                "<span class="hljs-attribute">secretMembers</span>": <span class="hljs-value">[]</span>,
+                "<span class="hljs-attribute">tagPubAddress</span>": <span class="hljs-value"><span class="hljs-string">"41a9058fb7b21d19ec93900e92ef1e56fe2ca603ee"</span>
+            </span>}</span>,
+            "<span class="hljs-attribute">0x000000000000000000000000000000000000005454545454421213b77a1c4f1a</span>": <span class="hljs-value">{
+                "<span class="hljs-attribute">generatorFlag</span>": <span class="hljs-value"><span class="hljs-literal">true</span></span>,
+                "<span class="hljs-attribute">isSecret</span>": <span class="hljs-value"><span class="hljs-literal">true</span></span>,
+                "<span class="hljs-attribute">genAddressList</span>": <span class="hljs-value">[
+                    <span class="hljs-string">"0xC95772fC74b4fDCCADf7fF48Fd620FE3B0Dbd201"</span>,
+                    <span class="hljs-string">"0xB70e6D5982426F03C72c3613429f7D072A40F872"</span>,
+                    <span class="hljs-string">"0x7CEC8335a033d5aEE830a2E984Ddf5FD9851476A"</span>,
+                    <span class="hljs-string">"0x18AC2A2948A11329FA06aDBc70bd10221711d7B1"</span>,
+                ]</span>,
+                "<span class="hljs-attribute">secretMembers</span>": <span class="hljs-value">[
+                    <span class="hljs-string">"0x0000000000000000000000000000000000000054545454547853ea51b5f8d82f"</span>,
+                    <span class="hljs-string">"0x272bc3acc367a8e14a3ba8fdc29b53778ce8830378a8ecef9f7d485808c8607b"</span>
+                ]</span>,
+                "<span class="hljs-attribute">tagPubAddress</span>": <span class="hljs-value"><span class="hljs-string">"410000000000000000000000000000000000000000"</span>
+            </span>}
+        </span>}
+    </span>}
+</span>}</code></pre><div style="height: 1px;"></div></div></div></div><div class="tab"><div><div class="inner"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/json</span></code></pre><div style="height: 1px;"></div><h5>Body</h5><pre><code>{
+  "<span class="hljs-attribute">result</span>": <span class="hljs-value"><span class="hljs-string">"Error Message"</span>
+</span>}</code></pre><div style="height: 1px;"></div><h5>Schema</h5><pre><code>{
+  "<span class="hljs-attribute">$schema</span>": <span class="hljs-value"><span class="hljs-string">"http://json-schema.org/draft-04/schema#"</span></span>,
+  "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"object"</span></span>,
+  "<span class="hljs-attribute">properties</span>": <span class="hljs-value">{
+    "<span class="hljs-attribute">result</span>": <span class="hljs-value">{
+      "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"string"</span></span>,
+      "<span class="hljs-attribute">description</span>": <span class="hljs-value"><span class="hljs-string">"Message can be returned as an object in some cases but primarily it's string."</span>
+    </span>}
+  </span>}
+</span>}</code></pre><div style="height: 1px;"></div></div></div></div></div></div></div><div class="middle"><div class="action get" id="info-for-alias-all-info-about-alias-tag-get"><h4 class="action-heading"><div class="name">All Info about Alias/Tag</div><a class="method get" href="#info-for-alias-all-info-about-alias-tag-get">GET</a><code class="uri">/allAliasInfo/{owner}</code></h4><p>Fetches all the available info for an owner in one request. It fetches the following
+items:</p>
+<ul>
+<li>
+<p><strong>Encrypted aliases</strong></p>
+</li>
+<li>
+<p><strong>Encrypted tags</strong> under alias</p>
+</li>
+<li>
+<p><strong>generateFlag</strong>: Is the tag set to use auto-generated address or static public address?</p>
+<ul>
+<li><code>true</code> if to use auto-gen addresses</li>
+</ul>
+</li>
+<li>
+<p><strong>isSecret</strong>: Is the tag secret?</p>
+</li>
+<li>
+<p><strong>genAddressList</strong>: Auto-generated addresses</p>
+</li>
+<li>
+<p><strong>secretMembers</strong>: Encrypted Tron public addresses that are the only ones allowed to resolve
+an alias</p>
+</li>
+<li>
+<p><strong>tagPubAddress</strong>: Static public address for tag if set. If it’s not set, it defaults to zero address in hex.</p>
+</li>
+</ul>
+<div class="title"><strong>URI Parameters</strong><div class="collapse-button show"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><dl class="inner"><dt>owner</dt><dd><code>string</code> <span class="required">(required)</span> <p>base58 Tron public address</p>
+</dd></dl></div></div></div><hr class="split"/><div class="middle"><section class="resource-group" id="info-for-tags"><h2 class="group-heading">Info for Tags <a class="permalink" href="#info-for-tags">¶</a></h2></section></div><div class="middle"><div class="resource" id="info-for-tags-tags-for-alias"><h3 class="resource-heading">Tags for Alias <a class="permalink" href="#info-for-tags-tags-for-alias">¶</a></h3></div></div><div class="right"><div class="definition"><span class="method get">GET</span> <span class="uri"><span class="hostname"></span>/tags/<span class="hljs-attribute" title="alias">alias</span></span></div><div class="tabs"><div class="tabs"><div class="example-names"><span>Responses</span><span class="tab-button">200</span><span class="tab-button">400</span></div><div class="tab"><div><div class="inner"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/json</span></code></pre><div style="height: 1px;"></div><h5>Body</h5><pre><code>{
+  "<span class="hljs-attribute">result</span>": <span class="hljs-value">[
+    <span class="hljs-string">"0x5cc2ac62eeec1807c65d225d7059ed53df61e2899d4618084e9059073ad41200"</span>
+  ]
+</span>}</code></pre><div style="height: 1px;"></div><h5>Schema</h5><pre><code>{
+  "<span class="hljs-attribute">$schema</span>": <span class="hljs-value"><span class="hljs-string">"http://json-schema.org/draft-04/schema#"</span></span>,
+  "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"object"</span></span>,
+  "<span class="hljs-attribute">properties</span>": <span class="hljs-value">{
+    "<span class="hljs-attribute">result</span>": <span class="hljs-value">{
+      "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"array"</span></span>,
+      "<span class="hljs-attribute">description</span>": <span class="hljs-value"><span class="hljs-string">"Array of keccak256 tags of owner"</span>
+    </span>}
+  </span>}
+</span>}</code></pre><div style="height: 1px;"></div></div></div></div><div class="tab"><div><div class="inner"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/json</span></code></pre><div style="height: 1px;"></div><h5>Body</h5><pre><code>{
+  "<span class="hljs-attribute">result</span>": <span class="hljs-value"><span class="hljs-string">"Error Message"</span>
+</span>}</code></pre><div style="height: 1px;"></div><h5>Schema</h5><pre><code>{
+  "<span class="hljs-attribute">$schema</span>": <span class="hljs-value"><span class="hljs-string">"http://json-schema.org/draft-04/schema#"</span></span>,
+  "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"object"</span></span>,
+  "<span class="hljs-attribute">properties</span>": <span class="hljs-value">{
+    "<span class="hljs-attribute">result</span>": <span class="hljs-value">{
+      "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"string"</span></span>,
+      "<span class="hljs-attribute">description</span>": <span class="hljs-value"><span class="hljs-string">"Message can be returned as an object in some cases but primarily it's string."</span>
+    </span>}
+  </span>}
+</span>}</code></pre><div style="height: 1px;"></div></div></div></div></div></div></div><div class="middle"><div class="action get" id="info-for-tags-tags-for-alias-get"><h4 class="action-heading"><div class="name">Tags for Alias</div><a class="method get" href="#info-for-tags-tags-for-alias-get">GET</a><code class="uri">/tags/{alias}</code></h4><p>A list of all tags that are under a specific alias. These are an
+array of keccak256 tag values and are not ordered in any fashion.</p>
+<div class="title"><strong>URI Parameters</strong><div class="collapse-button show"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><dl class="inner"><dt>alias</dt><dd><code>string</code> <span class="required">(required)</span> <p>Alias to fetch all tags of</p>
+</dd><dt>raw</dt><dd><code>boolean</code> <span>(optional)</span> <span class="text-info default"><strong>Default: </strong><span>true</span></span> <p>whether alias &amp; tag are hex or ASCII value</p>
+</dd></dl></div></div></div><hr class="split"/><div class="middle"><div class="resource" id="info-for-tags-tag-data-for-alias-tag"><h3 class="resource-heading">Tag Data for Alias/Tag <a class="permalink" href="#info-for-tags-tag-data-for-alias-tag">¶</a></h3></div></div><div class="right"><div class="definition"><span class="method get">GET</span> <span class="uri"><span class="hostname"></span>/tagInfo/<span class="hljs-attribute" title="alias">alias</span>/<span class="hljs-attribute" title="tag">tag</span></span></div><div class="tabs"><div class="tabs"><div class="example-names"><span>Responses</span><span class="tab-button">200</span><span class="tab-button">400</span></div><div class="tab"><div><div class="inner"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/json</span></code></pre><div style="height: 1px;"></div><h5>Body</h5><pre><code>{
+    "<span class="hljs-attribute">result</span>": <span class="hljs-value">{
+        "<span class="hljs-attribute">generatorFlag</span>": <span class="hljs-value"><span class="hljs-literal">true</span></span>,
+        "<span class="hljs-attribute">isSecret</span>": <span class="hljs-value"><span class="hljs-literal">false</span></span>,
+        "<span class="hljs-attribute">genAddressList</span>": <span class="hljs-value">[
+            <span class="hljs-string">"0xC95772fC74b4fDCCADf7fF48Fd620FE3B0Dbd201"</span>,
+            <span class="hljs-string">"0xB70e6D5982426F03C72c3613429f7D072A40F872"</span>,
+            <span class="hljs-string">"0x7CEC8335a033d5aEE830a2E984Ddf5FD9851476A"</span>,
+            <span class="hljs-string">"0x18AC2A2948A11329FA06aDBc70bd10221711d7B1"</span>,
+            <span class="hljs-string">"0x68581ba726D7759F23d015Fb17FE46da5AE57391"</span>,
+        ]</span>,
+        "<span class="hljs-attribute">secretMembers</span>": <span class="hljs-value">[
+            <span class="hljs-string">"0x0000000000000000000000000000000000000054545454541306c416cd2bc030"</span>,
+            <span class="hljs-string">"0x0f3b8e9231d990d0eb736ae82f101274200665721f9070031ce69d2f957fad1a"</span>,
+            <span class="hljs-string">"0x0000000000000000000000000000000000000054545454547853ea51b5f8d82f"</span>,
+            <span class="hljs-string">"0x272bc3acc367a8e14a3ba8fdc29b53778ce8830378a8ecef9f7d485808c8607b"</span>
+        ]</span>,
+        "<span class="hljs-attribute">tagPubAddress</span>": <span class="hljs-value"><span class="hljs-string">"41a9058fb7b21d19ec93900e92ef1e56fe2ca603ee"</span>
+    </span>}
+</span>}</code></pre><div style="height: 1px;"></div></div></div></div><div class="tab"><div><div class="inner"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/json</span></code></pre><div style="height: 1px;"></div><h5>Body</h5><pre><code>{
+  "<span class="hljs-attribute">result</span>": <span class="hljs-value"><span class="hljs-string">"Error Message"</span>
+</span>}</code></pre><div style="height: 1px;"></div><h5>Schema</h5><pre><code>{
+  "<span class="hljs-attribute">$schema</span>": <span class="hljs-value"><span class="hljs-string">"http://json-schema.org/draft-04/schema#"</span></span>,
+  "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"object"</span></span>,
+  "<span class="hljs-attribute">properties</span>": <span class="hljs-value">{
+    "<span class="hljs-attribute">result</span>": <span class="hljs-value">{
+      "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"string"</span></span>,
+      "<span class="hljs-attribute">description</span>": <span class="hljs-value"><span class="hljs-string">"Message can be returned as an object in some cases but primarily it's string."</span>
+    </span>}
+  </span>}
+</span>}</code></pre><div style="height: 1px;"></div></div></div></div></div></div></div><div class="middle"><div class="action get" id="info-for-tags-tag-data-for-alias-tag-get"><h4 class="action-heading"><div class="name">Tag Data for Alias/Tag</div><a class="method get" href="#info-for-tags-tag-data-for-alias-tag-get">GET</a><code class="uri">/tagInfo/{alias}/{tag}</code></h4><p>All the data related to a tag under a specific alias. This result
+object is also included in <code>/allAliasInfo/{owner}</code> request</p>
+<ul>
+<li>
+<p><strong>generateFlag</strong>: Is the tag set to use auto-generated address or static public address?</p>
+<ul>
+<li><code>true</code> if to use auto-gen addresses</li>
+</ul>
+</li>
+<li>
+<p><strong>isSecret</strong>: Determines whether or not tag is secret</p>
+</li>
+<li>
+<p><strong>genAddressList</strong>: Auto-generated addresses list</p>
+</li>
+<li>
+<p><strong>secretMembers</strong>: Encrypted Tron public addresses that only the owner can decrypt &amp; see</p>
+</li>
+<li>
+<p><strong>tagPubAddress</strong>: Static public address for tag in hex</p>
+</li>
+</ul>
+<div class="title"><strong>URI Parameters</strong><div class="collapse-button show"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><dl class="inner"><dt>alias</dt><dd><code>string</code> <span class="required">(required)</span> </dd><dt>tag</dt><dd><code>string</code> <span class="required">(required)</span> <p>Tag for which to fetch data
+If alias doesn’t have a tag, tag value is <code>default</code></p>
+</dd><dt>raw</dt><dd><code>boolean</code> <span>(optional)</span> <span class="text-info default"><strong>Default: </strong><span>true</span></span> <p>whether alias &amp; tag are hex or ASCII value</p>
+</dd></dl></div></div></div><hr class="split"/><div class="middle"><div class="resource" id="info-for-tags-static-public-address"><h3 class="resource-heading">Static Public Address <a class="permalink" href="#info-for-tags-static-public-address">¶</a></h3></div></div><div class="right"><div class="definition"><span class="method get">GET</span> <span class="uri"><span class="hostname"></span>/pubAddress/<span class="hljs-attribute" title="alias">alias</span>/<span class="hljs-attribute" title="tag">tag</span></span></div><div class="tabs"><div class="tabs"><div class="example-names"><span>Responses</span><span class="tab-button">200</span><span class="tab-button">400</span></div><div class="tab"><div><div class="inner"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/json</span></code></pre><div style="height: 1px;"></div><h5>Body</h5><pre><code>{
+  "<span class="hljs-attribute">result</span>": <span class="hljs-value">[
+    <span class="hljs-string">"41a9058fb7b21d19ec93900e92ef1e56fe2ca603ee"</span>
+  ]
+</span>}</code></pre><div style="height: 1px;"></div><h5>Schema</h5><pre><code>{
+  "<span class="hljs-attribute">$schema</span>": <span class="hljs-value"><span class="hljs-string">"http://json-schema.org/draft-04/schema#"</span></span>,
+  "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"object"</span></span>,
+  "<span class="hljs-attribute">properties</span>": <span class="hljs-value">{
+    "<span class="hljs-attribute">result</span>": <span class="hljs-value">{
+      "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"array"</span></span>,
+      "<span class="hljs-attribute">description</span>": <span class="hljs-value"><span class="hljs-string">"Tron public address (hex) of user"</span>
+    </span>}
+  </span>}
+</span>}</code></pre><div style="height: 1px;"></div></div></div></div><div class="tab"><div><div class="inner"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/json</span></code></pre><div style="height: 1px;"></div><h5>Body</h5><pre><code>{
+  "<span class="hljs-attribute">result</span>": <span class="hljs-value"><span class="hljs-string">"Error Message"</span>
+</span>}</code></pre><div style="height: 1px;"></div><h5>Schema</h5><pre><code>{
+  "<span class="hljs-attribute">$schema</span>": <span class="hljs-value"><span class="hljs-string">"http://json-schema.org/draft-04/schema#"</span></span>,
+  "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"object"</span></span>,
+  "<span class="hljs-attribute">properties</span>": <span class="hljs-value">{
+    "<span class="hljs-attribute">result</span>": <span class="hljs-value">{
+      "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"string"</span></span>,
+      "<span class="hljs-attribute">description</span>": <span class="hljs-value"><span class="hljs-string">"Message can be returned as an object in some cases but primarily it's string."</span>
+    </span>}
+  </span>}
+</span>}</code></pre><div style="height: 1px;"></div></div></div></div></div></div></div><div class="middle"><div class="action get" id="info-for-tags-static-public-address-get"><h4 class="action-heading"><div class="name">Static Public Address</div><a class="method get" href="#info-for-tags-static-public-address-get">GET</a><code class="uri">/pubAddress/{alias}/{tag}</code></h4><p>Fetches static public address for the given alias/tag. If static
+address is not set by the user, a zero address will be returned in hex
+<code>410000000000000000000000000000000000000000</code>.</p>
+<p>This is the main address that an alias/tag resolves to if it’s not secret
+or have auto-generated addresses flag setting turned on.</p>
+<div class="title"><strong>URI Parameters</strong><div class="collapse-button show"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><dl class="inner"><dt>alias</dt><dd><code>string</code> <span class="required">(required)</span> </dd><dt>tag</dt><dd><code>string</code> <span class="required">(required)</span> <p>Tag for which you want to fetch public address of</p>
+</dd><dt>raw</dt><dd><code>boolean</code> <span>(optional)</span> <span class="text-info default"><strong>Default: </strong><span>true</span></span> <p>whether alias &amp; tag are hex or ASCII value</p>
+</dd></dl></div></div></div><hr class="split"/><div class="middle"><div class="resource" id="info-for-tags-auto-gen-addreses"><h3 class="resource-heading">Auto-Gen Addreses <a class="permalink" href="#info-for-tags-auto-gen-addreses">¶</a></h3></div></div><div class="right"><div class="definition"><span class="method get">GET</span> <span class="uri"><span class="hostname"></span>/genAddressList/<span class="hljs-attribute" title="alias">alias</span>/<span class="hljs-attribute" title="tag">tag</span></span></div><div class="tabs"><div class="tabs"><div class="example-names"><span>Responses</span><span class="tab-button">200</span><span class="tab-button">400</span></div><div class="tab"><div><div class="inner"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/json</span></code></pre><div style="height: 1px;"></div><h5>Body</h5><pre><code>{
+  "<span class="hljs-attribute">result</span>": <span class="hljs-value">[
+    <span class="hljs-string">"0x25B9620Bd4675f778E6eAA4463aB4EF6be3FC329"</span>,
+    <span class="hljs-string">"0x4897e301F6B289C4819fba930d333646c266d8D8"</span>
+  ]
+</span>}</code></pre><div style="height: 1px;"></div><h5>Schema</h5><pre><code>{
+  "<span class="hljs-attribute">$schema</span>": <span class="hljs-value"><span class="hljs-string">"http://json-schema.org/draft-04/schema#"</span></span>,
+  "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"object"</span></span>,
+  "<span class="hljs-attribute">properties</span>": <span class="hljs-value">{
+    "<span class="hljs-attribute">result</span>": <span class="hljs-value">{
+      "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"array"</span></span>,
+      "<span class="hljs-attribute">description</span>": <span class="hljs-value"><span class="hljs-string">"Tron public address (hex)"</span>
+    </span>}
+  </span>}
+</span>}</code></pre><div style="height: 1px;"></div></div></div></div><div class="tab"><div><div class="inner"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/json</span></code></pre><div style="height: 1px;"></div><h5>Body</h5><pre><code>{
+  "<span class="hljs-attribute">result</span>": <span class="hljs-value"><span class="hljs-string">"Error Message"</span>
+</span>}</code></pre><div style="height: 1px;"></div><h5>Schema</h5><pre><code>{
+  "<span class="hljs-attribute">$schema</span>": <span class="hljs-value"><span class="hljs-string">"http://json-schema.org/draft-04/schema#"</span></span>,
+  "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"object"</span></span>,
+  "<span class="hljs-attribute">properties</span>": <span class="hljs-value">{
+    "<span class="hljs-attribute">result</span>": <span class="hljs-value">{
+      "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"string"</span></span>,
+      "<span class="hljs-attribute">description</span>": <span class="hljs-value"><span class="hljs-string">"Message can be returned as an object in some cases but primarily it's string."</span>
+    </span>}
+  </span>}
+</span>}</code></pre><div style="height: 1px;"></div></div></div></div></div></div></div><div class="middle"><div class="action get" id="info-for-tags-auto-gen-addreses-get"><h4 class="action-heading"><div class="name">Auto-Gen Addreses</div><a class="method get" href="#info-for-tags-auto-gen-addreses-get">GET</a><code class="uri">/genAddressList/{alias}/{tag}</code></h4><p>Returns all the auto-generated addresses for alias/tag.</p>
+<div class="title"><strong>URI Parameters</strong><div class="collapse-button show"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><dl class="inner"><dt>alias</dt><dd><code>string</code> <span class="required">(required)</span> </dd><dt>tag</dt><dd><code>string</code> <span class="required">(required)</span> <p>Tag for which you want to fetch auto-gen addresses of</p>
+</dd><dt>raw</dt><dd><code>boolean</code> <span>(optional)</span> <span class="text-info default"><strong>Default: </strong><span>true</span></span> <p>whether alias &amp; tag are hex or ASCII value</p>
+</dd></dl></div></div></div><hr class="split"/><div class="middle"><div class="resource" id="info-for-tags-length-of-auto-gen-addreseses"><h3 class="resource-heading">Length of Auto-Gen Addreseses <a class="permalink" href="#info-for-tags-length-of-auto-gen-addreseses">¶</a></h3></div></div><div class="right"><div class="definition"><span class="method get">GET</span> <span class="uri"><span class="hostname"></span>/genAddressListLen/<span class="hljs-attribute" title="alias">alias</span>/<span class="hljs-attribute" title="tag">tag</span></span></div><div class="tabs"><div class="tabs"><div class="example-names"><span>Responses</span><span class="tab-button">200</span><span class="tab-button">400</span></div><div class="tab"><div><div class="inner"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/json</span></code></pre><div style="height: 1px;"></div><h5>Body</h5><pre><code>{
+  "<span class="hljs-attribute">result</span>": <span class="hljs-value"><span class="hljs-number">20</span>
+</span>}</code></pre><div style="height: 1px;"></div><h5>Schema</h5><pre><code>{
+  "<span class="hljs-attribute">$schema</span>": <span class="hljs-value"><span class="hljs-string">"http://json-schema.org/draft-04/schema#"</span></span>,
+  "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"object"</span></span>,
+  "<span class="hljs-attribute">properties</span>": <span class="hljs-value">{
+    "<span class="hljs-attribute">result</span>": <span class="hljs-value">{
+      "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"number"</span>
+    </span>}
+  </span>}
+</span>}</code></pre><div style="height: 1px;"></div></div></div></div><div class="tab"><div><div class="inner"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/json</span></code></pre><div style="height: 1px;"></div><h5>Body</h5><pre><code>{
+  "<span class="hljs-attribute">result</span>": <span class="hljs-value"><span class="hljs-string">"Error Message"</span>
+</span>}</code></pre><div style="height: 1px;"></div><h5>Schema</h5><pre><code>{
+  "<span class="hljs-attribute">$schema</span>": <span class="hljs-value"><span class="hljs-string">"http://json-schema.org/draft-04/schema#"</span></span>,
+  "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"object"</span></span>,
+  "<span class="hljs-attribute">properties</span>": <span class="hljs-value">{
+    "<span class="hljs-attribute">result</span>": <span class="hljs-value">{
+      "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"string"</span></span>,
+      "<span class="hljs-attribute">description</span>": <span class="hljs-value"><span class="hljs-string">"Message can be returned as an object in some cases but primarily it's string."</span>
+    </span>}
+  </span>}
+</span>}</code></pre><div style="height: 1px;"></div></div></div></div></div></div></div><div class="middle"><div class="action get" id="info-for-tags-length-of-auto-gen-addreseses-get"><h4 class="action-heading"><div class="name">Length of Auto-Gen Addreseses</div><a class="method get" href="#info-for-tags-length-of-auto-gen-addreseses-get">GET</a><code class="uri">/genAddressListLen/{alias}/{tag}</code></h4><p>Returns the total number of auto-generated addresses found for an alias/tag.
+The maximum number of addresses that you can set currently is 20 so that users
+do not exceed maximum size of transaction.</p>
+<p>Use this endpoint if you don’t want to fetch a large array unnecessarily
+and only want its length.</p>
+<div class="title"><strong>URI Parameters</strong><div class="collapse-button show"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><dl class="inner"><dt>alias</dt><dd><code>string</code> <span class="required">(required)</span> </dd><dt>tag</dt><dd><code>string</code> <span class="required">(required)</span> <p>Tag for which you want to fetch length of auto-gen addresses</p>
+</dd><dt>raw</dt><dd><code>boolean</code> <span>(optional)</span> <span class="text-info default"><strong>Default: </strong><span>true</span></span> <p>whether alias &amp; tag are hex or ASCII value</p>
+</dd></dl></div></div></div><hr class="split"/><div class="middle"><div class="resource" id="info-for-tags-auto-gen-flag"><h3 class="resource-heading">Auto-Gen Flag <a class="permalink" href="#info-for-tags-auto-gen-flag">¶</a></h3></div></div><div class="right"><div class="definition"><span class="method get">GET</span> <span class="uri"><span class="hostname"></span>/genAddressFlag/<span class="hljs-attribute" title="alias">alias</span>/<span class="hljs-attribute" title="tag">tag</span></span></div><div class="tabs"><div class="tabs"><div class="example-names"><span>Responses</span><span class="tab-button">200</span><span class="tab-button">400</span></div><div class="tab"><div><div class="inner"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/json</span></code></pre><div style="height: 1px;"></div><h5>Body</h5><pre><code>{
+  "<span class="hljs-attribute">result</span>": <span class="hljs-value"><span class="hljs-literal">true</span>
+</span>}</code></pre><div style="height: 1px;"></div><h5>Schema</h5><pre><code>{
+  "<span class="hljs-attribute">$schema</span>": <span class="hljs-value"><span class="hljs-string">"http://json-schema.org/draft-04/schema#"</span></span>,
+  "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"object"</span></span>,
+  "<span class="hljs-attribute">properties</span>": <span class="hljs-value">{
+    "<span class="hljs-attribute">result</span>": <span class="hljs-value">{
+      "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"boolean"</span></span>,
+      "<span class="hljs-attribute">description</span>": <span class="hljs-value"><span class="hljs-string">"Auto-gen flag is turned on for tag"</span>
+    </span>}
+  </span>}
+</span>}</code></pre><div style="height: 1px;"></div></div></div></div><div class="tab"><div><div class="inner"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/json</span></code></pre><div style="height: 1px;"></div><h5>Body</h5><pre><code>{
+  "<span class="hljs-attribute">result</span>": <span class="hljs-value"><span class="hljs-string">"Error Message"</span>
+</span>}</code></pre><div style="height: 1px;"></div><h5>Schema</h5><pre><code>{
+  "<span class="hljs-attribute">$schema</span>": <span class="hljs-value"><span class="hljs-string">"http://json-schema.org/draft-04/schema#"</span></span>,
+  "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"object"</span></span>,
+  "<span class="hljs-attribute">properties</span>": <span class="hljs-value">{
+    "<span class="hljs-attribute">result</span>": <span class="hljs-value">{
+      "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"string"</span></span>,
+      "<span class="hljs-attribute">description</span>": <span class="hljs-value"><span class="hljs-string">"Message can be returned as an object in some cases but primarily it's string."</span>
+    </span>}
+  </span>}
+</span>}</code></pre><div style="height: 1px;"></div></div></div></div></div></div></div><div class="middle"><div class="action get" id="info-for-tags-auto-gen-flag-get"><h4 class="action-heading"><div class="name">Auto-Gen Flag</div><a class="method get" href="#info-for-tags-auto-gen-flag-get">GET</a><code class="uri">/genAddressFlag/{alias}/{tag}</code></h4><p>Tells you whether or not alias/tag is set to use auto-generated addresses.
+If this flag is turned on, it means length returned by <code>/genAddressListLen/{alias}/{tag}</code>
+must be greater than 0 and tag will subsequently be resolved using auto-gen
+addresses, not static public address.</p>
+<div class="title"><strong>URI Parameters</strong><div class="collapse-button show"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><dl class="inner"><dt>alias</dt><dd><code>string</code> <span class="required">(required)</span> </dd><dt>tag</dt><dd><code>string</code> <span class="required">(required)</span> <p>Tag for which you want to fetch auto-gen flag of</p>
+</dd><dt>raw</dt><dd><code>boolean</code> <span>(optional)</span> <span class="text-info default"><strong>Default: </strong><span>true</span></span> <p>whether alias &amp; tag are hex or ASCII value</p>
+</dd></dl></div></div></div><hr class="split"/><div class="middle"><section class="resource-group" id="400-errors"><h2 class="group-heading">400 Errors <a class="permalink" href="#400-errors">¶</a></h2><h2 id="header-400-api-errors">400 API Errors <a aria-hidden="true" class="permalink" href="#header-400-api-errors">¶</a></h2>
+<p>There are different kinds of errors that TNS API can return, however, for sanity checks
+and validation you may see the following kinds of errors being returned.</p>
+<p>Not all errors may be strings; they can be returned as objects as well.</p>
+<ul>
+<li><strong>TRONWEB_NOT_CONNECTED</strong>: API was unable to connect to TronWeb</li>
+</ul>
+<pre><code>{
+    "<span class="hljs-attribute">error</span>": <span class="hljs-value"><span class="hljs-string">"Unable to connect to any nodes at this time"</span>
+</span>}</code></pre>
+<ul>
+<li><strong>INVALID_PARAM</strong>: Invalid parameters were inputted during request</li>
+</ul>
+<pre><code>{
+    "<span class="hljs-attribute">error</span>": <span class="hljs-value"><span class="hljs-string">"Given parameter(s) are not valid"</span>
+</span>}</code></pre>
+<ul>
+<li><strong>NO_ADDRESS_FOUND</strong>: Address was not found for your request</li>
+</ul>
+<pre><code>{
+    "<span class="hljs-attribute">error</span>": <span class="hljs-value"><span class="hljs-string">"No addresses found"</span>
+</span>}</code></pre>
+</section></div><div class="middle"><p class="text-muted" style="text-align: center;">Generated by <a class="aglio" href="https://github.com/danielgtaylor/aglio">aglio</a> on 02 Jan 2019</p></div></div></div></div><script>/* eslint-env browser */
+/* eslint quotes: [2, "single"] */
+'use strict';
+
+/*
+  Determine if a string ends with another string.
+*/
+function endsWith(str, suffix) {
+    return str.indexOf(suffix, str.length - suffix.length) !== -1;
+}
+
+/*
+  Get a list of direct child elements by class name.
+*/
+function childrenByClass(element, name) {
+  var filtered = [];
+
+  for (var i = 0; i < element.children.length; i++) {
+    var child = element.children[i];
+    var classNames = child.className.split(' ');
+    if (classNames.indexOf(name) !== -1) {
+      filtered.push(child);
+    }
+  }
+
+  return filtered;
+}
+
+/*
+  Get an array [width, height] of the window.
+*/
+function getWindowDimensions() {
+  var w = window,
+      d = document,
+      e = d.documentElement,
+      g = d.body,
+      x = w.innerWidth || e.clientWidth || g.clientWidth,
+      y = w.innerHeight || e.clientHeight || g.clientHeight;
+
+  return [x, y];
+}
+
+/*
+  Collapse or show a request/response example.
+*/
+function toggleCollapseButton(event) {
+    var button = event.target.parentNode;
+    var content = button.parentNode.nextSibling;
+    var inner = content.children[0];
+
+    if (button.className.indexOf('collapse-button') === -1) {
+      // Clicked without hitting the right element?
+      return;
+    }
+
+    if (content.style.maxHeight && content.style.maxHeight !== '0px') {
+        // Currently showing, so let's hide it
+        button.className = 'collapse-button';
+        content.style.maxHeight = '0px';
+    } else {
+        // Currently hidden, so let's show it
+        button.className = 'collapse-button show';
+        content.style.maxHeight = inner.offsetHeight + 12 + 'px';
+    }
+}
+
+function toggleTabButton(event) {
+    var i, index;
+    var button = event.target;
+
+    // Get index of the current button.
+    var buttons = childrenByClass(button.parentNode, 'tab-button');
+    for (i = 0; i < buttons.length; i++) {
+        if (buttons[i] === button) {
+            index = i;
+            button.className = 'tab-button active';
+        } else {
+            buttons[i].className = 'tab-button';
+        }
+    }
+
+    // Hide other tabs and show this one.
+    var tabs = childrenByClass(button.parentNode.parentNode, 'tab');
+    for (i = 0; i < tabs.length; i++) {
+        if (i === index) {
+            tabs[i].style.display = 'block';
+        } else {
+            tabs[i].style.display = 'none';
+        }
+    }
+}
+
+/*
+  Collapse or show a navigation menu. It will not be hidden unless it
+  is currently selected or `force` has been passed.
+*/
+function toggleCollapseNav(event, force) {
+    var heading = event.target.parentNode;
+    var content = heading.nextSibling;
+    var inner = content.children[0];
+
+    if (heading.className.indexOf('heading') === -1) {
+      // Clicked without hitting the right element?
+      return;
+    }
+
+    if (content.style.maxHeight && content.style.maxHeight !== '0px') {
+      // Currently showing, so let's hide it, but only if this nav item
+      // is already selected. This prevents newly selected items from
+      // collapsing in an annoying fashion.
+      if (force || window.location.hash && endsWith(event.target.href, window.location.hash)) {
+        content.style.maxHeight = '0px';
+      }
+    } else {
+      // Currently hidden, so let's show it
+      content.style.maxHeight = inner.offsetHeight + 12 + 'px';
+    }
+}
+
+/*
+  Refresh the page after a live update from the server. This only
+  works in live preview mode (using the `--server` parameter).
+*/
+function refresh(body) {
+    document.querySelector('body').className = 'preload';
+    document.body.innerHTML = body;
+
+    // Re-initialize the page
+    init();
+    autoCollapse();
+
+    document.querySelector('body').className = '';
+}
+
+/*
+  Determine which navigation items should be auto-collapsed to show as many
+  as possible on the screen, based on the current window height. This also
+  collapses them.
+*/
+function autoCollapse() {
+  var windowHeight = getWindowDimensions()[1];
+  var itemsHeight = 64; /* Account for some padding */
+  var itemsArray = Array.prototype.slice.call(
+    document.querySelectorAll('nav .resource-group .heading'));
+
+  // Get the total height of the navigation items
+  itemsArray.forEach(function (item) {
+    itemsHeight += item.parentNode.offsetHeight;
+  });
+
+  // Should we auto-collapse any nav items? Try to find the smallest item
+  // that can be collapsed to show all items on the screen. If not possible,
+  // then collapse the largest item and do it again. First, sort the items
+  // by height from smallest to largest.
+  var sortedItems = itemsArray.sort(function (a, b) {
+    return a.parentNode.offsetHeight - b.parentNode.offsetHeight;
+  });
+
+  while (sortedItems.length && itemsHeight > windowHeight) {
+    for (var i = 0; i < sortedItems.length; i++) {
+      // Will collapsing this item help?
+      var itemHeight = sortedItems[i].nextSibling.offsetHeight;
+      if ((itemsHeight - itemHeight <= windowHeight) || i === sortedItems.length - 1) {
+        // It will, so let's collapse it, remove its content height from
+        // our total and then remove it from our list of candidates
+        // that can be collapsed.
+        itemsHeight -= itemHeight;
+        toggleCollapseNav({target: sortedItems[i].children[0]}, true);
+        sortedItems.splice(i, 1);
+        break;
+      }
+    }
+  }
+}
+
+/*
+  Initialize the interactive functionality of the page.
+*/
+function init() {
+    var i, j;
+
+    // Make collapse buttons clickable
+    var buttons = document.querySelectorAll('.collapse-button');
+    for (i = 0; i < buttons.length; i++) {
+        buttons[i].onclick = toggleCollapseButton;
+
+        // Show by default? Then toggle now.
+        if (buttons[i].className.indexOf('show') !== -1) {
+            toggleCollapseButton({target: buttons[i].children[0]});
+        }
+    }
+
+    var responseCodes = document.querySelectorAll('.example-names');
+    for (i = 0; i < responseCodes.length; i++) {
+        var tabButtons = childrenByClass(responseCodes[i], 'tab-button');
+        for (j = 0; j < tabButtons.length; j++) {
+            tabButtons[j].onclick = toggleTabButton;
+
+            // Show by default?
+            if (j === 0) {
+                toggleTabButton({target: tabButtons[j]});
+            }
+        }
+    }
+
+    // Make nav items clickable to collapse/expand their content.
+    var navItems = document.querySelectorAll('nav .resource-group .heading');
+    for (i = 0; i < navItems.length; i++) {
+        navItems[i].onclick = toggleCollapseNav;
+
+        // Show all by default
+        toggleCollapseNav({target: navItems[i].children[0]});
+    }
+}
+
+// Initial call to set up buttons
+init();
+
+window.onload = function () {
+    autoCollapse();
+    // Remove the `preload` class to enable animations
+    document.querySelector('body').className = '';
+};
+</script></body></html>

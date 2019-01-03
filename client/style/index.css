@@ -116,6 +116,9 @@ input::-webkit-inner-spin-button {
 .no_margined_t{
 	margin-top: 0 !important;
 }
+.no_margined_b{
+	margin-bottom: 0 !important;
+}
 .margined{
 	margin: 2rem !important;
 }

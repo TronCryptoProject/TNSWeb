@@ -179,7 +179,7 @@ export default class EditTagDataModal extends React.Component{
         console.log("TAG:", this.props.tag, "END");
 
         let conf_text_suffix = `${is_default ? "default tag": "{" + this.props.tag +"} tag"} for '${this.props.alias}' alias `;
-        let conf_text_prefix = this.props.ttlTags == 1? `You are about to delete the last tag for '${this.props.alias}' alias. You'll still have ownership of this alias and no one can claim it. `:"";
+        let conf_text_prefix = this.props.allTags.length == 1? `You are about to delete the last tag for '${this.props.alias}' alias. You'll still have ownership of this alias and no one can claim it. `:"";
         let modal_dict = {
             icon: "trash alternate",
             headerTitle: "Delete Tag for Alias",
@@ -266,12 +266,21 @@ export default class EditTagDataModal extends React.Component{
             promise_list.push(this.handleAddrStateUpdate);
         }
 
-        if (this.getParsedStaticAddrHex(this.state.addrInputVal) != this.props.data.pubAddress){
+        if (this.getParsedStaticAddrHex(this.state.addrInputVal) != this.state.addrValOriginal){
             promise_list.push(this.handleAddrInputUpdate);
         }
 
-        if (this.state.tagInputVal != this.props.tag){
-            promise_list.push(this.handleTagUpdate);
+        console.log("tagInputVal:", this.state.tagInputVal);
+        console.log("tagInputValOrig:", this.state.tagValOrignal);
+        let parsed_tag = (this.state.tagInputVal == ""? "default": this.state.tagInputVal);
+
+        if (parsed_tag != this.state.tagValOrignal){
+            if (!this.props.allTags.includes(parsed_tag)){
+                promise_list.push(this.handleTagUpdate);
+            }else{
+                showConfMsg(`${parsed_tag} tag already exists!`);
+                return;
+            }
         }
         console.log(promise_list);
         if (promise_list.length > 0){
@@ -638,7 +647,7 @@ EditTagDataModal.defaultProps = {
     hideModal: (function(){}),
     alias: "",
     tag: "",
-    ttlTags: 0,
+    allTags: [],
     ttlGenAddrs:0,
     data: {
         pubAddress: "",

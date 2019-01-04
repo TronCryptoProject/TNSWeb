@@ -4,7 +4,7 @@ require("env2")("./.env");
 var AppRoot = require("app-root-path");
 var Express = require("express");
 var BodyParser = require("body-parser");
-var GlobalConfig = require(AppRoot + "/GlobalConfig.js");
+var GlobalConfig = require(AppRoot + "/globalconfig.js");
 global.GlobalConfig = GlobalConfig;
 
 var AppRouter = require(AppRoot + "/server/js/routes/AppRouter.js");

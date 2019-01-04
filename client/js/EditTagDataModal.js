@@ -139,22 +139,35 @@ export default class EditTagDataModal extends React.Component{
                             actions: ["ok"],
                             actionsText: ["Okay"]
                         };
-                        window.contractSend(method_config.method,method_config.params).then(res=>{
-                            console.log("txid edit tag: ", res);
-                            conf_modal_dict.bodyText = method_config.conf.bodyText;
-                            conf_modal_dict.iconHeader = "green";
-                            conf_modal_dict.icon = "check circle outline";
-                            setConfState(elem, conf_modal_dict, false, ()=>{
+                        let setConfStateWithParams = (isError)=>{
+                            setConfState(elem, conf_modal_dict, isError, ()=>{
                                 is_called = false;
+                            });
+                        }
+                        window.contractSend(method_config.method,method_config.params).then(txid=>{
+                            console.log("txid edit tag: ", txid);
+                            let store_params = {
+                                txid: txid,
+                                owner: tronWeb.defaultAddress.base58,
+                                entities: method_config.entities
+                            }
+                            window.storeTx(store_params).then(storeRes=>{
+                                conf_modal_dict.bodyText =  method_config.conf.bodyText;
+                                conf_modal_dict.iconHeader = "green";
+                                conf_modal_dict.icon = "check circle outline";
+                                setConfStateWithParams(false);
+                            }).catch(err=>{
+                                conf_modal_dict.bodyText = "Unable to record transaction but tag info update was successful";
+                                conf_modal_dict.iconHeader = "red";
+                                conf_modal_dict.icon = "close icon";
+                                setConfStateWithParams(false);
                             });
                         }).catch(err=>{
                             console.log("edit tag error: ", err);
                             conf_modal_dict.bodyText = JSON.stringify(err);
                             conf_modal_dict.iconHeader = "red";
                             conf_modal_dict.icon = "close icon";
-                            setConfState(elem, conf_modal_dict, true, ()=>{
-                                is_called = false;
-                            });
+                            setConfStateWithParams(true);
                         });
                     }
                     if (this.isDoneWhenChangeBroadcast) return true;
@@ -189,20 +202,36 @@ export default class EditTagDataModal extends React.Component{
             actionsText: ["Yes I do", "Cancel"]
         }
 
-        this.showConfModal(modal_dict, ()=>{
-            return {
-                method: "deleteAliasTag",
-                params:[
-                    tronWeb.sha3(this.props.alias),
-                    tronWeb.sha3(this.props.tag)
-                ],
-                conf:{
-                    headerTitle: "Tag Delete Status",
-                    bodyText: `Transaction successfully broadcasted to delete ${conf_text_suffix}. Please monitor the transaction
-                    to see if contract update was successful.`
-                }
-            };
+        let promise = new Promise((resolve,reject)=>{
+            this.showConfModal(modal_dict, ()=>{
+                return {
+                    method: "deleteAliasTag",
+                    params:[
+                        tronWeb.sha3(this.props.alias),
+                        tronWeb.sha3(this.props.tag)
+                    ],
+                    conf:{
+                        headerTitle: "Tag Delete Status",
+                        bodyText: `Transaction successfully broadcasted to delete ${conf_text_suffix}. Please monitor the transaction
+                        to see if contract update was successful.`
+                    },
+                    entities:{
+                        aliasName:  encryptData(this.props.alias),
+                        tagName: encryptData(this.props.tag)
+                    }
+                };
+            }, (isError)=>{
+                if (isError) reject();
+                else resolve();
+            });
         });
+
+        promise().then(success=>{
+            this.isDoneWhenChangeBroadcast = true;
+        }).catch(e=>{
+            this.isDoneWhenChangeBroadcast = true;
+        })
+        
     }
 
     promiseRecurse(promiseList, idx){
@@ -261,15 +290,15 @@ export default class EditTagDataModal extends React.Component{
         if (this.state.permState != this.state.permStateOriginal){
             promise_list.push(this.handlePermissionUpdate);
         }
-        console.log("addrSTate:", this.state.addrState);
-        if (this.state.addrState != this.state.addrStateOriginal){
-            promise_list.push(this.handleAddrStateUpdate);
-        }
-
+        //must be called before addr state update so that address is updated before setting to 'static'
         if (this.getParsedStaticAddrHex(this.state.addrInputVal) != this.state.addrValOriginal){
             promise_list.push(this.handleAddrInputUpdate);
         }
 
+        console.log("addrSTate:", this.state.addrState);
+        if (this.state.addrState != this.state.addrStateOriginal){
+            promise_list.push(this.handleAddrStateUpdate);
+        }
         console.log("tagInputVal:", this.state.tagInputVal);
         console.log("tagInputValOrig:", this.state.tagValOrignal);
         let parsed_tag = (this.state.tagInputVal == ""? "default": this.state.tagInputVal);
@@ -317,19 +346,26 @@ export default class EditTagDataModal extends React.Component{
         }
         return new Promise((resolve,reject)=>{
             this.showConfModal(modal_dict, ()=>{
+                let old_enc_tag = encryptData(this.props.tag);
+                let new_enc_tag = encryptData(new_tag);
                 return {
                     method: "updateTag",
                     params:[
                         tronWeb.sha3(this.props.alias),
                         tronWeb.sha3(this.props.tag),
-                        encryptData(this.props.tag),
+                        old_enc_tag,
                         tronWeb.sha3(new_tag),
-                        encryptData(new_tag)
+                        new_enc_tag
                     ],
                     conf:{
                         headerTitle: "Tag Update Status",
                         bodyText: `Transaction successfully broadcasted to update ${conf_text_suffix} to ${new_tag} tag. Please monitor the transaction
                         to see if contract update was successful.`
+                    },
+                    entities:{
+                        aliasName: encryptData(this.props.alias),
+                        oldEncryptedTag: old_enc_tag,
+                        newTagName: new_enc_tag
                     }
                 };
             }, (isError)=>{
@@ -363,6 +399,10 @@ export default class EditTagDataModal extends React.Component{
                         headerTitle: "Tag Permission Update Status",
                         bodyText: `Transaction successfully broadcasted to update ${conf_text_suffix}. Please monitor the transaction
                         to see if contract update was successful.`
+                    },
+                    entities:{
+                        aliasName:  encryptData(this.props.alias),
+                        tagName: encryptData(this.props.tag)
                     }
                 };
             }, (isError)=>{
@@ -398,6 +438,10 @@ export default class EditTagDataModal extends React.Component{
                         headerTitle: "Address Generation Update Status",
                         bodyText: `Transaction successfully broadcasted to update ${conf_text_suffix}. Please monitor the transaction
                         to see if contract update was successful.`
+                    },
+                    entities:{
+                        aliasName:  encryptData(this.props.alias),
+                        tagName: encryptData(this.props.tag)
                     }
                 };
             }, (isError)=>{
@@ -442,6 +486,10 @@ export default class EditTagDataModal extends React.Component{
                         headerTitle: "Public Address Update Status",
                         bodyText: `Transaction successfully broadcasted to update public address for ${conf_text_suffix}. Please monitor the transaction
                         to see if contract update was successful.`
+                    },
+                    entities:{
+                        aliasName: encryptData(this.props.alias),
+                        tagName: encryptData(this.props.tag)
                     }
                 };
             }, (isError)=>{

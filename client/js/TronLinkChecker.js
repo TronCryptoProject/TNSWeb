@@ -11,12 +11,16 @@ export default class TronLinkChecker extends React.Component{
 	}
 	render(){
 		return(
-			<div className="ui center aligned container vertical_center">
-				<div className="ui container text_center tronlinkchecker_title" id="tronlinkchecker_title">
-					{this.props.title}
+			<div className="ui one column centered stackable grid">
+				<div className="row">
+					<div className="ui container text_center tronlinkchecker_title" id="tronlinkchecker_title">
+						{this.props.title}
+					</div>
 				</div>
-				<object type="image/svg+xml" data="../images/tron_loader.svg" id="tronlinkchecker_svg">
-				</object>
+				<div className="row">
+					<object type="image/svg+xml" data="../images/tron_loader.svg" id="tronlinkchecker_svg">
+					</object>
+				</div>
 			</div>
 		);
 	}

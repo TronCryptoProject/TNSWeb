@@ -164,6 +164,7 @@ export default class CreateAlias extends React.Component{
             console.log("params: ", contract_params);
             window.contractSend(isStatic?"setAliasStatic": "setAliasGenerated", contract_params).then(txid=>{
                 console.log("setAliasRes: ", txid);
+                is_succeeded = true;
                 let store_params = {
                     txid: txid,
                     owner: tronWeb.defaultAddress.base58,
@@ -177,7 +178,6 @@ export default class CreateAlias extends React.Component{
                     someone else doesn't get it first. You can monitor your transaction in 'My Activity' tab to see if
                     contract update succeeded.`;
                     modal_dict.iconHeader = "green";
-                    is_succeeded = true;
                     setConfState();
                 }).catch(err=>{
                     modal_dict.bodyText = "Unable to record transaction but was able to create alias/tag successfully.";

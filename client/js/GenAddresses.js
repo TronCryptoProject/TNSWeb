@@ -36,8 +36,11 @@ export default class GenAddresses extends React.Component{
 
     componentWillReceiveProps(nextProps){
         let tmp_dict = {};
+        console.log("old genlist:", this.props.genList);
+        console.log("new list:", nextProps.genList);
 		if (!Equal(nextProps.genList, this.props.genList)){
             tmp_dict.genList = this.parseGenList(nextProps.genList);
+            console.log("adding new genList", tmp_dict.genList);
 		}
 		if (!Equal(nextProps.alias, this.props.alias)){
 			tmp_dict.alias = nextProps.alias;
@@ -49,7 +52,9 @@ export default class GenAddresses extends React.Component{
 		if (Object.keys(tmp_dict).length != 0){
             this.setState(tmp_dict, ()=>{
                 if ("genList" in tmp_dict){
+                    console.log("now fetching balances");
                     this.getAccountBalances(tmp_dict.genList);
+                    tableBorderRefresh("#gen_addr_balance_table", tmp_dict.genList.length);
                 }
             });
         }
@@ -63,8 +68,10 @@ export default class GenAddresses extends React.Component{
     }
 
     hideModal(e){
-        this.setState({toShowGenSegment: false});
-        this.props.hideModal();
+        this.setState({toShowGenSegment: false, genAddrInputVal: ""}, ()=>{
+            this.props.hideModal();
+        });
+        
     }
 
     fetchTrxPrice(){
@@ -114,6 +121,7 @@ export default class GenAddresses extends React.Component{
             this.setState({toShowGenSegment: !this.state.toShowGenSegment}, ()=>{
                 if (this.state.toShowGenSegment){
                     $("#gen_addr_segment").animateCss("flipInX");
+                    $("#alias_gen_addresses_modal").modal("refresh");
                 }
             });
         }
@@ -155,22 +163,36 @@ export default class GenAddresses extends React.Component{
                             actions: ["ok"],
                             actionsText: ["Okay"]
                         };
-                        window.contractSend(method_config.method,method_config.params).then(res=>{
-                            console.log("txid edit tag: ", res);
-                            conf_modal_dict.bodyText = method_config.conf.bodyText;
-                            conf_modal_dict.iconHeader = "green";
-                            conf_modal_dict.icon = "check circle outline";
-                            setConfState(elem, conf_modal_dict, false, ()=>{
+                        let setConfStateWithParams = (isError)=>{
+                            setConfState(elem, conf_modal_dict, isError, ()=>{
                                 is_called = false;
+                            });
+                        }
+
+                        window.contractSend(method_config.method,method_config.params).then(txid=>{
+                            console.log("txid edit tag: ", txid);
+                            let store_params = {
+                                txid: txid,
+                                owner: tronWeb.defaultAddress.base58,
+                                entities: method_config.entities
+                            }
+                            window.storeTx(store_params).then(storeRes=>{
+                                conf_modal_dict.bodyText = method_config.conf.bodyText;
+                                conf_modal_dict.iconHeader = "green";
+                                conf_modal_dict.icon = "check circle outline";
+                                setConfStateWithParams(false);
+                            }).catch(err=>{
+                                conf_modal_dict.bodyText = "Unable to record transaction but auto-gen address update was successful";
+                                conf_modal_dict.iconHeader = "red";
+                                conf_modal_dict.icon = "close icon";
+                                setConfStateWithParams(false);
                             });
                         }).catch(err=>{
                             console.log("edit tag error: ", err);
                             conf_modal_dict.bodyText = JSON.stringify(err);
                             conf_modal_dict.iconHeader = "red";
                             conf_modal_dict.icon = "close icon";
-                            setConfState(elem, conf_modal_dict, true, ()=>{
-                                is_called = false;
-                            });
+                            setConfStateWithParams(true);
                         });
                         return false;
                     }
@@ -197,9 +219,14 @@ export default class GenAddresses extends React.Component{
         if (!tronWeb.isAddress(this.state.genAddrInputVal)){
             this.showButtonError("Address is not valid", e.target);
             return;
-        }
-        if (isZeroAddress(parseAddr(this.state.genAddrInputVal))){
+        }else if (isZeroAddress(parseAddr(this.state.genAddrInputVal))){
             this.showButtonError("Address cannot be zero", e.target);
+            return;
+        }else if (this.state.genList.length >= 20){
+            this.showButtonError("Max 20 auto-gen addresses allowed", e.target);
+            return;
+        }else if (this.state.genList.includes(getBase58Addr(this.state.genAddrInputVal))){
+            this.showButtonError("Duplicate addresses not allowed", e.target);
             return;
         }
         
@@ -228,6 +255,10 @@ export default class GenAddresses extends React.Component{
                     headerTitle: "Status for Append Address to Auto-Gen",
                     bodyText: `Transaction successfully broadcasted to append address ${getBase58Addr(this.state.genAddrInputVal)}. Please monitor the transaction
                     to see if contract update was successful.`
+                },
+                entities:{
+                    aliasName: encryptData(this.state.alias),
+                    tagName: encryptData(this.state.tag)
                 }
             };
         });
@@ -282,6 +313,10 @@ export default class GenAddresses extends React.Component{
                     headerTitle: "Status for Delete Auto-Generated Address",
                     bodyText: `Transaction successfully broadcasted to delete address ${this.state.genList[idx]}. Please monitor the transaction
                     to see if contract update was successful.`
+                },
+                entities:{
+                    aliasName: encryptData(this.state.alias),
+                    tagName: encryptData(this.state.tag)
                 }
             };
         });
@@ -342,7 +377,7 @@ export default class GenAddresses extends React.Component{
             let addr = this.state.genList[idx];
           
             row_list.push(
-                <tr key={addr}>
+                <tr key={`${addr}_${idx+1}`}>
                     <td className="center aligned">
                         <div className="ui circular label no_user_select">
                             {idx+1}
@@ -365,7 +400,7 @@ export default class GenAddresses extends React.Component{
 
     createGenAddrTable(){
         return(
-            <table className="ui striped table">
+            <table className="ui striped table" id="gen_addr_balance_table">
                 <thead>
                     <tr className="center aligned">
                         <th></th>

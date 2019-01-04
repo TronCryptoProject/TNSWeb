@@ -11,8 +11,12 @@ export default class HomePageFeatures extends React.Component{
         this.eventGithubClick = this.eventGithubClick.bind(this);
     }
 
-    eventGithubClick(){
-        window.open("https://gitlab.com/gregorydev/tnsweb", "_blank");
+    eventGithubClick(e,repo){
+        if (repo == "contracts"){
+            window.open("https://gitlab.com/gregorydev/tronnameservice", "_blank");
+        }else if (repo == "web"){
+            window.open("https://gitlab.com/gregorydev/tnsweb", "_blank");
+        }
     }
 
     getFeaturesDiv(){
@@ -31,7 +35,7 @@ export default class HomePageFeatures extends React.Component{
 						<p>
 							You’ll never have to worry about entering a wrong
 							address when sending TRX. It’s visually easier to look
-							at a username you cann understand than a long alphanumeric string.
+							at a username you can understand than a long alphanumeric string.
 							More than 90% of people are anxious about sending crypto to
 							the wrong person.
 						</p>
@@ -92,11 +96,11 @@ export default class HomePageFeatures extends React.Component{
 					</div>
 					<div className="right floated column">
 						<div className="ui huge center aligned margined_y header">
-							Have Transactions Sent to New Addresses
+							Auto-Generated Addresses
 						</div>
 						<p>
-                            You can have your incoming transactions be sent to new addresses
-                            every time your alias is resolved by TNS! This lets you mask your identity for every transaction
+                            You can choose to have your incoming transactions be sent to new addresses
+                            every time your alias is resolved by TNS or be sent to only 1 address! This lets you mask your identity for every transaction
                             by creating multiple addresses under 1 mnemonic HD key,
                             so that every transaction is sent to a different address.
                             You should keep your wealth private without having to manage several private keys.
@@ -311,9 +315,13 @@ export default class HomePageFeatures extends React.Component{
 	getFooterDiv(){
 		return(
 			<div className="ui basic center aligned segment">
-				<div className="ui labeled icon red button" onClick={this.eventGithubClick}>
+				<div className="ui labeled icon red button margined_x" onClick={e=>{this.eventGithubClick(e,"web")}}>
                     <i className="github icon"></i>
-                    Github Code
+                    TNS Web
+				</div>
+                <div className="ui labeled icon red button margined_x" onClick={e=>{this.eventGithubClick(e,"contracts")}}>
+                    <i className="github icon"></i>
+                    TNS Contracts
 				</div>
 			</div>
 		)

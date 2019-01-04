@@ -87,3 +87,15 @@ window.resizePopup = function(){
 $(window).resize(function(e){
     window.resizePopup();
 });
+
+window.tableBorderRefresh = function(tableElem, rowListLen){
+    let first_th = tableElem + " thead tr:first-child>th:first-child";
+    let last_th = tableElem + " thead tr:first-child>th:last-child";
+    if (rowListLen == 0){
+        $(first_th).addClass("border_radius_bottomleft_1em");
+        $(last_th).addClass("border_radius_bottomright_1em");
+    }else{
+        $(first_th).addClass("border_radius_bottomleft_1em");
+        $(last_th).addClass("border_radius_bottomright_1em");
+    }
+}   

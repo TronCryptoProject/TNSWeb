@@ -277,7 +277,7 @@ class Index extends React.Component{
 				<div className="ui secondary pointing borderless menu" id="navbar">
 					<a className="ui item no_padding" onClick={(e)=>{this.handleMenuClick(e)}}
 						id="home">
-						<img src="../images/tron_logo_shadow_white.svg"/>
+						<img src="../images/tron_logo_shadow_white.svg" className="no_pointer_event"/>
 						TNS
 					</a>
 					<div className="right menu">
@@ -302,7 +302,7 @@ class Index extends React.Component{
 				background = "tronlink_background";
 				break;
 			case "TronLinkChecker":
-				background = "tronlinkchecker_background";
+				background = "tronlinkchecker_background vertical_center";
 				break;
 			case "HomePage":
 				background = "hp_background";

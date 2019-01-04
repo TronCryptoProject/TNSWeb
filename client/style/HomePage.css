@@ -11,7 +11,7 @@
 }
 
 #hp_logo_container{
-    height: 75%;
+    height: 80vh;
 }
 
 .hp_title{
@@ -28,6 +28,7 @@
     transition: all 2s;
     animation: image_blur_out 3s;
     user-select: none;
+    margin: 1.5rem 1.5rem !important;
 }
 
 .ui.secondary.pointing.borderless.menu a,

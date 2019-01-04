@@ -343,8 +343,11 @@ function monitorBlock(){
                         if ("raw_data" in tx && "contract" in tx.raw_data){
                             var tx_owners = getOwners(tx.raw_data.contract);
                             for (var owner of tx_owners){
-                                io.to(ownerSocketMap[owner]).emit("gotMail", "true");
-                                console.log("got mail emit sent to ", owner);
+                                console.log('owernset:', ownerSocketMap[owner]);
+                                for (var socket_id of ownerSocketMap[owner]){
+                                    io.to(socket_id).emit("gotMail", "true");
+                                    console.log("got mail emit sent to ", owner, socket_id);
+                                }
                             }
                         }
                     }
@@ -368,7 +371,6 @@ function getTxsHelper(aliasOwner, timePosted){
         mysql.query(query_str, function (err, result) {
             if (err) reject(err);
             else{
-                console.log("RES FETCH: ", result);
                 resolve(result);
             }
         });
@@ -414,7 +416,7 @@ function getTxInfo(txList){
         for (var tx of txList){
             var txid = tx.txid;
             promise_list.push(tronWeb.trx.getTransaction(txid).catch(e=>{
-                console.log("getTx Error:", e);
+                console.log("getTx Error:", e, txid);
             }));
         }
 
@@ -454,7 +456,6 @@ exports.storeTx = function(req,res){
             console.log(query_str);
             mysql.query(query_str, function (err, result) {
                 if (err) throw err;
-                console.log("RES STORE: ", result);
                 res.json(createResJSON("success"));
             });
         }
@@ -473,8 +474,16 @@ exports.getTxs = function(req,res){
         if (!tronWeb.isAddress(alias_owner)){
             throw ApiConfig.errors.INVALID_PARAM;
         }else{
-            getTxsHelper(alias_owner, "").then(result=>{
-                res.json(createResJSON(result));
+            getTxsHelper(alias_owner, "").then(qResult=>{
+                var res_list = [];
+                for (var row of qResult){
+                    res_list.push({
+                        txid: row.txid,
+                        entities: JSON.parse(row.entities),
+                        timePosted: row.timePosted
+                    });
+                }
+                res.json(createResJSON(res_list));
             }).catch(err=>{
                 throw err;
             })
@@ -493,7 +502,6 @@ exports.getOwnerTxActivity = function(req,res){
             
             getTxsHelper(alias_owner, "").then(result=>{
                 getTxInfo(result).then(parsedTxs=>{
-                    console.log("parsed result:", parsedTxs);
                     res.json(createResJSON(parsedTxs));
                 }).catch(err=>{
                     console.log(err);
@@ -515,12 +523,22 @@ io.on('connection', function (socket) {
     console.log("server connect:", socket.id);
     socket.on("watchMe", function (owner) {
         socketOwnerMap[socket.id] = owner;
-        ownerSocketMap[owner] = socket.id;
-        console.log(ownerSocketMap);
+        if (owner in ownerSocketMap){
+            ownerSocketMap[owner].add(socket.id);
+        }else{
+            ownerSocketMap[owner] = new Set([socket.id]);
+        }
+        console.log("watching owner", owner, ownerSocketMap);
     });
 
     socket.on('disconnect', function () {
-        delete ownerSocketMap[socketOwnerMap[socket.id]];
+        var owner = socketOwnerMap[socket.id];
+        if (owner){
+            ownerSocketMap[owner].delete(socket.id);
+            if (ownerSocketMap[owner].size < 1){
+                delete ownerSocketMap[owner];
+            }
+        }
         delete socketOwnerMap[socket.id];
         console.log("socket disconnected");
         console.log(ownerSocketMap);

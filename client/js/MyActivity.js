@@ -38,7 +38,7 @@ export default class MyActivity extends React.Component{
     fetchData(callback){
         this.setState({isfetch: true});
         console.log("FETCHING");
-        get(`activityApi/activity/${tronWeb.defaultAddress.base58}`).then(res=>{
+        get(`activityApi/activity/${this.props.userAccount}`).then(res=>{
             let data = res.data;
             if ("error" in data){
                 this.setState({error: data.error, isfetch: false},()=>{
@@ -121,8 +121,9 @@ export default class MyActivity extends React.Component{
                 </a>
             );
         }
+        let pagination_class = res_pages.length > 0 ? "": "no_border";
         return(
-            <div className="ui pagination menu">
+            <div className={`ui pagination menu ${pagination_class}`}>
                 {res_pages}
             </div>
         );
@@ -290,5 +291,6 @@ export default class MyActivity extends React.Component{
 
 MyActivity.defaultProps = {
     hideModal: (function(){}),
-    activityCounterCallback: (function(){})
+    activityCounterCallback: (function(){}),
+    userAccount: ""
 }

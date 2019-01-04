@@ -1,4 +1,3 @@
-@import "./Spacing.css";
 @import "./TronLinkDownload.css";
 @import "./TronLinkChecker.css";
 @import "./HomePage.css";
@@ -40,22 +39,33 @@ input::-webkit-inner-spin-button {
 }
 
 .fullscreen{
-	height: 100vh;
+	min-height: 100vh;
+	height: auto;
 	width: 100vw;
 }
 .fullwidth{
 	width: 100%;
 }
+.fullscreen_width{
+	width: 100vw;
+}
+.inherit_height{
+	height: inherit !important;
+}
 .fullheight{
 	height: 100%;
 }
-
-.vertical_center{
+.vertical_transform{
 	position: relative;
 	transform: translate(-50%, -50%);
     float: left;
     top: 50%;
-    left: 50%;
+	left: 50%;
+}
+.vertical_center{
+	display: flex;
+  	align-items: center;
+  	justify-content: center;
 }
 
 .text_center{
@@ -78,7 +88,12 @@ input::-webkit-inner-spin-button {
 		opacity: 1;
 	}
 }
-
+.blur{
+	filter: blur(5px) !important;
+}
+.no_pointer_event{
+	pointer-events: none;
+}
 .ui.sub.header.lowercase{
     text-transform: lowercase !important;
 }
@@ -92,6 +107,12 @@ input::-webkit-inner-spin-button {
 
 .border_radius_1em{
 	border-radius: 1em !important;
+}
+.border_radius_bottomleft_1em{
+	border-bottom-left-radius: 1em !important;
+}
+.border_radius_bottomright_1em{
+	border-bottom-right-radius: 1em !important;
 }
 
 .no_padding{
@@ -244,7 +265,7 @@ input::-webkit-inner-spin-button {
 }
 
 #main_background_div{
-    transition: all .5s;
+	transition: all .5s;
 }
 
 .disabled_text{
@@ -258,8 +279,15 @@ input::-webkit-inner-spin-button {
 .ui.table thead tr:first-child>th:first-child{
 	border-radius: 1em 0 0 0 !important;
 }
+.ui.table thead tr:first-child>th.border_radius_bottomleft_1em:first-child{
+	border-radius: 1em 0 0 1em !important;
+}
+
 .ui.table thead tr:last-child>th:last-child{
 	border-radius: 0 1em 0 0 !important;
+}
+.ui.table thead tr:last-child>th.border_radius_bottomright_1em:last-child{
+	border-radius: 0 1em 1em 0 !important;
 }
 .ui.table{
 	border-radius: 1em !important;

@@ -52,8 +52,13 @@ export default class SecretUsers extends React.Component{
         
     }
 
+    componentDidUpdate(){
+        tableBorderRefresh("#secret_user_pub_table", this.state.usersList.length);
+    }
+
     hideModal(e){
         this.setState({toShowAddUserSegment: false});
+        console.log("Hiding secret modal");
         this.props.hideModal();
     }
 
@@ -124,22 +129,35 @@ export default class SecretUsers extends React.Component{
                             actions: ["ok"],
                             actionsText: ["Okay"]
                         };
-                        window.contractSend(method_config.method,method_config.params).then(res=>{
-                            console.log("txid edit tag: ", res);
-                            conf_modal_dict.bodyText = method_config.conf.bodyText;
-                            conf_modal_dict.iconHeader = "green";
-                            conf_modal_dict.icon = "check circle outline";
-                            setConfState(elem, conf_modal_dict, false, ()=>{
+                        let setConfStateWithParams = (isError)=>{
+                            setConfState(elem, conf_modal_dict, isError, ()=>{
                                 is_called = false;
+                            });
+                        }
+                        window.contractSend(method_config.method,method_config.params).then(txid=>{
+                            console.log("secret users edit: ", txid);
+                            let store_params = {
+                                txid: txid,
+                                owner: tronWeb.defaultAddress.base58,
+                                entities: method_config.entities
+                            }
+                            window.storeTx(store_params).then(storeRes=>{
+                                conf_modal_dict.bodyText = method_config.conf.bodyText;
+                                conf_modal_dict.iconHeader = "green";
+                                conf_modal_dict.icon = "check circle outline";
+                                setConfStateWithParams(false);
+                            }).catch(err=>{
+                                conf_modal_dict.bodyText = "Unable to record transaction but secret users list update was successful";
+                                conf_modal_dict.iconHeader = "red";
+                                conf_modal_dict.icon = "close icon";
+                                setConfStateWithParams(false);
                             });
                         }).catch(err=>{
                             console.log("edit tag error: ", err);
                             conf_modal_dict.bodyText = JSON.stringify(err);
                             conf_modal_dict.iconHeader = "red";
                             conf_modal_dict.icon = "close icon";
-                            setConfState(elem, conf_modal_dict, true, ()=>{
-                                is_called = false;
-                            });
+                            setConfStateWithParams(true);
                         });
                         return false;
                     }
@@ -229,6 +247,10 @@ export default class SecretUsers extends React.Component{
                     headerTitle: "Status for Update Secret Users List",
                     bodyText: `Transaction successfully broadcasted to add ${base58_addrs.size} secret addresses. Please monitor the transaction
                     to see if contract update was successful.`
+                },
+                entities:{
+                    aliasName:  encryptData(this.state.alias),
+                    tagName: encryptData(this.state.tag)
                 }
             };
         });
@@ -288,6 +310,10 @@ export default class SecretUsers extends React.Component{
                     headerTitle: "Status for Append Address to Secret Users List",
                     bodyText: `Transaction successfully broadcasted to append address ${new_addr}. Please monitor the transaction
                     to see if contract update was successful.`
+                },
+                entities:{
+                    aliasName:  encryptData(this.state.alias),
+                    tagName: encryptData(this.state.tag)
                 }
             };
         });
@@ -319,6 +345,10 @@ export default class SecretUsers extends React.Component{
                     headerTitle: "Status for Delete Address from Secret Users List",
                     bodyText: `Transaction successfully broadcasted to delete address ${this.state.usersList[idx]}. Please monitor the transaction
                     to see if contract update was successful.`
+                },
+                entities:{
+                    aliasName:  encryptData(this.state.alias),
+                    tagName: encryptData(this.state.tag)
                 }
             };
         });
@@ -479,11 +509,11 @@ export default class SecretUsers extends React.Component{
 
     createSecretUserTable(){
         return(
-            <table className="ui striped collapsing auto_margin table">
+            <table className="ui striped collapsing auto_margin table" id="secret_user_pub_table">
                 <thead>
                     <tr className="center aligned">
                         <th></th>
-                        <th>Public Address</th>
+                        <th>Public Addresses</th>
                         <th></th>
                     </tr>
                 </thead>

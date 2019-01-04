@@ -15,10 +15,12 @@
     outline: none !important;
     border: none !important;
     border-radius: 1em !important;
+    margin: 0 !important;
+    height: 100% !important;
 }
 
 .create_alias_background{
-	background: rgba(85, 140, 222, 0.77)!important;
+	background: #3e437385 !important; /*rgba(85, 140, 222, 0.77)!important; //skyblue*/
 }
 
 #create_alias_div .value .bracket{

@@ -13,16 +13,7 @@ import io from 'socket.io-client';
 export default class UserHome extends React.Component{
 	constructor(props){
         super(props);
-        this.state = {
-            userAccount: window.tronWeb.defaultAddress.base58,
-            data: {},
-            showAliasLoader: true,
-            genAddrModalProps: {},
-            secretUsersModalProps:{},
-            aliasEditModalProps: {},
-            tagDataEditModalProps: {},
-            currTxCount: localStorage.getItem("myActivityTXCount") || 0
-        };
+        
         this.fetchData = this.fetchData.bind(this);
         this.createAliasInfoCards = this.createAliasInfoCards.bind(this);
         this.eventCreateAliasClick = this.eventCreateAliasClick.bind(this);
@@ -42,8 +33,21 @@ export default class UserHome extends React.Component{
         this.eventTagDataEditClick = this.eventTagDataEditClick.bind(this);
         this.activityCounterCallback = this.activityCounterCallback.bind(this);
         this.handleSocketEvents = this.handleSocketEvents.bind(this);
+        this.getMyActivityTxCount = this.getMyActivityTxCount.bind(this);
+        this.setMyActivityTxCount = this.setMyActivityTxCount.bind(this);
         this.socket = null;
         this.myActivityRef = null;
+
+        this.state = {
+            userAccount: window.tronWeb.defaultAddress.base58,
+            data: {},
+            showAliasLoader: true,
+            genAddrModalProps: {},
+            secretUsersModalProps:{},
+            aliasEditModalProps: {},
+            tagDataEditModalProps: {},
+            currTxCount: this.getMyActivityTxCount()
+        };
     }
 
     componentDidMount(){
@@ -55,20 +59,20 @@ export default class UserHome extends React.Component{
             $(id).modal({
                 blurring: true,
                 allowMultiple: true,
-                closable: false,
+                closable: true,
                 transition: "slide up",
                 duration: 100,
                 onShow: () =>{
+                    $("#htmlroot").addClass("blur");
                     $(id).parent().addClass(background_class);
-                    $(id).parent().addClass("overflow_hidden");
                     if (id == "#my_activity_modal"){
-                        localStorage.setItem("myActivityTXCount", this.state.currTxCount);
+                        this.setMyActivityTxCount(this.state.currTxCount);
                         this.forceUpdate();
                     }
                 },
                 onHidden:()=>{
+                    $("#htmlroot").removeClass("blur");
                     $(id).parent().removeClass(background_class);
-                    $(id).parent().removeClass("overflow_hidden");
                 }
             });
         }
@@ -91,7 +95,7 @@ export default class UserHome extends React.Component{
     }
 
     componentWillUnmount(){
-        $("#main_background_div").removeClass("userhome_full_background");
+        $("body .ui.dimmer.modals").remove();
         if (this.socket != null){
             this.socket.close();
             this.socket = null;
@@ -112,12 +116,6 @@ export default class UserHome extends React.Component{
             console.log(data.result);
            
             this.setState({data: data.result, showAliasLoader: false}, ()=>{
-                if (Object.keys(this.state.data).length > 0){
-                    $("#main_background_div").addClass("userhome_full_background");
-                }else{
-                    $("#main_background_div").removeClass("userhome_full_background");
-                }
-
                 $(".alias_table thead>tr th").popup({
                     boundary: ".alias_segment",
                     transition: "vertical flip",
@@ -132,6 +130,30 @@ export default class UserHome extends React.Component{
         }else{
             console.log("error: ", err);
         }
+    }
+
+    getMyActivityTxCount(returnObj){
+        let tx_obj = localStorage.getItem("myActivityTXCount");
+        if (tx_obj){
+            try{
+                let tx_json = JSON.parse(tx_obj);
+                if (typeof tx_json == "object"){
+                    if (returnObj) return tx_json;
+                    if (tronWeb.defaultAddress.base58 in tx_json){
+                        return tx_json[tronWeb.defaultAddress.base58];
+                    }
+                }
+            }catch(e){
+                console.log("error parsing activity TX count");
+            }
+        }
+        return (returnObj ? {}:0);
+    }
+
+    setMyActivityTxCount(txCount){
+        let activity_tx_obj = this.getMyActivityTxCount(true);
+        activity_tx_obj[this.state.userAccount] = txCount;
+        localStorage.setItem("myActivityTXCount", JSON.stringify(activity_tx_obj));
     }
 
     eventCreateAliasClick(){
@@ -207,9 +229,6 @@ export default class UserHome extends React.Component{
     }
 
     eventTagDataEditClick(e, alias, tag, tagData){
-        console.log("rawtag:", tag, "END");
-        console.log("TAGEDIT:", decryptData(tag), "END");
-
         let all_tags = [];
         for(let tag in this.state.data[alias]){
             all_tags.push(decryptData(tag));
@@ -400,8 +419,13 @@ export default class UserHome extends React.Component{
 
     render(){
         let getMyActivityNotifBadge = ()=>{
-            let storage_tx_count = localStorage.getItem("myActivityTXCount");
+            let storage_tx_count = this.getMyActivityTxCount();
             let countdiff = this.state.currTxCount - storage_tx_count;
+            if (countdiff < 0){
+                let new_count = Math.max(this.state.currTxCount - 1, 0);
+                this.setMyActivityTxCount(new_count);
+                countdiff = new_count == 0? 0:1 //just need to alert the user
+            }
             if (countdiff > 0){
                 return <div className="floating ui red circular small label" id="notif_badge">{countdiff}</div>;
             }
@@ -415,7 +439,7 @@ export default class UserHome extends React.Component{
                             {this.state.userAccount}
                         </div>
                         <div className="label initialcase">
-                            Current User Account
+                            Current TronLink User Account
                         </div>
                     </div>
                 </div>
@@ -439,9 +463,12 @@ export default class UserHome extends React.Component{
                     <div className="sub header disabled_text">
                         {Object.keys(this.state.data).length > 0? "Hover over each column to learn more": ""}
                     </div>
+                    <div className="sub header disabled_text">
+                        Your changes will be reflected here once transactions are confirmed by the network
+                    </div>
                 </div>
                 
-                <div className="ui one column centered grid">
+                <div className="ui one column centered grid margined_t">
                     {this.createAliasLoader()}
                     {this.createAliasInfoCards()}
                 </div>
@@ -453,7 +480,8 @@ export default class UserHome extends React.Component{
                     {...this.state.aliasEditModalProps}/>
                 <MyActivity hideModal={this.hideMyActivityModalCallback}
                     activityCounterCallback={this.activityCounterCallback}
-                    onRef={ref=>(this.myActivityRef = ref)}/>
+                    onRef={ref=>(this.myActivityRef = ref)}
+                    userAccount={this.state.userAccount}/>
             </div>            
         );
     }

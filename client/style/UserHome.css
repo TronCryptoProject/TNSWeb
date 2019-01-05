@@ -1,5 +1,5 @@
 .userhome_background{
-    background: linear-gradient(-43deg,#d9e3ff,#bacce8 27%,transparent 0),linear-gradient(43deg,#d9e3ff,#bacce8 26%,#477cca 0);
+    background: linear-gradient(-43deg,#d9e3ff,#bacce8 27%,transparent 0),linear-gradient(43deg,#d9e3ff,#bacce8 26%,#558cde 0);
     /*linear-gradient(-45deg, #5c7bc1 0%, #98bef9 27%, transparent 27%), linear-gradient(45deg, #5c7bc1 0%, #89b5fa 26%, #558cde 26%);*/
     /*linear-gradient(185deg,#558cde 60%,rgba(136,163,212,.75),#bdd4f9 10%)* //diagonal background*/
 }

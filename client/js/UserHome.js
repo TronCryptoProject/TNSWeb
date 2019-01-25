@@ -51,8 +51,7 @@ export default class UserHome extends React.Component{
     }
 
     componentDidMount(){
-        this.fetchData(this.props, true);
-        let modal_ids = ["#create_alias_modal", "#alias_gen_addresses_modal",
+	let modal_ids = ["#create_alias_modal", "#alias_gen_addresses_modal",
             "#alias_modal", "#tag_data_modal", "#my_activity_modal","#secret_users_modal"];
         for (let id of modal_ids){
             let background_class = (id == "#my_activity_modal")?"activity_background": "create_alias_background";
@@ -80,11 +79,12 @@ export default class UserHome extends React.Component{
     }
 
     handleSocketEvents(){
-        this.socket = io("http://localhost:8888");
+        this.socket = io("http://35.185.252.177:8888");
         this.socket.on("connect", ()=>{
             console.log("connected");
             this.socket.emit("watchMe", tronWeb.defaultAddress.base58);
-        });
+            this.fetchData(this.props, true);
+	});
         this.socket.on("gotMail", ()=>{
             console.log("got mail emit received");
             this.fetchData(this.props);
@@ -129,6 +129,7 @@ export default class UserHome extends React.Component{
             
         }else{
             console.log("error: ", err);
+	    this.setState({showAliasLoader:false});
         }
     }
 
@@ -464,8 +465,11 @@ export default class UserHome extends React.Component{
                         {Object.keys(this.state.data).length > 0? "Hover over each column to learn more": ""}
                     </div>
                     <div className="sub header disabled_text">
-                        Your changes will be reflected here once transactions are confirmed by the network
+                        Your changes will be reflected here once transactions are confirmed by the network. Test your alias in Live Demo.
                     </div>
+			{/*<div className="ui red inverted compact center aligned auto_margin margined_t segment border_radius_1em">
+				TronGrid is having major issues. Please connect TronLink to https://super.guildchat.io for full/solidity node
+			</div>*/}
                 </div>
                 
                 <div className="ui one column centered grid margined_t">

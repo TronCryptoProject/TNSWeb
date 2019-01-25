@@ -314,16 +314,12 @@ export default class HomePageFeatures extends React.Component{
 
 	getFooterDiv(){
 		return(
-			<div className="ui basic center aligned segment">
-				<div className="ui labeled icon red button margined_x" onClick={e=>{this.eventGithubClick(e,"web")}}>
-                    <i className="github icon"></i>
-                    TNS Web
-				</div>
-                <div className="ui labeled icon red button margined_x" onClick={e=>{this.eventGithubClick(e,"contracts")}}>
+                <div className="ui basic center aligned segment">
+			<div className="ui labeled icon red button margined_x" onClick={e=>{this.eventGithubClick(e,"contracts")}}>
                     <i className="github icon"></i>
                     TNS Contracts
-				</div>
 			</div>
+		</div>
 		)
     }
     

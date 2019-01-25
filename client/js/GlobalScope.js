@@ -12,7 +12,7 @@ window.contractSend = function(contractFunc, args, sendParams){
     return new Promise((resolve,reject)=>{
         try{
             let params = {
-                feeLimit: 100000,
+                feeLimit: 1000000000,
                 shouldPollResponse: false
             }
             if (sendParams != null || sendParams != undefined){

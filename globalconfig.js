@@ -11,8 +11,8 @@ module.exports = {
             "eventServer": "https://api.shasta.trongrid.io"
         },
         "mainnet":{
-            "fullNode": "https://api.trongrid.io",
-            "solidityNode": "https://api.trongrid.io",
+            "fullNode": "http://47.90.215.84:8090",
+            "solidityNode": "http://47.75.10.71:8091",
             "eventServer": "https://api.trongrid.io"
         }
     },

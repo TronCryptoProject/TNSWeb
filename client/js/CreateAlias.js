@@ -151,7 +151,7 @@ export default class CreateAlias extends React.Component{
                 }).modal("show");
             });
         }
-        let setAlias = (isStatic)=>{
+        let setAlias = (isStatic, aliasAvailable)=>{
             let enc_alias = encryptData(alias);
             let enc_tag = encryptData(tag);
             let contract_params = [
@@ -164,7 +164,7 @@ export default class CreateAlias extends React.Component{
             console.log("params: ", contract_params);
             window.contractSend(isStatic?"setAliasStatic": "setAliasGenerated", contract_params).then(txid=>{
                 console.log("setAliasRes: ", txid);
-                is_succeeded = true;
+               
                 let store_params = {
                     txid: txid,
                     owner: tronWeb.defaultAddress.base58,
@@ -173,21 +173,46 @@ export default class CreateAlias extends React.Component{
                         tagName: enc_tag
                     }
                 }
-                window.storeTx(store_params).then(storeRes=>{
-                    modal_dict.bodyText = `Transaction for alias creation successfully broadcasted. Hopefully
-                    someone else doesn't get it first. You can monitor your transaction in 'My Activity' tab to see if
-                    contract update succeeded.`;
-                    modal_dict.iconHeader = "green";
-                    setConfState();
-                }).catch(err=>{
-                    modal_dict.bodyText = "Unable to record transaction but was able to create alias/tag successfully.";
-                    modal_dict.iconHeader = "red";
-                    setConfState();
-                })
+                if (aliasAvailable){
+                    window.contractSend(isStatic?"setAliasStatic": "setAliasGenerated", contract_params).then(tagtxid=>{
+                        console.log("setAliasResTag: ", tagtxid);
+                        is_succeeded = true;
+                        window.storeTx(store_params).then(storeRes=>{
+                            modal_dict.bodyText = `Transaction for alias creation successfully broadcasted. Hopefully
+                            someone else doesn't get it first. You can monitor your transaction in 'My Activity' tab to see if
+                            contract update succeeded.`;
+                            modal_dict.iconHeader = "green";
+                            setConfState();
+                        }).catch(err=>{
+                            modal_dict.bodyText = "Unable to record transaction but was able to create alias/tag successfully.";
+                            modal_dict.iconHeader = "red";
+                            setConfState();
+                        })
+                        
+                    }).catch(err=>{
+                        console.log("setAliasErr: ", err);
+                        modal_dict.bodyText = "Unable to create tag";
+                        modal_dict.iconHeader = "red";
+                        setConfState();
+                    });
+                }else{
+                    is_succeeded = true;
+                    window.storeTx(store_params).then(storeRes=>{
+                        modal_dict.bodyText = `Transaction for alias creation successfully broadcasted. Hopefully
+                        someone else doesn't get it first. You can monitor your transaction in 'My Activity' tab to see if
+                        contract update succeeded.`;
+                        modal_dict.iconHeader = "green";
+                        setConfState();
+                    }).catch(err=>{
+                        modal_dict.bodyText = "Unable to record transaction but was able to create alias/tag successfully.";
+                        modal_dict.iconHeader = "red";
+                        setConfState();
+                    })
+                }
                 
             }).catch(err=>{
                 console.log("setAliasErr: ", err);
-                modal_dict.bodyText = err;
+                modal_dict.bodyText = JSON.stringify(err);
                 modal_dict.iconHeader = "red";
                 setConfState();
             });
@@ -199,7 +224,7 @@ export default class CreateAlias extends React.Component{
             try{
                 if (!err && !("error" in res.data)){
                     if (res.data.result == true){
-                        setAlias(isStatic);
+                        setAlias(isStatic, true);
                     }else{
                         let def_addr = tronWeb.defaultAddress.hex;
                         let [err, res] = await to(get(`api/aliasOwner/${alias}`,{params:{raw:true}}));
@@ -209,7 +234,7 @@ export default class CreateAlias extends React.Component{
                                 let [err, res] = await to(get(`api/tagAvailable/${alias}/${tag}`,{params:{raw:true}}));
                                 if (!err){
                                     if (res.data.result == true){
-                                        setAlias(isStatic);
+                                        setAlias(isStatic, false);
                                     }else showBtnError("Tag already exists for alias");
                                 }else throw(err);
                             }else showBtnError("Alias is already taken!");
@@ -313,12 +338,10 @@ export default class CreateAlias extends React.Component{
                     <div className="ui centered card alot margined_t alias_round_tab_menu">
                         <div className="content">
                             <div className="ui top attached tabular two item menu no_border">
-                                <div className="item active" data-tab="static"
-                                    onClick={this.eventStaticMenuClick}>
+                                <div className="item active" data-tab="static">
                                     Static Address
                                 </div>
-                                <div className="item" data-tab="generate"
-                                    onClick={this.eventGenerateMenuClick}>
+                                <div className="item" data-tab="generate">
                                     Generate Addresses on Fly
                                 </div>
                             </div>

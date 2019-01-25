@@ -5,6 +5,7 @@ var tronWeb = require("./TronWebInst.js");
 var to = require('await-to-js').default;
 
 const TNSContractAddress = Injecter["TNS"]["address"];
+var tronWebConnected = false;
 var genAddressListIdxDict = {};
 
 
@@ -12,17 +13,17 @@ async function isTronWebConnected(){
     return await tronWeb.isConnected();
 }
 
-function preCheck(itemArray){
-    if (isTronWebConnected()){
+global.preCheck = function (itemArray){
+    //if (isTronWebConnected()){
         for (var item of itemArray){
             item = item.trim();
             if (item == undefined || item == ""){
                 throw ApiConfig.errors.INVALID_PARAM;
             }
         }
-    }else{
+    /*}else{
         throw ApiConfig.errors.TRONWEB_NOT_CONNECTED;
-    }
+    }*/
 }
 global.isZeroAddress = function(address){
     if (address == "410000000000000000000000000000000000000000") return true;
@@ -66,14 +67,31 @@ global.keccak256 = function(itemList){
 global.contractCall = function(contractFunc, args){
     return new Promise((resolve,reject)=>{
         try{
-            tronWeb.contract().at(TNSContractAddress).then(contract=>{
-                contract[contractFunc](...args).call().then(result=>{
-                    resolve(result);
+	    var contract_call = function(){
+            	tronWeb.contract().at(TNSContractAddress).then(contract=>{
+                    contract[contractFunc](...args).call().then(result=>{
+                        resolve(result);
+                    }).catch(e=>{
+                        console.log(e);
+                        reject(e);
+                    });
                 }).catch(e=>{
-                    console.log(e);
-                    reject(e);
+		    console.log("contract err:", e);
+		    reject(e);
+	        });
+	    }
+
+ 	    if (tronWebConnected == false){
+                tronWeb.isConnected().then(res=>{
+                    console.log("got it connected");
+                    tronWebConnected = true;
+                    contract_call();
+                }).catch(e=>{
+                    reject("tronweb is not connected");
                 });
-            });            
+            }else{
+                contract_call();
+            }            
         }catch(e){
             reject(e);
         }

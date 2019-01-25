@@ -33,22 +33,6 @@ function parseUnixTimestamp(timestamp){
     var date = new Date(timestamp);
     return "{0} ({1})".format(date.toLocaleDateString(), date.toLocaleTimeString());
 }
-async function isTronWebConnected(){
-    return await tronWeb.isConnected();
-}
-
-function preCheck(itemArray){
-    if (isTronWebConnected()){
-        for (var item of itemArray){
-            item = item.trim();
-            if (item == undefined || item == ""){
-                throw ApiConfig.errors.INVALID_PARAM;
-            }
-        }
-    }else{
-        throw ApiConfig.errors.TRONWEB_NOT_CONNECTED;
-    }
-}
 
 function getActionStr(entities, funcName){
     var base_str = ApiConfig.contractFuncAction[funcName];
@@ -522,13 +506,16 @@ exports.getOwnerTxActivity = function(req,res){
 io.on('connection', function (socket) {
     console.log("server connect:", socket.id);
     socket.on("watchMe", function (owner) {
-        socketOwnerMap[socket.id] = owner;
-        if (owner in ownerSocketMap){
-            ownerSocketMap[owner].add(socket.id);
-        }else{
-            ownerSocketMap[owner] = new Set([socket.id]);
+	console.log("received request to watch owner:", owner);
+        if (owner){
+            socketOwnerMap[socket.id] = owner;
+            if (owner in ownerSocketMap){
+                ownerSocketMap[owner].add(socket.id);
+            }else{
+                ownerSocketMap[owner] = new Set([socket.id]);
+            }
+            console.log("watching owner", owner, ownerSocketMap);
         }
-        console.log("watching owner", owner, ownerSocketMap);
     });
 
     socket.on('disconnect', function () {
@@ -540,7 +527,7 @@ io.on('connection', function (socket) {
             }
         }
         delete socketOwnerMap[socket.id];
-        console.log("socket disconnected");
+        console.log("socket disconnected:", socket.id);
         console.log(ownerSocketMap);
     });
 });

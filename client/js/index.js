@@ -110,13 +110,13 @@ class Index extends React.Component{
 		super(props);
 		this.state = {
 			tronWebState: {
-				installed: false,
-				loggedIn: false
+				installed: true, //bypass installation check for demo
+				loggedIn: true //bypass login check for demo
 			},
 			currPage: "home"
 		};
 		this.tronLinkInterval = null;
-		this.tronLinkCheckerRunning = true;
+		this.tronLinkCheckerRunning = false; //bypass run check for demo
 		this.getMainComp = this.getMainComp.bind(this);
 		this.handleMenuClick = this.handleMenuClick.bind(this);
 		this.getNavBar = this.getNavBar.bind(this);
@@ -127,7 +127,7 @@ class Index extends React.Component{
 	}
 
 	componentDidMount(){
-		let maxtime = 5000;
+		/*let maxtime = 5000;
 		let currtime = 0;
 		let timeinterval = 200;
 		let extratime = 1000;
@@ -161,7 +161,7 @@ class Index extends React.Component{
 				}
 				
 			}
-		}, timeinterval);
+		}, timeinterval);*/
 	}
 
 	componentDidUpdate(){

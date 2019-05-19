@@ -9,11 +9,12 @@
     "prod": "pm2 start app.js -- --network mainnet",
     "webpack:dev": "sudo webpack -d --watch",
     "webpack:prod": "webpack",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "ghdeploy": "gh-pages -d build"
   },
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@gitlab.com/gregorydev/tnsweb.git"
+    "url": "git+ssh://git@github.com:TronCryptoProject/TNSWeb.git"
   },
   "keywords": [
     "tns",
@@ -23,9 +24,9 @@
   "author": "Gregory",
   "license": "ISC",
   "bugs": {
-    "url": "https://gitlab.com/gregorydev/tnsweb/issues"
+    "url": "https://github.com/TronCryptoProject/TNSWeb/issues"
   },
-  "homepage": "https://gitlab.com/gregorydev/tnsweb#README",
+  "homepage": "https://endeavors.github.io/TronCryptoProject/TNSWeb",
   "dependencies": {
     "animate.css": "^3.5.2",
     "app-root-path": "^2.1.0",
@@ -64,6 +65,7 @@
     "extract-text-webpack-plugin": "^4.0.0-beta.0",
     "file-loader": "^1.1.11",
     "flat-cache": "^1.3.4",
+    "gh-pages": "^2.0.1",
     "glamor": "^2.20.40",
     "import-glob-loader": "^1.1.0",
     "jest-cli": "^23.6.0",

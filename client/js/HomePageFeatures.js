@@ -13,9 +13,9 @@ export default class HomePageFeatures extends React.Component{
 
     eventGithubClick(e,repo){
         if (repo == "contracts"){
-            window.open("https://gitlab.com/gregorydev/tronnameservice", "_blank");
+            window.open("https://github.com/TronCryptoProject/TronNameService", "_blank");
         }else if (repo == "web"){
-            window.open("https://gitlab.com/gregorydev/tnsweb", "_blank");
+            window.open("https://github.com/TronCryptoProject/TNSWeb", "_blank");
         }
     }
 

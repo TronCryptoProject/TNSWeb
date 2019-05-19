@@ -25,7 +25,7 @@ export default class HomePageFeatures extends React.Component{
 				<div className="left middle aligned two column row">
 					<div className="left floated center aligned column">
                         <video className="tns_resolver_video border_radius_1em" autoPlay="autoplay" loop muted>
-                            <source src="images/tns_resolver.mp4" type="video/mp4" />
+                            <source src="client/images/tns_resolver.mp4" type="video/mp4" />
                         </video>
 					</div>
 					<div className="right floated column">
@@ -92,7 +92,7 @@ export default class HomePageFeatures extends React.Component{
 				</div>
                 <div className="left middle aligned two column row">
 					<div className="left floated center aligned column">
-                        <object type="image/svg+xml" data="../images/rotating_address_anim.svg"></object>
+                        <object type="image/svg+xml" data="client/images/rotating_address_anim.svg"></object>
 					</div>
 					<div className="right floated column">
 						<div className="ui huge center aligned margined_y header">
@@ -115,7 +115,7 @@ export default class HomePageFeatures extends React.Component{
                         <div className="ui four stackable cards">
                             <div className="ui raised centered card">
                                 <div className="padding image">
-                                    <img src="../images/decentralized_anim.svg"/>
+                                    <img src="client/images/decentralized_anim.svg"/>
                                 </div>
                                 <div className="content">
                                     <div className="center aligned header">
@@ -131,7 +131,7 @@ export default class HomePageFeatures extends React.Component{
 
                             <div className="ui raised centered card">
                                 <div className="padding image">
-                                    <img src="../images/unlocked_anim.svg"/>
+                                    <img src="client/images/unlocked_anim.svg"/>
                                 </div>
                                 <div className="content">
                                     <div className="center aligned header">
@@ -147,7 +147,7 @@ export default class HomePageFeatures extends React.Component{
 
                              <div className="ui raised centered card">
                                 <div className="padding image">
-                                    <img src="../images/zero_anim.svg"/>
+                                    <img src="client/images/zero_anim.svg"/>
                                 </div>
                                 <div className="content">
                                     <div className="center aligned header">
@@ -164,7 +164,7 @@ export default class HomePageFeatures extends React.Component{
 
                             <div className="ui raised centered card">
                                 <div className="padding image">
-                                    <img src="../images/api_anim.svg"/>
+                                    <img src="client/images/api_anim.svg"/>
                                 </div>
                                 <div className="content">
                                     <div className="center aligned header">
@@ -193,7 +193,7 @@ export default class HomePageFeatures extends React.Component{
 					<div className="ui very padded yellow segment">
                         <div className="ui two column stackable centered grid">
                             <div className="three wide center middle aligned column">
-                                <object type="image/svg+xml" data="../images/secret_anim.svg"/>
+                                <object type="image/svg+xml" data="client/images/secret_anim.svg"/>
                             </div>
                             <div className="twelve wide column">
                                 <div className="ui large header">
@@ -214,7 +214,7 @@ export default class HomePageFeatures extends React.Component{
                     <div className="ui very padded orange segment">
                         <div className="ui two column stackable centered grid">
                             <div className="three wide center middle aligned column">
-                                <img src="../images/non-reverse.svg"/>
+                                <img src="client/images/non-reverse.svg"/>
                             </div>
                             <div className="twelve wide column">
                                 <div className="ui large header">
@@ -233,7 +233,7 @@ export default class HomePageFeatures extends React.Component{
                     <div className="ui very padded red segment">
                         <div className="ui two column stackable centered grid">
                             <div className="three wide center middle aligned column">
-                                <img src="../images/hacker.png"/>
+                                <img src="client/images/hacker.png"/>
                             </div>
                             <div className="twelve wide column">
                                 <div className="ui large header">
@@ -314,12 +314,16 @@ export default class HomePageFeatures extends React.Component{
 
 	getFooterDiv(){
 		return(
-                <div className="ui basic center aligned segment">
-			<div className="ui labeled icon red button margined_x" onClick={e=>{this.eventGithubClick(e,"contracts")}}>
+            <div className="ui basic center aligned segment">
+			    <div className="ui labeled icon red button margined_x" onClick={e=>{this.eventGithubClick(e,"contracts")}}>
                     <i className="github icon"></i>
                     TNS Contracts
-			</div>
-		</div>
+			    </div>
+                <div className="ui labeled icon red button margined_x" onClick={e=>{this.eventGithubClick(e,"web")}}>
+                    <i className="github icon"></i>
+                    TNS Frontend
+			    </div>
+		    </div>
 		)
     }
     

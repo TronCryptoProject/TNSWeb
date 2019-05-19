@@ -19,7 +19,7 @@ export default class HomePage extends React.Component{
 	render(){
 		return(
 			<div className="ui center aligned container" id="hp_logo_container">
-				<object type="image/svg+xml" data="../images/tron_logo_shadow_dark_loop.svg"
+				<object type="image/svg+xml" data="client/images/tron_logo_shadow_dark_loop.svg"
 					className="vertical_transform"></object>
 				<div className="vertical_transform">
 					<div className="ui hp_title">

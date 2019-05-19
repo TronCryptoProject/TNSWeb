@@ -277,7 +277,7 @@ class Index extends React.Component{
 				<div className="ui secondary pointing borderless menu" id="navbar">
 					<a className="ui item no_padding" onClick={(e)=>{this.handleMenuClick(e)}}
 						id="home">
-						<img src="../images/tron_logo_shadow_white.svg" className="no_pointer_event"/>
+						<img src="client/images/tron_logo_shadow_white.svg" className="no_pointer_event"/>
 						TNS
 					</a>
 					<div className="right menu">

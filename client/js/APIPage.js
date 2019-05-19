@@ -7,7 +7,7 @@ export default class APIPage extends React.Component{
     }
     render(){
         return(
-            <embed className="fullscreen" src="../../APIBlueprint.html"/>
+            <embed className="fullscreen" src="APIBlueprint.html"/>
         );
     }
 }

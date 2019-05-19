@@ -34,16 +34,23 @@ export default class LoginPage extends React.Component{
                         }
                     };
                 }else{
-                    button_conf_dict = {
+                    /*button_conf_dict = {
                         type: "success",
                         success: {
                             text: "Success"
                         }
+                    };*/
+                    //changing below only for demo purposes on gh-pages
+                    button_conf_dict = {
+                        type: "error",
+                        error: {
+                            text: "Cannot serve from backend API at this time"
+                        }
                     };
-                    func_callback = ()=>{
+                    /*func_callback = ()=>{
                         localStorage.setItem("tnsx", confirm_val);
                         this.props.onSuccessCallback();
-                    }
+                    }*/
                 }
             }else{
                 button_conf_dict = {

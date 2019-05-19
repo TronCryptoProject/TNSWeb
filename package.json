@@ -8,6 +8,7 @@
     "shasta": "nodemon app.js -- --network shasta",
     "prod": "pm2 start app.js -- --network mainnet",
     "webpack:dev": "sudo webpack -d --watch",
+    "webpack:dev-nowatch": "sudo webpack -d",
     "webpack:prod": "webpack",
     "test": "echo \"Error: no test specified\" && exit 1",
     "ghdeploy": "gh-pages -d build"

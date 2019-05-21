@@ -1,8 +1,9 @@
 # Tron Name Service Dapp
 #### Web Interface/API for setting human readable usernames for base58 Tron addresses
 
-#### View live demo/API here: [TronDapp](https://troncryptoproject.github.io/TNSWeb/)
-
+#### View demo website/API here: [TronDapp](https://troncryptoproject.github.io/TNSWeb/)
+#### Video walk-through demo: https://vimeo.com/337208830
+<br/>
 <img src="https://media.giphy.com/media/J5Lg2zmuJKSH6AJcQy/giphy.gif" width="698"/>
 
 
